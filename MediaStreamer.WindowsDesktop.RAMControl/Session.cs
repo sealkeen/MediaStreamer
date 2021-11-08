@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 using System.Windows.Controls;
-using MediaStreamer.FileTypes;
+using MediaStreamer.Domain;
 using MediaStreamer.WindowsDesktop;
 
 namespace MediaStreamer.WindowsDesktop.RAMControl

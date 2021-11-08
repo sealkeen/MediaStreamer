@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
-using TagEditing;
+using MediaStreamer.TagEditing;
 
 namespace MediaStreamer.WindowsDesktop
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MediaStreamer.FileTypes;
+using MediaStreamer.Domain;
 using LinqExtensions;
 
 namespace MediaStreamer.WindowsDesktop

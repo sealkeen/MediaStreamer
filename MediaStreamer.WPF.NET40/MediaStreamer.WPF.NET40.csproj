@@ -102,13 +102,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DMFileTypes\MediaStreamer.FileTypes.csproj">
-      <Project>{E772CD57-41B6-4681-8C0B-383C37E15D64}</Project>
-      <Name>MediaStreamer.FileTypes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FirstFMCourse_Backup_3.1\DataBaseResource\MediaStreamer.DMRepository.csproj">
-      <Project>{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}</Project>
-      <Name>MediaStreamer.DMRepository</Name>
+    <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj">
+      <Project>{09a91bd6-a533-4945-b834-728a1a326085}</Project>
+      <Name>MediaStreamer.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\MediaStreamer.WindowsDesktop.RAMControl\MediaStreamer.WindowsDesktop.RAMControl.csproj">
       <Project>{9a8ff82e-a9cd-40f7-957c-0ec56b0d6cb4}</Project>

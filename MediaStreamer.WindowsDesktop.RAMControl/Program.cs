@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Controls;
-using MediaStreamer.FileTypes;
+using MediaStreamer.Domain;
 using MediaStreamer.IO;
 using System.Collections;
 using System.Collections.Generic;

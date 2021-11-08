@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MediaStreamer.FileTypes;
+using MediaStreamer.Domain;
 
 namespace MediaStreamer.WindowsDesktop
 {

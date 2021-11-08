@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1; net40</TargetFrameworks>
@@ -14,15 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DMFileManipulator\MediaStreamer.IO.csproj" />
-    <ProjectReference Include="..\DMFileTypes\MediaStreamer.FileTypes.csproj" />
-    <ProjectReference Include="..\DMTagEditor\MediaStreamer.DMTagEditor.csproj" />
     <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
+    <ProjectReference Include="..\MediaStreamer.DMTagEditor\MediaStreamer.DMTagEditor.csproj" />
+    <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
+    <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="taglib-sharp">
-      <HintPath>..\FirstFMCourse_Backup_3.1\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+      <HintPath>C:\Users\Sealkeen\Documents\VCSharp\MediaStreamer\FirstFMCourse_Backup_3.1\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
 

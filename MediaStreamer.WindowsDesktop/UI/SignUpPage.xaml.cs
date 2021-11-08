@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using MediaStreamer.FileTypes;
+using MediaStreamer.Domain;
 
 namespace MediaStreamer.WindowsDesktop
 {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using MediaStreamer.FileTypes;
-using TagEditing;
+using MediaStreamer.Domain;
+using MediaStreamer.TagEditing;
 
 namespace MediaStreamer.WindowsDesktop
 {

@@ -8,15 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DMServer\DMEntitiesDataLibraryCore3.0\DMEntitiesDataLibraryStandard2.1.csproj" />
+    <ProjectReference Include="..\MediaStreamer.WindowsDesktop.DataAccess.NetStandard\MediaStreamer.WindowsDesktop.DataAccess.NetStandard.csproj" />
     <ProjectReference Include="..\MediaStreamer.WindowsDesktop.RAMControl\MediaStreamer.WindowsDesktop.RAMControl.csproj" />
     <ProjectReference Include="..\MediaStreamer.WindowsDesktop\MediaStreamer.WindowsDesktop.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="DMEntitiesDataLibrary">
-      <HintPath>..\DMEntitiesDataLibrary\bin\Release\netcoreapp3.1\DMEntitiesDataLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

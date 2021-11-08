@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-using MediaStreamer.FileTypes;
+using MediaStreamer.Domain;
 using System.Linq;
 using MediaStreamer.IO;
 

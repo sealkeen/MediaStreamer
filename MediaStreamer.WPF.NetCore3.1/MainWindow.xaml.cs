@@ -1,7 +1,7 @@
 ﻿using System.Windows;
+using MediaStreamer.Domain;
 using MediaStreamer.WindowsDesktop;
-using DMEntitiesDataLibrary;
-using DMEntitiesDataLibrary.Models;
+using MediaStreamer.Models;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {
@@ -12,11 +12,11 @@ namespace MediaStreamer.WPF.NetCore3_1
     {
         public MainWindow()
         {
-            MediaStreamer.WindowsDesktop.RAMControl.Program.DBAccess = new DMEntitiesDataLibrary.NetCoreDBRepository();
-            MediaStreamer.WindowsDesktop.RAMControl.Program.DBAccess.DB = new DMEntitiesDataLibrary.DMEntitiesContext();
+            MediaStreamer.WindowsDesktop.RAMControl.Program.DBAccess = new MediaStreamer.NetCoreDBRepository();
+            MediaStreamer.WindowsDesktop.RAMControl.Program.DBAccess.DB = new MediaStreamer.DMEntitiesContext();
 
-            Program.DBAccess = new DMEntitiesDataLibrary.NetCoreDBRepository();
-            Program.DBAccess.DB = new DMEntitiesDataLibrary.DMEntitiesContext();
+            Program.DBAccess = new MediaStreamer.NetCoreDBRepository();
+            Program.DBAccess.DB = new MediaStreamer.DMEntitiesContext();
             //DMEntitiesDataLibrary.DBAccess.dB = new DMEntitiesDataLibrary.DMEntitiesContext();
             //Program.DBAccess = new DMEntitiesDataLibrary.DBAccess();
             //Program.DBAccess.DB = new DMEntitiesDataLibrary.DMEntitiesContext();

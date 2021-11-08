@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MediaStreamer.IO;
-using MediaStreamer.FileTypes;
+using MediaStreamer.Domain;
 
 namespace MediaStreamer.WindowsDesktop
 {

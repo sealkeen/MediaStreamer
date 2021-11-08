@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>DMEntitiesDataLibraryCore3._0</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="..\..\..\ГУАП Done %28v%29\7 Базы данных %281%29\09.06.2021-2.db3" Link="09.06.2021-2.db3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

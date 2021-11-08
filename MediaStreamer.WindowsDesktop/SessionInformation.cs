@@ -1,4 +1,4 @@
-﻿using MediaStreamer.FileTypes;
+﻿using MediaStreamer.Domain;
 using System;
 
 namespace MediaStreamer.WindowsDesktop

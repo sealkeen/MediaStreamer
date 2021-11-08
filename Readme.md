@@ -6,4 +6,4 @@ WPF .Net Core 3.1 build for windows;
 .NetStandard Xamarin Forms several component's support (in development);
 
 ## Usage - output:
-Compile the application using visual studio for your target platform and run DMHandler.exe / FirstFMCourse.exe from build directory.
+Compile the application using visual studio for your target platform and run MediaStreamer.WPF.NetCore3.1 / FirstFMCourse.exe from build directory.

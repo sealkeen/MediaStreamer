@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DMFileManipulator\MediaStreamer.IO.csproj" />
-    <ProjectReference Include="..\DMFileTypes\MediaStreamer.FileTypes.csproj" />
-    <ProjectReference Include="..\DMTagEditor\MediaStreamer.DMTagEditor.csproj" />
     <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
+    <ProjectReference Include="..\MediaStreamer.DMTagEditor\MediaStreamer.DMTagEditor.csproj" />
+    <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
+    <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
     <ProjectReference Include="..\MediaStreamer.WindowsDesktop\MediaStreamer.WindowsDesktop.csproj" />
   </ItemGroup>
 
