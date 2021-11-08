@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.WindowsDesktop", "MediaStreamer.WindowsDesktop.csproj", "{116FA3A6-F9B6-41C6-85FC-4575B87CFBC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.WPF.NET40", "..\MediaStreamer.WPF.NET40\MediaStreamer.WPF.NET40.csproj", "{C0030375-6375-4118-AE7B-6CE0F4A1F796}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.WPF.NetCore3.1", "..\MediaStreamer.WPF.NetCore3.1\MediaStreamer.WPF.NetCore3.1.csproj", "{0718A214-46D1-483E-B2CE-5F33FC97E740}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.WPF.EventAction", "..\MediaStreamer.WPF.EventAction\MediaStreamer.WPF.EventAction.csproj", "{461A676C-E7B5-44AB-9F1D-5D543E8E35DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.FileTypes", "..\DMFileTypes\MediaStreamer.FileTypes.csproj", "{E772CD57-41B6-4681-8C0B-383C37E15D64}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.IO", "..\DMFileManipulator\MediaStreamer.IO.csproj", "{E4DBFB0D-F614-4657-A18B-E750B6E07B17}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqExtensions", "..\LinqExtensions\LinqExtensions.csproj", "{92AA9FF7-3187-4AA8-B3D4-CF2604D32B72}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DMTagEditor", "..\DMTagEditor\MediaStreamer.DMTagEditor.csproj", "{6C3681F3-9EB3-4412-9297-3E20C49CC56A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.DMRepository", "..\FirstFMCourse_Backup_3.1\DataBaseResource\MediaStreamer.DMRepository.csproj", "{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMEntitiesDataLibraryStandard2.1", "..\DMServer\DMEntitiesDataLibraryCore3.0\DMEntitiesDataLibraryStandard2.1.csproj", "{D46E4B34-AFFC-428C-BE73-618C8D0D1019}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.WindowsDesktop.RAMControl", "..\MediaStreamer.WindowsDesktop.RAMControl\MediaStreamer.WindowsDesktop.RAMControl.csproj", "{9A8FF82E-A9CD-40F7-957C-0EC56B0D6CB4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{116FA3A6-F9B6-41C6-85FC-4575B87CFBC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116FA3A6-F9B6-41C6-85FC-4575B87CFBC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116FA3A6-F9B6-41C6-85FC-4575B87CFBC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116FA3A6-F9B6-41C6-85FC-4575B87CFBC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0030375-6375-4118-AE7B-6CE0F4A1F796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0030375-6375-4118-AE7B-6CE0F4A1F796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0030375-6375-4118-AE7B-6CE0F4A1F796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0030375-6375-4118-AE7B-6CE0F4A1F796}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0718A214-46D1-483E-B2CE-5F33FC97E740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0718A214-46D1-483E-B2CE-5F33FC97E740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0718A214-46D1-483E-B2CE-5F33FC97E740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0718A214-46D1-483E-B2CE-5F33FC97E740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{461A676C-E7B5-44AB-9F1D-5D543E8E35DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{461A676C-E7B5-44AB-9F1D-5D543E8E35DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{461A676C-E7B5-44AB-9F1D-5D543E8E35DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{461A676C-E7B5-44AB-9F1D-5D543E8E35DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E772CD57-41B6-4681-8C0B-383C37E15D64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E772CD57-41B6-4681-8C0B-383C37E15D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E772CD57-41B6-4681-8C0B-383C37E15D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E772CD57-41B6-4681-8C0B-383C37E15D64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4DBFB0D-F614-4657-A18B-E750B6E07B17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4DBFB0D-F614-4657-A18B-E750B6E07B17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4DBFB0D-F614-4657-A18B-E750B6E07B17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4DBFB0D-F614-4657-A18B-E750B6E07B17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92AA9FF7-3187-4AA8-B3D4-CF2604D32B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92AA9FF7-3187-4AA8-B3D4-CF2604D32B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92AA9FF7-3187-4AA8-B3D4-CF2604D32B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92AA9FF7-3187-4AA8-B3D4-CF2604D32B72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C3681F3-9EB3-4412-9297-3E20C49CC56A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C3681F3-9EB3-4412-9297-3E20C49CC56A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C3681F3-9EB3-4412-9297-3E20C49CC56A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C3681F3-9EB3-4412-9297-3E20C49CC56A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D46E4B34-AFFC-428C-BE73-618C8D0D1019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D46E4B34-AFFC-428C-BE73-618C8D0D1019}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D46E4B34-AFFC-428C-BE73-618C8D0D1019}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D46E4B34-AFFC-428C-BE73-618C8D0D1019}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A8FF82E-A9CD-40F7-957C-0EC56B0D6CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A8FF82E-A9CD-40F7-957C-0EC56B0D6CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A8FF82E-A9CD-40F7-957C-0EC56B0D6CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A8FF82E-A9CD-40F7-957C-0EC56B0D6CB4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {678566D8-EEFE-4E23-AD46-716E0218FED5}
+	EndGlobalSection
+EndGlobal

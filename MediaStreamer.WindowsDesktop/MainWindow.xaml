@@ -1,0 +1,15 @@
+﻿<Window x:Class="MediaStreamer.WindowsDesktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MediaStreamer.WindowsDesktop"
+        mc:Ignorable="d"
+        Title="First FM Course Project" Height="202.4" Width="196.8"
+        MinWidth="480" MinHeight="440" >
+    <Grid Margin="0,0,0,0">
+        <Frame x:Name="windowFrame" 
+                Content="Frame" HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" Grid.ColumnSpan="3"/>
+    </Grid>
+</Window>

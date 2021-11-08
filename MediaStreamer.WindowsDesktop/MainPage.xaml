@@ -1,0 +1,160 @@
+﻿<Page x:Class="MediaStreamer.WindowsDesktop.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MediaStreamer.WindowsDesktop"
+      mc:Ignorable="d"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch"
+    Title="First FM Course Project" 
+    MinWidth="480" MinHeight="440" Loaded="Window_Loaded"
+      >
+    <Page.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
+        <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
+        <CommandBinding Command="MediaCommands.Pause" CanExecute="Pause_CanExecute" Executed="Pause_Executed" />
+        <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
+    </Page.CommandBindings>
+    <Grid VerticalAlignment="Stretch" Margin="0,0,0,0">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF08C0F0" Offset="0"/>
+                <GradientStop Color="White" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="10" MaxWidth="220" Width="20*"/>
+            <ColumnDefinition MinWidth="86" Width="87*"/>
+            <ColumnDefinition Width="304*"/>
+            <ColumnDefinition MinWidth="1" MaxWidth="168"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="80" Height="120*"></RowDefinition>
+            <RowDefinition MinHeight="34" Height="50"></RowDefinition>
+            <RowDefinition MinHeight="100" Height="200*"></RowDefinition>
+            <RowDefinition MinHeight ="15" Height="23*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--Login Data-->
+        <DockPanel Margin="0,6,0.2,6" Grid.Row="0" HorizontalAlignment="Right" 
+                    Grid.Column="2" Width="146">
+            <DockPanel Margin="0,5,0,0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="42" >
+                <TextBox Margin="0,-9,0,0" Name="txtLogin" Text="Login" DockPanel.Dock="Top" ></TextBox>
+                <PasswordBox Margin="0,0,0,0" x:Name="txtPassword" Height="20" Password="Password" DockPanel.Dock="Bottom"/>
+            </DockPanel>
+            <DockPanel VerticalAlignment="Stretch"  HorizontalAlignment="Stretch">
+                <Label Name="lblLogin" DockPanel.Dock="Top" Content="Not logged in"></Label>
+                <Button Background="AliceBlue" Margin="1,-13,0,0"  Height="20" Name="buttonLog" Content="Log in" Click="buttonLog_Click"></Button>
+                <Button Background="AliceBlue" Margin="1,-13,0,0"  Height="20" Name="buttonSignUp" Content="Sign up" Click="buttonSignUp_Click"></Button>
+            </DockPanel>
+        </DockPanel>
+        <!--Row 0, Column 0 LOGO-->
+        <StackPanel Orientation="Vertical" Grid.ColumnSpan="3">
+            <Label Margin="10,0,0,12" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Content="DMHandler" FontSize="24"/>
+            <Label Margin="10,-12,90,12" x:Name="lblStatus" Content="You're on a main page"/>
+        </StackPanel>
+        <!--<Rectangle Grid.Row="1" Grid.Column="1" Fill="#e8ebf1" Margin="0,0,0,0" />-->
+        <!--Grid.Row="0" -Grid.Column="1"-->
+        <Grid Height="22" MouseWheel="Header_MouseWheel" Margin="3,27,0,0.6" Grid.ColumnSpan="4" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="96"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition MaxWidth="94" />
+                <ColumnDefinition MaxWidth="44" Width="*"/>
+                <ColumnDefinition MaxWidth="44" Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="btnOpen" Content="Open" Click="Open_Executed" IsEnabled="True" Background="AliceBlue" />
+            <Button Grid.Column="1" x:Name="btnPlay" Content="Play" Click="Play_CanExecute" IsEnabled="True" Background="AliceBlue" />
+            <Button Grid.Column="2" x:Name="btnPause" Content="Pause" Click="Pause_CanExecute" IsEnabled="True" Background="AliceBlue" />
+            <Button Grid.Column="3" x:Name="btnStop" Content="Stop" Click="Stop_CanExecute" IsEnabled="True" Background="AliceBlue" />
+            <Button Grid.Column="4" x:Name="btnPrevious" Background="AliceBlue" Click="btnPrevious_Click">↞</Button>
+            <Button Grid.Column="5" x:Name="btnNext" Background="AliceBlue" Click="btnNext_Click">↠</Button>
+        </Grid>
+        <Grid MouseWheel="Header_MouseWheel" Margin="0,0,1.2,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" 
+                    Grid.ColumnSpan="3" >
+            <!--Grid.Column="2"-->
+            <StatusBar Margin="4,0,1,0" 
+                            VerticalAlignment="Center" 
+                            HorizontalAlignment="Stretch">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem Grid.Column="0" Grid.Row="1">
+                    <TextBlock x:Name="lblProgressStatus"><Run Text="00:00:00"/></TextBlock>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
+                    <Slider x:Name="sliProgress" Thumb.DragStarted="sliProgress_DragStarted"  
+                                Thumb.DragCompleted="sliProgress_DragCompleted" ValueChanged="sliProgress_ValueChanged" />
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Right">
+                    <ProgressBar x:Name="pbVolume" Width="80" Height="12" Maximum="1" 
+                                        Value="{Binding Volume, ElementName=mePlayer}" />
+                </StatusBarItem>
+            </StatusBar>
+
+            <MediaElement Margin="0,0,0,24" Grid.Row="1" x:Name="mePlayer" 
+                            VerticalAlignment="Center" LoadedBehavior="Manual" 
+                            Stretch="Fill" />
+        </Grid>
+
+        <!--Row 2-->
+        <!--Grid.Column="0"-->
+        <Grid Background="AliceBlue" Margin="4,2.4,0.2,0" Grid.Row="2" HorizontalAlignment="Stretch"
+                    Height="24" VerticalAlignment="Top" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" FontSize="11" Content="All categories"/>
+            <Button Grid.Column="1" x:Name="buttonGenres" Content="Genres" Background="AliceBlue" Click="buttonGenres_Click" />
+            <Button Grid.Column="2" x:Name="buttonArtists" Content="Artists"  Background="AliceBlue" Click="buttonArtists_Click" />
+            <Button Grid.Column="3" x:Name="buttonCompositions" Content="Compositions"  Background="AliceBlue" Click="buttonCompositions_Click" />
+            <Button Grid.Column="4" x:Name="buttonAlbums" Content="Albums"  Background="AliceBlue" Click="buttonAlbums_Click" />
+            <Button Grid.Column="5" x:Name="buttonGroupMembersGenres" Content="GroupMembers"  Background="AliceBlue" Click="buttonGroupMembers_Click" />
+            <Button Grid.Column="6" x:Name="buttonVideo" Content="Video Clips"  Background="AliceBlue" Click="buttonVideo_Click"/>
+        </Grid>
+        <Grid Background="AliceBlue"  Margin="4,28.4,0.2,0" Grid.Row="2" Grid.Column="0" IsEnabled="False"  Name="userPagesStackPanel"
+                    Height="24" VerticalAlignment="Top" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" FontSize="11" Content="User categories"></Label>
+            <Button Grid.Column="1" x:Name="buttonUserGenres" Content="User Genres" Click="buttonUserGenres_Click"/>
+            <Button Grid.Column="2" x:Name="buttonUserArtists" Content="User Artists" Click="buttonUserArtists_Click"/>
+            <Button Grid.Column="3" x:Name="buttonUserCompositions" Content="User Compositions" Click="buttonUserCompositions_Click"/>
+            <Button Grid.Column="4" x:Name="buttonUserAlbums" Content="User Albums" Click="buttonUserAlbums_Click"/>
+        </Grid>
+        <Frame Margin="4,54.4,1.2,9.8" 
+                   HorizontalAlignment="Stretch" 
+                   VerticalAlignment="Stretch" 
+                   Grid.ColumnSpan="3" 
+               Grid.Row="2"
+               Grid.Column="0" 
+               Navigated="mainFrame_Navigated"
+               Content="Frame" 
+               x:Name="mainFrame" />
+        <!--Row 3-->
+        <StatusBar Margin="10,0,1.2,0.2" Grid.Row="3" Name="statusBar"  VerticalAlignment="Bottom" 
+                       Height="30" HorizontalAlignment="Stretch" Grid.ColumnSpan="3">
+            <TextBlock Name="txtStatus">Loading completed.</TextBlock>
+        </StatusBar>
+    </Grid>
+</Page>

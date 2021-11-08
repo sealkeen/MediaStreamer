@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>MediaStreamer.WPF.NetCore3._1</RootNamespace>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DMServer\DMEntitiesDataLibraryCore3.0\DMEntitiesDataLibraryStandard2.1.csproj" />
+    <ProjectReference Include="..\MediaStreamer.WindowsDesktop.RAMControl\MediaStreamer.WindowsDesktop.RAMControl.csproj" />
+    <ProjectReference Include="..\MediaStreamer.WindowsDesktop\MediaStreamer.WindowsDesktop.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DMEntitiesDataLibrary">
+      <HintPath>..\DMEntitiesDataLibrary\bin\Release\netcoreapp3.1\DMEntitiesDataLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

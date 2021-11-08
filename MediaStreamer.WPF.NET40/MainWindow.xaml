@@ -1,0 +1,14 @@
+﻿<Window x:Class="MediaStreamer.WPF.NET40.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MediaStreamer.WPF.NET40"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Margin="0,0,0,0">
+        <Frame x:Name="windowFrame" 
+                Content="Frame" HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" Grid.ColumnSpan="3"/>
+    </Grid>
+</Window>
