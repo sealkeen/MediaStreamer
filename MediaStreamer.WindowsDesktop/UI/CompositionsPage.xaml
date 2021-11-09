@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MediaStreamer.WindowsDesktop"
-      mc:Ignorable="d" d:DesignWidth="445.882"
+      mc:Ignorable="d" d:DesignWidth="445.882"        
       Title="Compositions">
     <Grid VerticalAlignment="Stretch"  Background="White">
         <Grid.ColumnDefinitions>
@@ -13,14 +13,14 @@
             <ColumnDefinition Width="153*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="100"></RowDefinition>
+            <RowDefinition MinHeight="75"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <ListView VerticalAlignment="Stretch" Name="lstItems" Grid.Row="0" HorizontalAlignment="Stretch"
                   ItemsSource="{Binding Compositions}" Grid.ColumnSpan="3"  Grid.Column="0"
                   MouseDoubleClick="lstItems_MouseDoubleClick"
                   GridViewColumnHeader.Click="ListView_OnColumnClick"
-                  PreviewMouseLeftButtonDown="LstItems_PreviewMouseLeftButtonDown" 
+                  PreviewMouseLeftButtonDown="LstItems_PreviewMouseLeftButtonDown"
                   SelectionChanged="lstItems_SelectionChanged"
                   Margin="0,0,0,50" Grid.RowSpan="2">
             <ListView.ContextMenu>

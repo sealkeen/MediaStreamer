@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Sealkeen\Documents\VCSharp\FirstFMCourse_Backup_3.1\DataBaseResource\DMEntities.edmx'. 
+﻿// T4 code generation is enabled for model 'O:\VCSharp\MediaStreamer\MediaStreamer.WindowsDesktop.DataAccess.Net40\DMEntities.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -11,7 +11,6 @@ namespace MediaStreamer.WindowsDesktop.RAMControl
 {
     public class Program
     {
-        //private Lo
         public static IDBRepository DBAccess;
         public static bool mediaPlayerIsPlaying = false;
         public static MediaElement mePlayer;
