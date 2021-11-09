@@ -1,14 +1,26 @@
-﻿<Window x:Class="MediaStreamer.WPF.NET40.MainWindow"
+﻿<Window x:Class="DMultHandler.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MediaStreamer.WPF.NET40"
+        xmlns:local="clr-namespace:DMultHandler"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="0,0,0,0">
-        <Frame x:Name="windowFrame" 
-                Content="Frame" HorizontalAlignment="Stretch" 
-                VerticalAlignment="Stretch" Grid.ColumnSpan="3"/>
+        Title="First FM Course Project" Height="202.4" Width="196.8" 
+        MinWidth="480" MinHeight="440"
+        >
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Frame
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+            Background="AliceBlue"
+            x:Name="windowFrame" 
+            Content="Frame"/>
     </Grid>
 </Window>

@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using MediaStreamer.Domain;
 
-namespace DataBaseResource
+namespace MediaStreamer.WindowsDesktop.DataAccess.Net40
 {
     public class DBAccess : IDBRepository
     {

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataBaseResource
+namespace MediaStreamer.WindowsDesktop.DataAccess.Net40
 {
     using System;
     using System.Collections;

@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DMTagEditor",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.WindowsDesktop.DataAccess.Net40", "..\MediaStreamer.WindowsDesktop.DataAccess.Net40\MediaStreamer.WindowsDesktop.DataAccess.Net40.csproj", "{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.WPF.Net40", "..\MediaStreamer.WPF.Net40\MediaStreamer.WPF.Net40.csproj", "{E8832C35-876C-4776-BE27-1B034C5FCA3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55EBA084-29F7-4DCD-9D0C-67FA7E16A020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
