@@ -10,21 +10,27 @@
 namespace DataBaseResource
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
-    public partial class DMEntities : DbContext
+    using System.Linq;
+    using MediaStreamer.Domain;
+
+    public partial class DMEntities : DbContext, IDMDBContext
     {
         public DMEntities()
             : base("name=DMEntities")
         {
+            
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+        
         public virtual DbSet<Administrator> Administrators { get; set; }
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<AlbumGenre> AlbumGenres { get; set; }
@@ -45,5 +51,67 @@ namespace DataBaseResource
         public virtual DbSet<Picture> Pictures { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
+
+        public void AddEntity<T>(T entity) where T : class
+        {
+            if (typeof(T) == typeof(Composition))
+            
+                Compositions.Add(entity as Composition);
+            else if (typeof(T) == typeof(Album)) 
+                Albums.Add(entity as Album);
+            else if (typeof(T) == typeof(ListenedComposition))
+                ListenedCompositions.Add(entity as ListenedComposition);
+        }
+        public void RemoveEntity<T>(T entity) where T : class
+        {
+            if (typeof(T) == typeof(Composition))
+                Compositions.Remove(entity as Composition);
+            else if (typeof(T) == typeof(Album))
+                Albums.Remove(entity as Album);
+            else if (typeof(T) == typeof(ListenedComposition))
+                ListenedCompositions.Remove(entity as ListenedComposition);
+        }
+
+        public IQueryable<Administrator> GetAdministrators() { return Administrators; }
+        void IDMDBContext.Add(Administrator administrator) => Administrators.Add(administrator);
+        public IQueryable<Album> GetAlbums() { return Albums; }
+        void IDMDBContext.Add(Album album) => Albums.Add(album);
+        public IQueryable<AlbumGenre> GetAlbumGenres(){ return AlbumGenres; }
+        void IDMDBContext.Add(AlbumGenre albumGenre) => AlbumGenres.Add(albumGenre);
+        public IQueryable<Artist> GetArtists(){ return Artists; }
+        void IDMDBContext.Add(Artist artist) => Artists.Add(artist);
+        public IQueryable<ArtistGenre> GetArtistGenres(){ return ArtistGenres; }
+        void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
+        public IQueryable<Composition> GetCompositions(){ return Compositions; }
+        public IQueryable<IComposition> GetICompositions() { return Compositions; }
+        void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
+        public IQueryable<CompositionVideo> GetCompositionVideos(){ return CompositionVideos; }
+        void IDMDBContext.Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
+        public IQueryable<Genre> GetGenres(){ return Genres; }
+        void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
+        public IQueryable<GroupMember> GetGroupMembers(){ return GroupMembers; }
+        void IDMDBContext.Add(GroupMember groupMember) => GroupMembers.Add(groupMember);
+        public IQueryable<GroupRole> GetGroupRoles(){ return GroupRoles; }
+        void IDMDBContext.Add(GroupRole groupRole) => GroupRoles.Add(groupRole);
+        public IQueryable<ListenedAlbum> GetListenedAlbums(){ return ListenedAlbums; }
+        void IDMDBContext.Add(ListenedAlbum listenedAlbum) => ListenedAlbums .Add(listenedAlbum);
+        public IQueryable<ListenedArtist> GetListenedArtists(){ return ListenedArtists; }
+        void IDMDBContext.Add(ListenedArtist listenedArtist) => ListenedArtists.Add(listenedArtist);
+        public IQueryable<ListenedComposition> GetListenedCompositions(){ return ListenedCompositions; }
+        void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
+        public IQueryable<ListenedGenre> GetListenedGenres(){ return ListenedGenres; }
+        void IDMDBContext.Add(ListenedGenre listenedGenre) => ListenedGenres.Add(listenedGenre);
+        public IQueryable<Moderator> GetModerators(){ return Moderators; }
+        void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);
+        public IQueryable<Musician> GetMusicians(){ return Musicians; }
+        void IDMDBContext.Add(Musician musician) => Musicians.Add(musician);
+        public IQueryable<MusicianRole> GetMusicianRoles(){ return MusicianRoles; }
+        void IDMDBContext.Add(MusicianRole musicianRole) => MusicianRoles.Add(musicianRole);
+        public IQueryable<Picture> GetPictures(){ return Pictures; }
+        void IDMDBContext.Add(Picture picture) => Pictures.Add(picture);
+        public IQueryable<User> GetUsers(){ return Users; }
+        void IDMDBContext.Add(User user) => Users.Add(user);
+        public IQueryable<Video> GetVideos(){ return Videos; }
+        void IDMDBContext.Add(Video video) => Videos.Add(video);
     }
 }

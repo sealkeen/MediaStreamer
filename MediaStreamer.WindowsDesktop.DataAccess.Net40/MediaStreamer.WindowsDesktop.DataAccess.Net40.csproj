@@ -127,7 +127,6 @@
     <Compile Include="ListenedGenre.cs">
       <DependentUpon>DMEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="LogStatus.cs" />
     <Compile Include="Moderator.cs">
       <DependentUpon>DMEntities.tt</DependentUpon>
     </Compile>
@@ -141,7 +140,6 @@
       <DependentUpon>DMEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionInformation.cs" />
     <Compile Include="User.cs">
       <DependentUpon>DMEntities.tt</DependentUpon>
     </Compile>
@@ -176,9 +174,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DMFileTypes\DMFileTypes.csproj">
-      <Project>{c1fc0a4e-1f68-4187-97cd-4b55b2f61c22}</Project>
-      <Name>DMFileTypes</Name>
+    <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj">
+      <Project>{09a91bd6-a533-4945-b834-728a1a326085}</Project>
+      <Name>MediaStreamer.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

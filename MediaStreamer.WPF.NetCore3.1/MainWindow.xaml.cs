@@ -12,8 +12,8 @@ namespace MediaStreamer.WPF.NetCore3_1
     {
         public MainWindow()
         {
-            MediaStreamer.WindowsDesktop.RAMControl.Program.DBAccess = new MediaStreamer.NetCoreDBRepository();
-            MediaStreamer.WindowsDesktop.RAMControl.Program.DBAccess.DB = new MediaStreamer.DMEntitiesContext();
+            //MediaStreamer.WindowsDesktop.RAMControl.Program.DBAccess = new MediaStreamer.NetCoreDBRepository();
+            //MediaStreamer.WindowsDesktop.RAMControl.Program.DBAccess.DB = new MediaStreamer.DMEntitiesContext();
 
             Program.DBAccess = new MediaStreamer.NetCoreDBRepository();
             Program.DBAccess.DB = new MediaStreamer.DMEntitiesContext();
