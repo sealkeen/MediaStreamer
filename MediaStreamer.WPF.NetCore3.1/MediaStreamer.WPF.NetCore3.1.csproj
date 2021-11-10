@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MediaStreamer.WindowsDesktop.DataAccess.NetStandard\MediaStreamer.WindowsDesktop.DataAccess.NetStandard.csproj" />
-    <ProjectReference Include="..\MediaStreamer.WindowsDesktop.RAMControl\MediaStreamer.WindowsDesktop.RAMControl.csproj" />
-    <ProjectReference Include="..\MediaStreamer.WindowsDesktop\MediaStreamer.WindowsDesktop.csproj" />
+    <ProjectReference Include="..\MediaStreamer.DataAccess.NetStandard\MediaStreamer.DataAccess.NetStandard.csproj" />
+    <ProjectReference Include="..\MediaStreamer.RAMControl\MediaStreamer.RAMControl.csproj" />
+    <ProjectReference Include="..\MediaStreamer.WPF.Components\MediaStreamer.WPF.Components.csproj" />
   </ItemGroup>
 
 </Project>

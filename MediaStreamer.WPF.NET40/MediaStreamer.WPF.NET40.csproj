@@ -164,9 +164,9 @@
       <Project>{92aa9ff7-3187-4aa8-b3d4-cf2604d32b72}</Project>
       <Name>LinqExtensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MediaStreamer.DMTagEditor\MediaStreamer.DMTagEditor.csproj">
-      <Project>{56bfc0ef-94c5-4478-8966-b86b1afef226}</Project>
-      <Name>MediaStreamer.DMTagEditor</Name>
+    <ProjectReference Include="..\MediaStreamer.DataAccess.Net40\MediaStreamer.DataAccess.Net40.csproj">
+      <Project>{55eba084-29f7-4dcd-9d0c-67fa7e16a020}</Project>
+      <Name>MediaStreamer.DataAccess.Net40</Name>
     </ProjectReference>
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj">
       <Project>{09a91bd6-a533-4945-b834-728a1a326085}</Project>
@@ -176,13 +176,13 @@
       <Project>{e3701804-db44-4ddf-a0b7-ac9f6a6d05e7}</Project>
       <Name>MediaStreamer.IO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MediaStreamer.WindowsDesktop.DataAccess.Net40\MediaStreamer.WindowsDesktop.DataAccess.Net40.csproj">
-      <Project>{55eba084-29f7-4dcd-9d0c-67fa7e16a020}</Project>
-      <Name>MediaStreamer.DMRepository</Name>
+    <ProjectReference Include="..\MediaStreamer.RAMControl\MediaStreamer.RAMControl.csproj">
+      <Project>{02d2cd70-5dee-440d-b6c4-74aac25c47c6}</Project>
+      <Name>MediaStreamer.RAMControl</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MediaStreamer.WindowsDesktop\MediaStreamer.WindowsDesktop.csproj">
-      <Project>{2b036669-21eb-4c78-bac0-e8ee764e22e2}</Project>
-      <Name>MediaStreamer.WindowsDesktop</Name>
+    <ProjectReference Include="..\MediaStreamer.WPF.Components\MediaStreamer.WPF.Components.csproj">
+      <Project>{a2a51afd-641c-4170-812d-a6e029772454}</Project>
+      <Name>MediaStreamer.WPF.Components</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

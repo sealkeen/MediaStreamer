@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1; net40</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DMFileTypes\DMFileTypes.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DataBaseResource">
+      <HintPath>..\FirstFMCourse_Backup_3.1\DataBaseResource\bin\Release\DataBaseResource.dll</HintPath>
+    </Reference>
+    <Reference Include="taglib-sharp">
+      <HintPath>..\FirstFMCourse_Backup_3.1\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
