@@ -20,6 +20,7 @@ RAMControl (WPF/Components):
 	
 XamarinForms:
 	Implement the "Player functionality" on "Browse" page
+	Implement "Queue" from XamarinMediaManager project
 	
 IO:
 	Implement "Play several songs cross-platformely"
