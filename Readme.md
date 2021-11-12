@@ -7,3 +7,6 @@ WPF .Net Core 3.1 build for windows;
 
 ## Usage - output:
 Compile the application using visual studio for your target platform and run MediaStreamer.WPF.NetCore3.1 / FirstFMCourse.exe from build directory.
+
+## Current Tasks (TODO's):
+Integrate the XamarinMediaManager into the Windows (WPF) Application for both Net40 (EF 6) and NetCore3.1 (EFCore 5);

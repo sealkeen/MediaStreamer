@@ -25,7 +25,14 @@ namespace MediaStreamer.DataAccess.Net40
         {
             
         }
-    
+
+        public void Clear()
+        {
+            //if()
+            Database.Delete();
+            Database.Create();
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

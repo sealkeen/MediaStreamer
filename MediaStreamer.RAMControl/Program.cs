@@ -19,6 +19,11 @@ namespace MediaStreamer.RAMControl
         public static MediaStreamer.IO.FileManipulator FileManipulator;
         public static bool PlayerStopped = false;
 
+        public Program()
+        {
+           // mePlayer = new MediaElement();
+        }
+
         public static void HandleException(Exception ex)
         {
             SetCurrentStatus("Error to double click add composition");
@@ -66,16 +71,19 @@ namespace MediaStreamer.RAMControl
                 Session.MainPage.GetStatusTextBlock().Text = status;
             }));
         }
+
         [MTAThread]
         public static void SetCurrentStatus(string status)
         {
             SetTxtStatusContents(status);
         }
+
         [MTAThread]
         public static void AddToStatus(string addition)
         {
             txtStatus.Text += addition;
         }
+
         [MTAThread]
         public static void SetCurrentAction(string action)
         {
