@@ -30,6 +30,8 @@ XamarinForms:
 		Stop, Pause, Next, Previous;
 	Implement "Queue" from XamarinMediaManager project (allow queueing compositions);
 	Implement "Video" page in Xamarin Forms;
+	Implement "ListenedCompositions / UserCompositions" Model, ViewModel, View 
+	(Load ListenedCompositions from DataBase, register the user's composition into database when composition is playing, see the WPF project for example code).
 
 IO:
 	Implement "Play several songs cross-platformely" with XamarinMediaManager (for both .Net 4.0 and .Net Core 3.1).
