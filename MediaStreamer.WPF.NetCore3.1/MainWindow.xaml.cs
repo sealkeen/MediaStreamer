@@ -9,6 +9,7 @@ namespace MediaStreamer.WPF.NetCore3_1
     /// </summary>
     public partial class MainWindow : Window
     {
+        //TODO: WPFNet40 / Core3.1 – Merge into single project WPF's
         public MainWindow()
         {
             Program.DBAccess = new MediaStreamer.DataAccess.NetStandard.NetCoreDBRepository() 

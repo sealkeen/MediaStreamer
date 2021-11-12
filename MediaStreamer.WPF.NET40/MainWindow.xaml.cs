@@ -8,6 +8,7 @@ namespace DMultHandler
     /// </summary>
     public partial class MainWindow : Window
     {
+        //TODO: WPFNet40 / Core3.1 – Merge into single project WPF's
         public MainWindow()
         {
             InitializeComponent();
