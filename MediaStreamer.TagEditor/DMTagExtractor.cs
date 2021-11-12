@@ -5,6 +5,97 @@ namespace MediaStreamer.TagEditing
 {
     public static class DMTagExtractor
     {
+        private static string ResolveArtistTitleConflicts(string fileName, string titleFromMetaD, string artistFromMetaD, ref string artistName, ref string compositionName)
+        {
+            string divider;
+            if (fileName.Contains(divider = "-") || fileName.Contains(divider = "—"))
+            {
+
+                int firstPartLength = fileName.IndexOf(divider);
+                int secondPartStart = fileName.IndexOf(divider) + 1;
+
+                artistName = fileName.Substring(0, firstPartLength);
+                compositionName = fileName.Substring(secondPartStart);
+            }
+            else
+            {
+                divider = null;
+            }
+
+            if (artistFromMetaD == null || artistFromMetaD.ToLower() == "unknown")
+            {
+                if (divider != null)
+                {
+                    artistName = artistName.TrimStart(divider.ToCharArray()[0]).TrimStart(' ');
+                    artistName = artistName.TrimEnd(divider.ToCharArray()[0]).TrimEnd(' ');
+                }
+                else
+                {
+                    artistName = "unknown";
+                }
+            }
+            else
+            {
+                artistName = artistFromMetaD;
+            }
+
+            if (titleFromMetaD == null || titleFromMetaD.ToLower() == "unknown")
+            {
+                if (divider != null)
+                {
+                    compositionName = compositionName.TrimStart(divider.ToCharArray()[0]).TrimStart(' ');
+                    compositionName = compositionName.TrimEnd(divider.ToCharArray()[0]).TrimEnd(' ');
+                }
+                else
+                {
+                    compositionName = fileName;
+                }
+            }
+            else
+            {
+                compositionName = titleFromMetaD;
+            }
+
+            return divider;
+        }
+
+        public static string ExcludeExtension(string withPossibleExtension)
+        {
+            var dotIndex = -1;
+            int extensionWithDotLength = 0;
+            for (int i = withPossibleExtension.Length - 1; i >= 0; i--)
+            {
+
+                extensionWithDotLength++;
+                if (withPossibleExtension[i] == '.')
+                {
+                    if (extensionWithDotLength < 2)
+                        return withPossibleExtension;
+                    dotIndex = i;
+                    break;
+                }
+                if (
+                    (withPossibleExtension[i] < 'a' ||
+                    withPossibleExtension[i] > 'z')
+                    &&
+                    (withPossibleExtension[i] > 'Z' ||
+                    withPossibleExtension[i] < 'A')
+                    &&
+                    (withPossibleExtension[i] < '0' ||
+                    withPossibleExtension[i] > '9')
+                )
+                    return withPossibleExtension;
+            }
+
+            int withoutExtensionLength = withPossibleExtension.Length - extensionWithDotLength;
+
+            if (extensionWithDotLength > 5)
+                return withPossibleExtension;
+            //because there is no audio extension with more then 4 symbols
+
+            return withPossibleExtension.Substring(0, withoutExtensionLength);
+        }
+
         public static string TryGetArtistNameFromFile(TagLib.File tfile, Action<string> errorAction)
         {
             try {

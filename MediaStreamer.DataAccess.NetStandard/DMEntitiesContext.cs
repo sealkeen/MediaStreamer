@@ -2,6 +2,9 @@
 using MediaStreamer.Domain;
 using System;
 using System.Linq;
+using System.IO;
+using System.Threading.Tasks;
+using MediaStreamer.IO;
 
 #nullable disable
 
@@ -9,13 +12,52 @@ namespace MediaStreamer
 {
     public partial class DMEntitiesContext : DbContext, IDMDBContext
     {
+        public string Filename { get; set; }
+        public string _localSource = @"C:\Users\Sealkeen\Documents\ГУАП Done(v)\7 Базы данных(1)\09.06.2021-2.db3";
+
         public DMEntitiesContext()
         {
+            if (!_localSource.FileExists())
+            {
+                string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "xmsdb.db3");
+                bool exists = File.Exists(fileName);
+                Filename = fileName;
+                Database.EnsureCreated();
+            }
         }
 
+        public void Clear()
+        {
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+        }
+        //public async Task ClearAsync()
+        //{
+        //    await Database.EnsureDeleted();
+        //    await Database.EnsureCreated();
+        //}
         public DMEntitiesContext(DbContextOptions<DMEntitiesContext> options)
             : base(options)
         {
+
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                {
+                    //optionsBuilder.UseSqlite($"DataSource=http://docs.google.com/uc?export=open&id=1TqCBUjhXeglQogUaIGaegu7TUf4-iiXA");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkID=723263.
+                    optionsBuilder.UseSqlite(@$"DataSource={_localSource}");
+                }
+                else
+                {
+
+                    optionsBuilder.UseSqlite($"DataSource={Filename}");
+                } 
+            }
         }
 
         public virtual DbSet<Administrator> Administrators { get; set; }
@@ -41,22 +83,6 @@ namespace MediaStreamer
 
         public string DBPath { get; set; } = "";
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                {
-                    //optionsBuilder.UseSqlite($"DataSource=http://docs.google.com/uc?export=open&id=1TqCBUjhXeglQogUaIGaegu7TUf4-iiXA");
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkID=723263.
-                    optionsBuilder.UseSqlite(@"DataSource=C:\Users\Sealkeen\Documents\ГУАП Done (v)\7 Базы данных (1)\09.06.2021-2.db3");
-                }
-                else
-                {
-                    optionsBuilder.UseSqlite($"DataSource={DBPath}");
-                } 
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -567,6 +593,5 @@ namespace MediaStreamer
         void IDMDBContext.Add(User user) => Users.Add(user);
         public IQueryable<Video> GetVideos() { return Videos; }
         void IDMDBContext.Add(Video video) => Videos.Add(video);
-
     }
 }
