@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="..\..\..\ГУАП Done %28v%29\7 Базы данных %281%29\09.06.2021-2.db3" Link="09.06.2021-2.db3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

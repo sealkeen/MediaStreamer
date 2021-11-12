@@ -11,7 +11,9 @@ namespace MediaStreamer.WPF.Components
 {
     public class Program
     {
-        //private Lo
+        //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
+        //TODO: Move CompositionStorage to RAMControl
+
         public static IDBRepository DBAccess;
         public static bool mediaPlayerIsPlaying = false;
         public static MediaElement mePlayer;
