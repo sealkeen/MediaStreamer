@@ -10,22 +10,25 @@ Compile the application using visual studio for your target platform and run Med
 
 ## Current Tasks (TODO's):
 
-Overall //TODO: Refactor into separate Methods those that more than 10 lines;
+Overall //TODO: 
+	Refactor into separate Methods those that consist more than of 10-15 lines;
+	Delete unused code (if it's obsolete / not working)
+	
+WPF.Components:
+	CompositionsPage: Fix "Rename to Standard" check menu item button -> enable renaming the file to match pattern "Artist – Title (Year if exists)".
 
 RAMControl (WPF/Components):
 	Integrate the XamarinMediaManager into the Windows (WPF) Application for both Net40 (EF 6) and NetCore3.1 (EFCore 5);
 	Connect WPFComponents with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage from WPF, add RAMControl);
 	Move CompositionStorage to RAMControl.
-	
+
 XamarinForms:
 	Implement the "Player functionality" on "Browse" page:
 		Stop, Pause, Next, Previous;
 	Implement "Queue" from XamarinMediaManager project (allow queueing compositions);
 	Implement "Video" page in Xamarin Forms;
+
 IO:
 	Implement "Play several songs cross-platformely" with XamarinMediaManager (for both .Net 4.0 and .Net Core 3.1).
 
 
-
-
-	

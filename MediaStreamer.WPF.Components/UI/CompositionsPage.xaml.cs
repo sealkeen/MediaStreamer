@@ -450,6 +450,11 @@ namespace MediaStreamer.WPF.Components
             if (lstItems != null)
                 lstItems.SelectedIndex = -1;
         }
+
+        /// <summary>
+        /// TODO:Fix "Rename to Standard" check menu item button -> enable renaming the file to match pattern "Artist – Title (Year if exists)".
+        /// </summary>
+        /// <param name="compositions"></param>
         protected static void RenameCompositionFiles(List<IComposition> compositions)
         {
             FileInfo fileInfo;
@@ -484,6 +489,11 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
+        /// <summary>
+        /// TODO:Fix "Rename to Standard" check menu item button -> enable renaming the file to match pattern "Artist – Title (Year if exists)".
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void CmiRename_Click(object sender, RoutedEventArgs e)
         {
             try
