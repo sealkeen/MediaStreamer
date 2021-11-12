@@ -11,14 +11,17 @@ namespace MediaStreamer.RAMControl
 {
     public class Program
     {
+        // TODO: Replace MediaElement with XamarinMediaManager
+        // (Including the .Net Framework 4.0 WPF project and .Net Core 3.1)
+        public static MediaElement mePlayer;
         public static IDBRepository DBAccess;
         public static bool mediaPlayerIsPlaying = false;
-        public static MediaElement mePlayer;
         public static System.Windows.Controls.TextBlock txtStatus;
         public static IComposition currentComposition;
         public static MediaStreamer.IO.FileManipulator FileManipulator;
         public static bool PlayerStopped = false;
 
+        //TODO: Initialize the Media Player and Incapsulate its methods into MediaStreamer.RAMControl
         public Program()
         {
            // mePlayer = new MediaElement();
