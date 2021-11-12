@@ -15,13 +15,14 @@ Overall //TODO: Refactor into separate Methods those that more than 10 lines;
 Integrate the XamarinMediaManager into the Windows (WPF) Application for both Net40 (EF 6) and NetCore3.1 (EFCore 5);
 
 RAMControl (WPF/Components):
-	Connect WPFComponents with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
+	Connect WPFComponents with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage from WPF, add RAMControl)
 	Move CompositionStorage to RAMControl
 	
 XamarinForms:
 	Implement the "Player functionality" on "Browse" page
 	
-FileManipulator:
+IO:
 	Implement "Play several songs cross-platformely"
-	
+
+
 	

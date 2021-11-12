@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using MediaStreamer.Domain;
 using MediaStreamer.WPF.Components;
-using MediaStreamer.DataAccess.NetStandard.Models;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {
