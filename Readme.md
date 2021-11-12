@@ -11,10 +11,13 @@ Compile the application using visual studio for your target platform and run Med
 ## Current Tasks (TODO's):
 Integrate the XamarinMediaManager into the Windows (WPF) Application for both Net40 (EF 6) and NetCore3.1 (EFCore 5);
 
-RAMControl:
+RAMControl (WPF/Components):
 	Connect WPFComponents with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
 	Move CompositionStorage to RAMControl
 	
 XamarinForms:
 	Implement the "Player functionality" on "Browse" page
 	
+FileManipulator:
+	Implement "Play several songs cross-platformely"
+
