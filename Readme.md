@@ -14,3 +14,7 @@ Integrate the XamarinMediaManager into the Windows (WPF) Application for both Ne
 RAMControl:
 	Connect WPFComponents with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
 	Move CompositionStorage to RAMControl
+	
+XamarinForms:
+	Implement the "Player functionality" on "Browse" page
+	
