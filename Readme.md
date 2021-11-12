@@ -17,6 +17,9 @@ Overall //TODO:
 WPF.Components:
 	CompositionsPage: Fix "Rename to Standard" check menu item button -> enable renaming the file to match pattern "Artist – Title (Year if exists)".
 
+WPF.Net40 / WPFNetCore3.1 / DataAccess.Net40 / DataAccessNetCore3.1
+	Merge into single project WPF's
+
 RAMControl (WPF/Components):
 	Integrate the XamarinMediaManager into the Windows (WPF) Application for both Net40 (EF 6) and NetCore3.1 (EFCore 5);
 	Connect WPFComponents with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage from WPF, add RAMControl);
