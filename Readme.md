@@ -12,7 +12,9 @@ Compile the application using visual studio for your target platform and run Med
 
 Overall //TODO: 
 	Refactor into separate Methods those that consist more than of 10-15 lines;
-	Delete unused code (if it's obsolete / not working)
+	Delete unused code (if it's obsolete / not working);
+	Connect WebAcrobbler from Last.FM and its WEB APIs;
+	Implement "Return to previous state (Composition / Player Position)" when application's closed and re-opened.
 	
 WPF.Components:
 	CompositionsPage: Fix "Rename to Standard" check menu item button -> enable renaming the file to match pattern "Artist – Title (Year if exists)".
