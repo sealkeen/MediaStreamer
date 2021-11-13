@@ -23,6 +23,8 @@ namespace MediaStreamer
                 bool exists = File.Exists(fileName);
                 Filename = fileName;
                 Database.EnsureCreated();
+            } else {
+                Filename = _localSource;
             }
         }
 
@@ -50,11 +52,10 @@ namespace MediaStreamer
                 {
                     //optionsBuilder.UseSqlite($"DataSource=http://docs.google.com/uc?export=open&id=1TqCBUjhXeglQogUaIGaegu7TUf4-iiXA");
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkID=723263.
-                    optionsBuilder.UseSqlite(@$"DataSource={_localSource}");
+                    optionsBuilder.UseSqlite(@$"DataSource={Filename}");
                 }
                 else
                 {
-
                     optionsBuilder.UseSqlite($"DataSource={Filename}");
                 } 
             }
@@ -82,7 +83,6 @@ namespace MediaStreamer
         public virtual DbSet<Video> Videos { get; set; }
 
         public string DBPath { get; set; } = "";
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
