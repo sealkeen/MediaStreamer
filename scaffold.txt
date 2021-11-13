@@ -1,1 +1,3 @@
+Usage (from Package Manager console):
+
 Scaffold-DbContext "DataSource=C:\Users\Sealkeen\Documents\VCSharp\DMEntitiesDataLibrary\DMEntitiesDataLibrary\DMEntities.db3" Microsoft.EntityFrameworkCore.Sqlite -OutputDir C:\Users\Sealkeen\Documents\VCSharp\DMEntitiesDataLibrary\Models
