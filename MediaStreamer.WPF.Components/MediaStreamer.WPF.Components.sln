@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.UnitTests.Net
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.UnitTests.NetCore31", "..\MediaStreamer.UnitTests.NetCore31\MediaStreamer.UnitTests.NetCore31.csproj", "{3E2C099C-784B-46DC-A25B-4180F718799E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.Exceptions", "..\MediaStreamer.Exceptions\MediaStreamer.Exceptions.csproj", "{A8A140AB-3F38-49EC-B113-0015A3625A1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.GTK", "..\MediaStreamer.GTK\MediaStreamer.GTK.csproj", "{89BFD384-CF96-464B-9F07-17C414308BF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{3E2C099C-784B-46DC-A25B-4180F718799E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E2C099C-784B-46DC-A25B-4180F718799E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E2C099C-784B-46DC-A25B-4180F718799E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8A140AB-3F38-49EC-B113-0015A3625A1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A140AB-3F38-49EC-B113-0015A3625A1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8A140AB-3F38-49EC-B113-0015A3625A1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8A140AB-3F38-49EC-B113-0015A3625A1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89BFD384-CF96-464B-9F07-17C414308BF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89BFD384-CF96-464B-9F07-17C414308BF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89BFD384-CF96-464B-9F07-17C414308BF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89BFD384-CF96-464B-9F07-17C414308BF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

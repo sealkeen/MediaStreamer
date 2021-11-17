@@ -30,6 +30,11 @@ namespace MediaStreamer
 
         public void Clear()
         {
+            this.ChangeTracker
+               .Entries()
+               .ToList()
+               .ForEach(e => e.State = EntityState.Detached);
+
             Database.EnsureDeleted();
             Database.EnsureCreated();
         }
