@@ -563,6 +563,11 @@ namespace MediaStreamer
         public IQueryable<ArtistGenre> GetArtistGenres() { return ArtistGenres; }
         void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
         public IQueryable<Composition> GetCompositions() { return Compositions.Include(c => c.Artist); }
+
+        public Task<IQueryable<Composition>> GetCompositionsAsync() 
+        { 
+            return Task.Factory.StartNew(GetCompositions); 
+        }
         public IQueryable<IComposition> GetICompositions() { return Compositions; }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
         public IQueryable<CompositionVideo> GetCompositionVideos() { return CompositionVideos; }
@@ -593,5 +598,11 @@ namespace MediaStreamer
         void IDMDBContext.Add(User user) => Users.Add(user);
         public IQueryable<Video> GetVideos() { return Videos; }
         void IDMDBContext.Add(Video video) => Videos.Add(video);
+
+        void IDMDBContext.UpdateAndSaveChanges<TEntity>(TEntity entity)
+        {
+            Update(entity);
+            SaveChanges();
+        }
     }
 }

@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
+    <ProjectReference Include="..\MediaStreamer.Exceptions\MediaStreamer.Exceptions.csproj" />
     <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
   </ItemGroup>
 

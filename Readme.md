@@ -1,8 +1,8 @@
 ## Overview
 SQLite and .Net (Core) based application aimed to support cross-platform audio streaming / listening experience.
 Current versions support :
-WPF .Net 4.0 builds for windows;
-WPF .Net Core 3.1 build for windows;
+WPF .Net 4.0 builds for Windows;
+WPF .Net Core 3.1 build for Windows;
 .NetStandard Xamarin Forms several component's support (in development);
 
 ## Usage - output:
@@ -11,7 +11,7 @@ Compile the application using visual studio for your target platform and run Med
 ## Current Tasks (TODO's):
 
 Overall //TODO: 
-	Refactor into separate Methods those that consist more than of 10-15 lines;
+	Refactor into separate Methods those that consist more than of 16-21 lines;
 	Delete unused code (if it's obsolete / not working);
 	Connect WebScrobbler from Last.FM and its WEB APIs;
 	Implement "Return to previous state (Composition / Player Position)" when application's closed and re-opened.
