@@ -14,7 +14,7 @@ namespace MediaStreamer.WPF.Components
         public List<GroupMember> GroupMembers { get; set; }
         public List<GroupMember> GetGroupMembers()
         {
-            Program.DBAccess.Update();
+            //Program.DBAccess.Update();
             return Program.DBAccess.DB.GetGroupMembers().ToList();
         }
         public void ListGroupMembers()

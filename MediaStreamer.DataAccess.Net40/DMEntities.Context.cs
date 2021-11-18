@@ -16,6 +16,7 @@ namespace MediaStreamer.DataAccess.Net40
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
+    using System.Threading.Tasks;
     using MediaStreamer.Domain;
 
     public partial class DMEntities : DbContext, IDMDBContext
@@ -90,6 +91,10 @@ namespace MediaStreamer.DataAccess.Net40
         public IQueryable<ArtistGenre> GetArtistGenres(){ return ArtistGenres; }
         void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
         public IQueryable<Composition> GetCompositions(){ return Compositions; }
+        public Task<IQueryable<Composition>> GetCompositionsAsync()
+        {
+            return Task.Factory.StartNew(GetCompositions);
+        }
         public IQueryable<IComposition> GetICompositions() { return Compositions; }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
         public IQueryable<CompositionVideo> GetCompositionVideos(){ return CompositionVideos; }
@@ -119,6 +124,12 @@ namespace MediaStreamer.DataAccess.Net40
         public IQueryable<User> GetUsers(){ return Users; }
         void IDMDBContext.Add(User user) => Users.Add(user);
         public IQueryable<Video> GetVideos(){ return Videos; }
-        void IDMDBContext.Add(Video video) => Videos.Add(video);
+        void IDMDBContext.Add(Video video) => Videos.Add(video); 
+        void IDMDBContext.UpdateAndSaveChanges<TEntity>(TEntity entity)
+        {
+            DbEntityEntry entry = Entry(entity);
+            entry.State = EntityState.Modified;
+            SaveChanges();
+        }
     }
 }

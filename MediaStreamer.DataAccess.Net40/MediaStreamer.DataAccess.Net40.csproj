@@ -90,7 +90,6 @@
     <Compile Include="CompositionVideo.cs">
       <DependentUpon>DMEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataBaseResource.cs" />
     <Compile Include="DMEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

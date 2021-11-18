@@ -22,7 +22,7 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                Program.DBAccess.Update();
+                //Program.DBAccess.Update();
                 return Program.DBAccess.DB?.GetAlbums()?.ToList();
             } catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message, true);

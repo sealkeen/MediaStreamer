@@ -12,11 +12,11 @@ namespace MediaStreamer.WPF.NetCore3_1
         //TODO: WPFNet40 / Core3.1 – Merge into single project WPF's
         public MainWindow()
         {
-            Program.DBAccess = new MediaStreamer.DataAccess.NetStandard.NetCoreDBRepository() 
+            Program.DBAccess = new DBRepository() 
             {  DB = new MediaStreamer.DMEntitiesContext() };
 
             InitializeComponent();
-            windowFrame.Content = new MainPage();
+            this.Content = new MainPage();
         }
     }
 }

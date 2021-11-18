@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using MediaStreamer.DataAccess.Net40;
+using MediaStreamer.WPF.Components;
+using MediaStreamer.Domain;
 
 namespace DMultHandler
 {
@@ -12,8 +14,9 @@ namespace DMultHandler
         public MainWindow()
         {
             InitializeComponent();
-            MediaStreamer.WPF.Components.Program.DBAccess = new DBAccess { DB = new DMEntities() };
-            windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
+            MediaStreamer.WPF.Components.Program.DBAccess = new DBRepository { DB = new DMEntities() };
+            
+            this.Content = new MainPage();
         }
     }
 }
