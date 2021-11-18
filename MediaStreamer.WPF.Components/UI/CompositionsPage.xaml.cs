@@ -174,7 +174,11 @@ namespace MediaStreamer.WPF.Components
 
         public bool HasPreviousInList()
         {
-            return (lstItems.SelectedIndex >= 1) && (lstItems.SelectedIndex < lstItems.Items.Count);
+            int? selectedIndex = lstItems?.SelectedIndex;
+            bool moreThenOne = selectedIndex >= 1;
+                //&& 
+            bool lessThanLast = (lstItems?.SelectedIndex < lstItems?.Items.Count);
+            return moreThenOne && lessThanLast;
         }
 
         public bool HasNextInListOrQueue()
@@ -182,13 +186,26 @@ namespace MediaStreamer.WPF.Components
             return HasNextInQueue() || HasNextInList();
         }
 
-        public Composition GetPreviousComposition()
+        public IComposition GetCurrentComposition()
+        {
+            try
+            {
+                return Compositions[lstItems.SelectedIndex];
+            }
+            catch (Exception ex)
+            {
+                Program.SetCurrentStatus(ex.Message, true);
+                return null;
+            }
+        }
+
+        public IComposition GetPreviousComposition()
         {
             try
             {
                 if (HasPreviousInList())
                 {
-                    return GetPreviousComposition();
+                    return Compositions[lstItems.SelectedIndex - 1];
                 }
                 throw new ArgumentOutOfRangeException("End of compositions list.");
             }
@@ -228,6 +245,7 @@ namespace MediaStreamer.WPF.Components
         {
             if (HasPreviousInList())
             {
+                LastCompositionIndex = lstItems.SelectedIndex;
                 lstItems.SelectedIndex -= 1;
             }
         }
@@ -275,7 +293,7 @@ namespace MediaStreamer.WPF.Components
                 {
                     PlayTarget(GetNextComposition());
                 }
-                Program.ShowQueue(SelectedItems());
+                Program.ShowQueue(selectedItems);
                 Program.AddToStatus(" Queue: { ");
                 Program.AddToStatus(Program.ToString(Queue));
                 Program.AddToStatus(" }.");

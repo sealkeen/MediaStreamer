@@ -437,8 +437,8 @@ namespace MediaStreamer.WPF.Components
                 if (Session.CompositionsPage.HasPreviousInList()
                 )
                 {
-                    Session.CompositionsPage?.SwitchToNextSelected();
-                    Session.CompositionsPage?.PlayTarget(Session.CompositionsPage.GetPreviousComposition());
+                    Session.CompositionsPage?.SwitchToPreviousSelected();
+                    Session.CompositionsPage?.PlayTarget(Session.CompositionsPage?.GetCurrentComposition());
                 }
             }
             catch (Exception ex)
