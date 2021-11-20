@@ -28,8 +28,9 @@ RAMControl (WPF/Components):
 	Move CompositionStorage to RAMControl.
 	
 XamarinForms:
-	Implement the "Player functionality" on "Browse" page:
+	(v) Implement the "Player functionality" on "Browse" page:
 		Stop, Pause, Next, Previous;
+	Implement slider bar to scroll playing compositions;
 	Implement "Queue" from XamarinMediaManager project (allow queueing compositions);
 	Implement "Video" page in Xamarin Forms;
 	Implement "ListenedCompositions / UserCompositions" Model, ViewModel, View 
