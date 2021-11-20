@@ -158,11 +158,6 @@ namespace MediaStreamer
                     .HasForeignKey(d => d.AlbumID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
-                entity.HasOne(d => d.Artist)
-                    .WithMany(p => p.AlbumGenres)
-                    .HasForeignKey(d => d.ArtistID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.AlbumGenres)
                     .HasForeignKey(d => d.GenreName)

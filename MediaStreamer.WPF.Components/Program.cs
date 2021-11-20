@@ -77,8 +77,12 @@ namespace MediaStreamer.WPF.Components
         [MTAThread]
         public static void AddToStatus(string addition)
         {
-            txtStatus.Text += addition;
+            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                txtStatus.Text += addition;
+            }));
         }
+
         [MTAThread]
         public static void SetCurrentAction(string action)
         {
