@@ -12,19 +12,35 @@ namespace MediaStreamer
 {
     public partial class DMEntitiesContext : DbContext, IDMDBContext
     {
-        public string Filename { get; set; }
-        public string _localSource = @"C:\Users\Sealkeen\Documents\ГУАП Done(v)\7 Базы данных(1)\09.06.2021-2.db3";
+        public static string Filename { get; set; }
+        public static string _localSource = @"C:/Users/Sealkeen/Documents/ГУАП Done (v)/7 Базы данных(1)/09.06.2021-2.db3";
 
-        public DMEntitiesContext()
+        public DMEntitiesContext(string localSource = null)
         {
-            if (!_localSource.FileExists())
+            if (localSource != null)
             {
-                string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "xmsdb.db3");
-                bool exists = File.Exists(fileName);
-                Filename = fileName;
-                Database.EnsureCreated();
-            } else {
-                Filename = _localSource;
+                if (File.Exists(localSource))
+                    Filename = localSource;
+            }
+            else
+            {
+
+                if (!_localSource.FileExists())
+                {
+                    if (File.Exists("O:/DB/09.06.2021-2.db3"))
+                        Filename = "O:/DB/09.06.2021-2.db3";
+                    else
+                    {
+                        string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "xmsdb.db3");
+                        bool exists = File.Exists(fileName);
+                        Filename = fileName;
+                    }
+                    Database.EnsureCreated();
+                }
+                else
+                {
+                    Filename = _localSource;
+                }
             }
         }
 
