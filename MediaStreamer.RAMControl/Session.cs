@@ -107,6 +107,9 @@ namespace MediaStreamer.RAMControl
         {
             foreach (System.Reflection.PropertyInfo property in _propertyCollection)
             {
+                //TODO: page.Dispose()
+
+                //Debugging test //todo: remove
                 Page page = new Page();
                 property.GetValue(page, null);
             }
@@ -123,5 +126,4 @@ namespace MediaStreamer.RAMControl
             }
         }
     }
-    
 } //namespace FirstFMCourse

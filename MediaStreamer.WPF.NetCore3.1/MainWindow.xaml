@@ -7,14 +7,48 @@
         xmlns:local="clr-namespace:MediaStreamer.WPF.NetCore3_1"
         mc:Ignorable="d"
         Title="MediaStreamer (WindowsDesktop.NetCore3.1)" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="{x:Type local:MainWindow}">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome CornerRadius="0" GlassFrameThickness="0" ResizeBorderThickness="0" CaptionHeight="0"></WindowChrome>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+        
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <DockPanel.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FF454545" Offset="0.528" />
+                    <GradientStop Color="#FF555555" Offset="0.01" />
+                    <GradientStop Color="#FF454545" Offset="1" />
+                    <GradientStop Color="#FF666666" Offset="1" />
+                </LinearGradientBrush>
+            </DockPanel.Background>
+            <Menu Width="Auto" Name="menu1" VerticalAlignment="Top" DockPanel.Dock="Left" Foreground="White" Background="Transparent" Padding="5 0 5 0">
+                <!--<MenuItem Header="File" IsCheckable="true" FontSize="12"> </MenuItem>
+                <MenuItem Header="Settings" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>
+                <MenuItem Header="Security" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>-->
+                <MenuItem x:Name="btnDatabase" Click="btnDatabase_Click" Header="Database" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>
+            </Menu>
+            <Border HorizontalAlignment="Right" DockPanel.Dock="Right" Padding="5 0 5 0">
+                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                    <Button Content="Close" Width="50" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1"></Button>
+                    <Button Content="Minimize" Width="60" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1" Margin="5 0 0 0"></Button>
+                </StackPanel>
+            </Border>
+        </DockPanel>
         <Frame
+            Grid.Row="1"
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 

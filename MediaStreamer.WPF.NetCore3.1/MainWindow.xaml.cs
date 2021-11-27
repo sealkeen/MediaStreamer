@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using MediaStreamer.Domain;
 using MediaStreamer.WPF.Components;
 

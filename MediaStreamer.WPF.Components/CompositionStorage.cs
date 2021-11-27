@@ -39,10 +39,10 @@ namespace MediaStreamer.WPF.Components
                     if (comp?.Album?.Year < 2100 && comp.Album.Year > 1900)
                         newName += $" ({comp?.Album?.Year})";
                 }
-                newName += fileInfo.Extension;
-                if (fileInfo.FullName.FileExists())
-                    System.IO.File.Move(fileInfo.FullName, newName);
-                comp.FilePath = newName;
+                //newName += fileInfo.Extension;
+                //if (fileInfo.FullName.FileExists())
+                //    System.IO.File.Move(fileInfo.FullName, newName);
+                //comp.FilePath = newName;
                 TimeSpan tS;
                 if (comp.Duration != null)
                     tS = TimeSpan.FromSeconds(comp.Duration.Value);

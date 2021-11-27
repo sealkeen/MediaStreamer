@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using MediaStreamer.Domain;
@@ -16,7 +17,12 @@ namespace MediaStreamer.WPF.Components
         public void ListGenres()
         {
             //DBAccess.Update();
-            Genres = Program.DBAccess.DB.GetGenres().ToList();
+            try
+            {
+                Genres = Program.DBAccess.DB.GetGenres().ToList();
+            } catch (Exception ex) {
+                Program.SetCurrentStatus("Database was not loaded correctly.");
+            }
         }
         public GenresPage()
         {
