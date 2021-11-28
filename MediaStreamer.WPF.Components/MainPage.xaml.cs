@@ -255,8 +255,11 @@ namespace MediaStreamer.WPF.Components
             userPagesStackPanel.IsEnabled = false;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            if(Program.DBAccess.LoadingTask != null)
+                await Program.DBAccess.LoadingTask;
+
             buttonCompositions_Click(buttonCompositions, new RoutedEventArgs());
         }
 
@@ -445,6 +448,12 @@ namespace MediaStreamer.WPF.Components
             {
                 Program.SetCurrentStatus(ex.Message);
             }
+        }
+
+        public event RoutedEventHandler DataBaseClick;
+        private void btnDatabase_Click(object sender, RoutedEventArgs e)
+        {
+            DataBaseClick?.Invoke(sender, e);
         }
     }
 }

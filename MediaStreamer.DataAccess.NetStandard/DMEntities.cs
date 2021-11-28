@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#define netstandard2
+
+using Microsoft.EntityFrameworkCore;
 using MediaStreamer.Domain;
 using System;
 using System.Linq;
@@ -10,13 +12,12 @@ using MediaStreamer.IO;
 
 namespace MediaStreamer
 {
-    public partial class DMEntitiesContext : DbContext, IDMDBContext
+    public partial class DMEntities : DbContext, IDMDBContext
     {
-        public string DBPath { get; set; } = "";
         public static string Filename { get; set; }
-        public static string LocalSource { get; set; } = @"C:/Users/Sealkeen/Documents/ГУАП Done (v)/7 Базы данных(1)/09.06.2021-2.db3";
+        public static string _localSource = @"C:/Users/Sealkeen/Documents/ГУАП Done (v)/7 Базы данных(1)/09.06.2021-2.db3";
 
-        public DMEntitiesContext(string localSource = null)
+        public DMEntities(string localSource = null)
         {
             if (localSource != null)
             {
@@ -26,7 +27,7 @@ namespace MediaStreamer
             else
             {
 
-                if (!LocalSource.FileExists())
+                if (!_localSource.FileExists())
                 {
                     if (File.Exists("O:/DB/26.10.2021-3.db3"))
                         Filename = "O:/DB/26.10.2021-3.db3";
@@ -40,7 +41,7 @@ namespace MediaStreamer
                 }
                 else
                 {
-                    Filename = LocalSource;
+                    Filename = _localSource;
                 }
             }
         }
@@ -60,7 +61,7 @@ namespace MediaStreamer
         //    await Database.EnsureDeleted();
         //    await Database.EnsureCreated();
         //}
-        public DMEntitiesContext(DbContextOptions<DMEntitiesContext> options)
+        public DMEntities(DbContextOptions<DMEntities> options)
             : base(options)
         {
 
@@ -104,6 +105,7 @@ namespace MediaStreamer
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
 
+        public string DBPath { get; set; } = "";
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="First FM Course Project" Height="202.4" Width="196.8" 
         MinWidth="480" MinHeight="440"
+        
+            AllowsTransparency="False"
         >
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>

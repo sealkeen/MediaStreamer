@@ -6,6 +6,7 @@ using MediaStreamer.IO;
 using System.Collections;
 using System.Collections.Generic;
 using LinqExtensions;
+using System.Threading.Tasks;
 
 namespace MediaStreamer.WPF.Components
 {

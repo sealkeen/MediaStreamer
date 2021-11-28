@@ -6,15 +6,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaStreamer.WPF.NetCore3_1"
         mc:Ignorable="d"
-        Title="MediaStreamer (WindowsDesktop.NetCore3.1)" Height="450" Width="800">
+        Title="MediaStreamer (WindowsDesktop.NetCore3.1)" 
+            Height="450" Width="800"
+            AllowsTransparency="False"
+            >
     <Window.Resources>
-        <Style TargetType="{x:Type local:MainWindow}">
+        <!--<Style TargetType="{x:Type local:MainWindow}">
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome CornerRadius="0" GlassFrameThickness="0" ResizeBorderThickness="0" CaptionHeight="0"></WindowChrome>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
     </Window.Resources>
         
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -42,8 +45,8 @@
             </Menu>
             <Border HorizontalAlignment="Right" DockPanel.Dock="Right" Padding="5 0 5 0">
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                    <Button Content="Close" Width="50" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1"></Button>
-                    <Button Content="Minimize" Width="60" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1" Margin="5 0 0 0"></Button>
+                    <Button Content="Close" x:Name="btnClose" Click="btnClose_Click"  Width="50" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1"></Button>
+                    <Button Content="Minimize" x:Name="btnMinimize" Click="btnMinimize_Click" Width="60" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1" Margin="5 0 0 0"></Button>
                 </StackPanel>
             </Border>
         </DockPanel>

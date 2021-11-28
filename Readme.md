@@ -8,6 +8,10 @@ WPF .Net Core 3.1 build for Windows;
 ## Usage - output:
 Compile the application using visual studio for your target platform and run MediaStreamer.WPF.NetCore3.1 / FirstFMCourse.exe from build directory.
 
+Specify your own database path in "..\MediaStreamer\MediaStreamer.DataAccess.Net40\App.config" connection string for net40
+Specify your own database path in the constructor of DMEntities for NetCoreApp3.1 / NetStandard2.1
+
+
 ## Current Tasks (TODO's):
 
 Overall //TODO: 

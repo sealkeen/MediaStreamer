@@ -21,24 +21,29 @@ namespace MediaStreamer.DataAccess.Net40
 
     public partial class DMEntities : DbContext, IDMDBContext
     {
-        public DMEntities()
+        public DMEntities(string filePath = null)
             : base("name=DMEntities")
         {
-            
+            try
+            {
+                Database.CreateIfNotExists();
+            }
+            catch (Exception ex) {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
         }
 
         public void Clear()
         {
-            //if()
             Database.Delete();
             Database.Create();
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            throw new UnintentionalCodeFirstException();
+
         }
-        
+
         public virtual DbSet<Administrator> Administrators { get; set; }
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<AlbumGenre> AlbumGenres { get; set; }
