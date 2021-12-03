@@ -1,5 +1,7 @@
 ## Overview
-SQLServer (Net40) / SQLite (NetCoreApp3.1) based application aimed to support cross-platform audio streaming / listening experience.
+SQLite and .Net (Core) based application aimed to support cross-platform audio streaming / listening experience.
+Right now the functional of the project is limited to Music Explorer (Create music library and edit its content (e.g. tags, albums, genres, artists).
+
 Current versions support :
 WPF .Net 4.0 builds for Windows;
 WPF .Net Core 3.1 build for Windows;
@@ -10,7 +12,6 @@ Compile the application using visual studio for your target platform and run Med
 
 Specify your own database path in "..\MediaStreamer\MediaStreamer.DataAccess.Net40\App.config" connection string for net40
 Specify your own database path in the constructor of DMEntities for NetCoreApp3.1 / NetStandard2.1
-
 
 ## Current Tasks (TODO's):
 
