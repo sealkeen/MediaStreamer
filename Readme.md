@@ -1,8 +1,11 @@
 ## Overview
 SQLite and .Net (Core) based application aimed to support cross-platform audio streaming / listening experience.
 
-Right now the functional of the project is limited to Music Explorer (Create music library and edit its content (e.g. tags, albums, genres, artists).
-
+Right now the functional of the project is limited to:
+	Music Explorer: Create music library and edit its content (e.g. tags, albums, genres, artists);
+	Users data / Music Storage Database;
+	ASP.NET Core WebServer / WebService with links to the music files stored on a remote server.
+	
 Current versions support :
 WPF .Net 4.0 builds for Windows;
 WPF .Net Core 3.1 build for Windows;
