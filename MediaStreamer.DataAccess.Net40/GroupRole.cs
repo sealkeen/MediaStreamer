@@ -11,8 +11,8 @@ namespace MediaStreamer.DataAccess.Net40.Models
 {
     using System;
     using System.Collections.Generic;
-
-    internal partial class GroupRole
+    
+    public partial class GroupRole
     {
         public long MusicianID { get; set; }
         public long ArtistID { get; set; }
@@ -22,7 +22,7 @@ namespace MediaStreamer.DataAccess.Net40.Models
     
         public virtual Artist Artist { get; set; }
         public virtual GroupMember GroupMember { get; set; }
-        public virtual MusicianRole MusicianRole { get; set; }
         public virtual Musician Musician { get; set; }
+        public virtual MusicianRole MusicianRole { get; set; }
     }
 }

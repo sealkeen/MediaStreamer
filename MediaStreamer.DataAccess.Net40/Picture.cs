@@ -11,8 +11,8 @@ namespace MediaStreamer.DataAccess.Net40.Models
 {
     using System;
     using System.Collections.Generic;
-
-    internal partial class Picture
+    
+    public partial class Picture
     {
         public long PictureID { get; set; }
         public Nullable<long> XResolution { get; set; }

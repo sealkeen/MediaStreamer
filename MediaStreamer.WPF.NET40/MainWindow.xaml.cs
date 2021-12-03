@@ -1,11 +1,22 @@
-﻿using System.Windows;
-using MediaStreamer.IO;
-using MediaStreamer.DataAccess.Net40;
-using MediaStreamer.WPF.Components;
+﻿using MediaStreamerDataAccessNet40;
 using MediaStreamer.Domain;
+using MediaStreamer.WPF.Components;
+using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using MediaStreamer.DataAccess.Net40;
 
-namespace DMultHandler
+namespace MediaStreamer.WPF.Net40
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
@@ -16,20 +27,26 @@ namespace DMultHandler
         public MainWindow()
         {
             InitializeComponent();
-            MediaStreamer.WPF.Components.Program.DBAccess = new DBRepository { DB = new DMEntities() };
-            
-            this.Content = new MainPage();
-            Session.MainPage.DataBaseClick += this.btnDatabase_Click;
+            try
+            {
+                MediaStreamer.WPF.Components.Program.DBAccess = new DBRepository { DB = new DMEntities() };
+
+                this.Content = new MainPage();
+                Session.MainPage.DataBaseClick += this.btnDatabase_Click;
+            } catch (Exception ex) {
+                Program.SetCurrentStatus(ex.Message);
+            }
         }
 
         private async void btnDatabase_Click(object sender, RoutedEventArgs e)
         {
             MediaStreamer.IO.FileManipulator fM = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
-            var fullpath = await fM.GetOpenedDatabasePathAsync();
+            var fullpath = fM.GetOpenedDatabasePathAsync();
 
-            try 
+            fullpath.Wait();
+            try
             {
-                Program.DBAccess = new DBRepository() { DB = new DMEntities(fullpath) };
+                Program.DBAccess = new DBRepository() { DB = new DMEntities() };
             }
             catch (Exception ex)
             {

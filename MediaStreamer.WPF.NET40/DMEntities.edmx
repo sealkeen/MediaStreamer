@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="mainModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="Binary GUID=True;Data Source=&quot;C:\Users\Sealkeen\Documents\ГУАП Done (v)\7 Базы данных (1)\09.06.2021-2.db3&quot;" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MediaStreamer.WPF.NET40.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="Binary GUID=True;Data Source=&quot;C:\Users\Sealkeen\Documents\ГУАП Done (v)\7 Базы данных (1)\09.06.2021-2.db3&quot;" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Administrator">
           <Key>
             <PropertyRef Name="AdministratorID" />
@@ -1562,7 +1562,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="mainEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="DMEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Administrators" EntityType="Self.Administrator" />
           <EntitySet Name="Albums" EntityType="Self.Album" />
           <EntitySet Name="AlbumGenres" EntityType="Self.AlbumGenre" />
@@ -1737,7 +1737,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="mainModelStoreContainer" CdmEntityContainer="mainEntities">
+        <EntityContainerMapping StorageEntityContainer="mainModelStoreContainer" CdmEntityContainer="DMEntities">
           <EntitySetMapping Name="Administrators">
             <EntityTypeMapping TypeName="mainModel.Administrator">
               <MappingFragment StoreEntitySet="Administrator">

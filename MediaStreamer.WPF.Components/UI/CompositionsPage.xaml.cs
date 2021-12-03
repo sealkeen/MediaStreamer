@@ -109,11 +109,23 @@ namespace MediaStreamer.WPF.Components
 
         public async Task ListCompositionsAsync()
         {
-            var listCompsTask = Task.Factory.StartNew(GetICompositions);
-            var tsk = await listCompsTask;
-            Compositions = listCompsTask.Result;
-            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-            lastDataLoadWasPartial = false;
+            try
+            {
+                var listCompsTask = Task.Factory.StartNew(GetICompositions);
+                var tsk = await listCompsTask;
+                Compositions = listCompsTask.Result;
+                lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+                lastDataLoadWasPartial = false;
+            }
+            catch {
+                Compositions = new List<IComposition>();
+                try {
+                    Compositions = GetICompositions();
+                } catch { 
+
+                }
+                lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+            }
         }
 
         public CompositionsPage(long ArtistID, long albumID)
@@ -150,15 +162,17 @@ namespace MediaStreamer.WPF.Components
             await Task.Factory.StartNew(GetPartOfCompositions);
         }
 
-        protected void buttonNew_Click(object sender, RoutedEventArgs e)
+        protected async void buttonNew_Click(object sender, RoutedEventArgs e)
         {
-            Program.FileManipulator.DecomposeAudioFile(Program.FileManipulator.OpenAudioFileInMSWindows(), Program.SetCurrentStatus);
+            var tsk = await Program.FileManipulator.OpenAudioFileCrossPlatform();
+
+            Program.FileManipulator.DecomposeAudioFile(tsk, Program.SetCurrentStatus);
             ReList();
         }
 
         protected void buttonNewRange_Click(object sender, RoutedEventArgs e)
         {
-            Program.FileManipulator.DecomposeAudioFiles(Program.FileManipulator.OpenAudioFilesInMSWindows(), Program.SetCurrentStatus);
+            Program.FileManipulator.DecomposeAudioFiles(Program.FileManipulator.OpenAudioFilesCrossPlatform(), Program.SetCurrentStatus);
             ReList();
         }
 

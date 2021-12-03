@@ -8,7 +8,7 @@
         Title="First FM Course Project" Height="202.4" Width="196.8"
         MinWidth="480" MinHeight="440" >
     <Grid Margin="0,0,0,0">
-        <Frame x:Name="windowFrame" 
+        <Frame x:FieldModifier="public" x:Name="windowFrame" 
                 Content="Frame" HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" Grid.ColumnSpan="3"/>
     </Grid>

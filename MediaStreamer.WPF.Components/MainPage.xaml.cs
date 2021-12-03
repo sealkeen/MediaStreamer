@@ -22,6 +22,7 @@ namespace MediaStreamer.WPF.Components
     {
         private bool userIsDraggingSlider = false;
         private bool canExecute = false;
+        public event Action OnConstructing;
         public MainPage()
         {
             InitializeComponent();
@@ -48,7 +49,6 @@ namespace MediaStreamer.WPF.Components
         {
             return txtStatus;
         }
-
 
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -84,7 +84,13 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonCompositions_Click(object sender, RoutedEventArgs e)
         {
-            UpdateCompositionsPage();
+            try
+            {
+                UpdateCompositionsPage();
+            }
+            catch (Exception ex) {
+                Program.SetCurrentStatus(ex.Message);
+            }
         }
 
         [MTAThread]
@@ -257,8 +263,8 @@ namespace MediaStreamer.WPF.Components
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if(Program.DBAccess.LoadingTask != null)
-                await Program.DBAccess.LoadingTask;
+            //if(Program.DBAccess.LoadingTask != null)
+            //    await Program.DBAccess.LoadingTask;
 
             buttonCompositions_Click(buttonCompositions, new RoutedEventArgs());
         }

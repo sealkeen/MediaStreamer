@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
-using MediaStreamer.IO;
+//using MediaStreamer.IO;
 
 #nullable disable
 
@@ -12,37 +12,19 @@ namespace MediaStreamer
 {
     public partial class DMEntitiesContext : DbContext, IDMDBContext
     {
+        public static bool UseSQLServer = false;
         public string DBPath { get; set; } = "";
         public static string Filename { get; set; }
         public static string LocalSource { get; set; } = @"C:/Users/Sealkeen/Documents/ГУАП Done (v)/7 Базы данных(1)/09.06.2021-2.db3";
 
-        public DMEntitiesContext(string localSource = null)
+        public DMEntitiesContext()
         {
-            if (localSource != null)
-            {
-                if (File.Exists(localSource))
-                    Filename = localSource;
-            }
-            else
-            {
 
-                if (!LocalSource.FileExists())
-                {
-                    if (File.Exists("O:/DB/26.10.2021-3.db3"))
-                        Filename = "O:/DB/26.10.2021-3.db3";
-                    else
-                    {
-                        string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "xmsdb.db3");
-                        bool exists = File.Exists(fileName);
-                        Filename = fileName;
-                    }
-                    Database.EnsureCreated();
-                }
-                else
-                {
-                    Filename = LocalSource;
-                }
-            }
+        }
+
+        public void EnsureCreated()
+        {
+            Database.EnsureCreated();
         }
 
         public void Clear()
@@ -72,14 +54,19 @@ namespace MediaStreamer
             {
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
-                    //optionsBuilder.UseSqlite($"DataSource=http://docs.google.com/uc?export=open&id=1TqCBUjhXeglQogUaIGaegu7TUf4-iiXA");
+                    if (UseSQLServer) {
+                        //optionsBuilder.UseSqlServer("Name=CompositionsConnection");
+                        optionsBuilder.UseSqlServer("server=localhost\\SQLExpress;user=sys_admin;password=hr9p23yf8342QI;database=compositionsdb");
+                    }
+                    else
+                        //optionsBuilder.UseSqlite($"DataSource =http://docs.google.com/uc?export=open&id=1TqCBUjhXeglQogUaIGaegu7TUf4-iiXA");
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkID=723263.
-                    optionsBuilder.UseSqlite(@$"DataSource={Filename}");
+                        optionsBuilder.UseSqlite(@$"DataSource={Filename}");
                 }
                 else
                 {
                     optionsBuilder.UseSqlite($"DataSource={Filename}");
-                } 
+                }
             }
         }
 
@@ -148,7 +135,8 @@ namespace MediaStreamer
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Albums)
-                    .HasForeignKey(d => d.GenreName);
+                    .HasForeignKey(d => d.GenreID);
+
 
                 entity.HasOne(d => d.GroupMember)
                     .WithMany(p => p.Albums)
@@ -157,7 +145,7 @@ namespace MediaStreamer
 
             modelBuilder.Entity<AlbumGenre>(entity =>
             {
-                entity.HasKey(e => new { e.GenreName, e.ArtistID, e.GroupFormationDate, e.AlbumID });
+                entity.HasKey(e => new { e.GenreID, e.ArtistID, e.GroupFormationDate, e.AlbumID });
 
                 entity.ToTable("AlbumGenre");
 
@@ -176,7 +164,7 @@ namespace MediaStreamer
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.AlbumGenres)
-                    .HasForeignKey(d => d.GenreName)
+                    .HasForeignKey(d => d.GenreID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.GroupMember)
@@ -198,7 +186,7 @@ namespace MediaStreamer
 
             modelBuilder.Entity<ArtistGenre>(entity =>
             {
-                entity.HasKey(e => new { e.ArtistID, e.GenreName });
+                entity.HasKey(e => new { e.ArtistID, e.GenreID });
 
                 entity.ToTable("ArtistGenre");
 
@@ -213,7 +201,7 @@ namespace MediaStreamer
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.ArtistGenres)
-                    .HasForeignKey(d => d.GenreName)
+                    .HasForeignKey(d => d.GenreID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
@@ -281,12 +269,23 @@ namespace MediaStreamer
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
-            modelBuilder.Entity<Genre>(entity =>
+            if (UseSQLServer)
             {
-                entity.HasKey(e => e.GenreName);
-
-                entity.ToTable("Genre");
-            });
+                modelBuilder.Entity<Genre>(entity =>
+                {
+                    entity.HasKey(e => e.GenreID);
+                    entity.Property(e => e.GenreID).IsRequired();
+                    entity.ToTable("Genre");
+                });
+            }
+            else
+            {
+                modelBuilder.Entity<Genre>(entity =>
+                {
+                    entity.HasKey(e => e.GenreID);
+                    entity.ToTable("Genre");
+                });
+            }
 
             modelBuilder.Entity<GroupMember>(entity =>
             {
@@ -442,17 +441,17 @@ namespace MediaStreamer
 
             modelBuilder.Entity<ListenedGenre>(entity =>
             {
-                entity.HasKey(e => new { e.UserID, e.GenreName });
+                entity.HasKey(e => new { e.UserID, e.GenreID });
 
                 entity.ToTable("ListenedGenre");
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
 
-                entity.Property(e => e.GenreName).HasColumnType("Text");
+                entity.Property(e => e.GenreID).HasColumnType("Text");
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.ListenedGenres)
-                    .HasForeignKey(d => d.GenreName)
+                    .HasForeignKey(d => d.GenreID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.User)
@@ -547,7 +546,7 @@ namespace MediaStreamer
                 entity.Property(e => e.FPS).HasColumnName("FPS");
 
                 entity.Property(e => e.VariableFPS)
-                    .HasColumnType("BOOLEAN")
+                    .HasColumnType("BIT")
                     .HasColumnName("VariableFPS");
 
                 entity.Property(e => e.XResolution).HasColumnName("XResolution");

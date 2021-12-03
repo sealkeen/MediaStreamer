@@ -9,23 +9,19 @@ using LinqExtensions;
 
 namespace MediaStreamer.RAMControl
 {
+
     public class Program
     {
-        // TODO: Replace MediaElement with XamarinMediaManager
-        // (Including the .Net Framework 4.0 WPF project and .Net Core 3.1)
-        public static MediaElement mePlayer;
+        //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
+        //TODO: Move CompositionStorage to RAMControl
+
         public static IDBRepository DBAccess;
         public static bool mediaPlayerIsPlaying = false;
+        public static MediaElement mePlayer;
         public static System.Windows.Controls.TextBlock txtStatus;
         public static IComposition currentComposition;
         public static MediaStreamer.IO.FileManipulator FileManipulator;
         public static bool PlayerStopped = false;
-
-        //TODO: Initialize the Media Player and Incapsulate its methods into MediaStreamer.RAMControl
-        public Program()
-        {
-           // mePlayer = new MediaElement();
-        }
 
         public static void HandleException(Exception ex)
         {
@@ -71,20 +67,21 @@ namespace MediaStreamer.RAMControl
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.GetStatusTextBlock().Text = status;
+                Session.MainPage.txtStatus.Text = status;
             }));
         }
-
         [MTAThread]
         public static void SetCurrentStatus(string status)
         {
             SetTxtStatusContents(status);
         }
-
         [MTAThread]
         public static void AddToStatus(string addition)
         {
-            txtStatus.Text += addition;
+            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                txtStatus.Text += addition;
+            }));
         }
 
         [MTAThread]
@@ -92,7 +89,7 @@ namespace MediaStreamer.RAMControl
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.GetStatusLabel().Content = action;
+                Session.MainPage.lblStatus.Content = action;
             }));
         }
 

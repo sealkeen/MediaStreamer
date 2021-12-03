@@ -14,6 +14,7 @@ namespace MediaStreamer.WPF.NetCore3_1
         //TODO: WPFNet40 / Core3.1 – Merge into single project WPF's
         public MainWindow()
         {
+            MediaStreamer.DMEntitiesContext.UseSQLServer = true;
             //var task = Task.Factory.StartNew(() => 
             Program.DBAccess = new DBRepository()
             { DB = new MediaStreamer.DMEntitiesContext() }; //);
@@ -31,7 +32,8 @@ namespace MediaStreamer.WPF.NetCore3_1
             var fullpath = await fM.GetOpenedDatabasePathAsync();
             try
             {
-                Program.DBAccess = new DBRepository() { DB = new MediaStreamer.DMEntitiesContext(fullpath) };
+                Program.DBAccess = new DBRepository() { DB = new MediaStreamer.DMEntities(fullpath) };
+                Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             } catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
             }
@@ -39,12 +41,20 @@ namespace MediaStreamer.WPF.NetCore3_1
 
         private void btnMinimize_Click(object sender, RoutedEventArgs e)
         {
-
+            this.WindowState = WindowState.Minimized;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            App.Current.Shutdown();
+        }
 
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            // Begin dragging the window
+            this.DragMove();
         }
     }
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DMultHandler.Properties {
+namespace MediaStreamer.WPF.Net40.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

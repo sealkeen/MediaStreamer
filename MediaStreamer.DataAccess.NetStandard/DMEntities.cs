@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
-using MediaStreamer.IO;
+//using MediaStreamer.IO;
 
 #nullable disable
 
@@ -26,8 +26,7 @@ namespace MediaStreamer
             }
             else
             {
-
-                if (!_localSource.FileExists())
+                if (!File.Exists(_localSource))
                 {
                     if (File.Exists("O:/DB/26.10.2021-3.db3"))
                         Filename = "O:/DB/26.10.2021-3.db3";
@@ -44,6 +43,11 @@ namespace MediaStreamer
                     Filename = _localSource;
                 }
             }
+        }
+
+        public void EnsureCreated()
+        {
+            Database.EnsureCreated();
         }
 
         public void Clear()
@@ -150,7 +154,7 @@ namespace MediaStreamer
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Albums)
-                    .HasForeignKey(d => d.GenreName);
+                    .HasForeignKey(d => d.GenreID);
 
                 entity.HasOne(d => d.GroupMember)
                     .WithMany(p => p.Albums)
@@ -159,7 +163,7 @@ namespace MediaStreamer
 
             modelBuilder.Entity<AlbumGenre>(entity =>
             {
-                entity.HasKey(e => new { e.GenreName, e.ArtistID, e.GroupFormationDate, e.AlbumID });
+                entity.HasKey(e => new { e.GenreID, e.ArtistID, e.GroupFormationDate, e.AlbumID });
 
                 entity.ToTable("AlbumGenre");
 
@@ -178,7 +182,7 @@ namespace MediaStreamer
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.AlbumGenres)
-                    .HasForeignKey(d => d.GenreName)
+                    .HasForeignKey(d => d.GenreID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.GroupMember)
@@ -200,7 +204,7 @@ namespace MediaStreamer
 
             modelBuilder.Entity<ArtistGenre>(entity =>
             {
-                entity.HasKey(e => new { e.ArtistID, e.GenreName });
+                entity.HasKey(e => new { e.ArtistID, e.GenreID });
 
                 entity.ToTable("ArtistGenre");
 
@@ -215,7 +219,7 @@ namespace MediaStreamer
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.ArtistGenres)
-                    .HasForeignKey(d => d.GenreName)
+                    .HasForeignKey(d => d.GenreID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
@@ -285,7 +289,7 @@ namespace MediaStreamer
 
             modelBuilder.Entity<Genre>(entity =>
             {
-                entity.HasKey(e => e.GenreName);
+                entity.HasKey(e => e.GenreID);
 
                 entity.ToTable("Genre");
             });
@@ -444,17 +448,17 @@ namespace MediaStreamer
 
             modelBuilder.Entity<ListenedGenre>(entity =>
             {
-                entity.HasKey(e => new { e.UserID, e.GenreName });
+                entity.HasKey(e => new { e.UserID, e.GenreID });
 
                 entity.ToTable("ListenedGenre");
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
 
-                entity.Property(e => e.GenreName).HasColumnType("Text");
+                entity.Property(e => e.GenreID).HasColumnType("Text");
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.ListenedGenres)
-                    .HasForeignKey(d => d.GenreName)
+                    .HasForeignKey(d => d.GenreID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.User)

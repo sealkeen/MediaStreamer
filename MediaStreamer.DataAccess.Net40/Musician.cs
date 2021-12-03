@@ -11,8 +11,8 @@ namespace MediaStreamer.DataAccess.Net40.Models
 {
     using System;
     using System.Collections.Generic;
-
-    internal partial class Musician
+    
+    public partial class Musician
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Musician()

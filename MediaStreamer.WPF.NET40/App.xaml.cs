@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace DMultHandler
+namespace MediaStreamer.WPF.Net40
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml

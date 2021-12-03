@@ -11,8 +11,8 @@ namespace MediaStreamer.DataAccess.Net40.Models
 {
     using System;
     using System.Collections.Generic;
-
-    internal partial class GroupMember
+    
+    public partial class GroupMember
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public GroupMember()
@@ -25,8 +25,8 @@ namespace MediaStreamer.DataAccess.Net40.Models
             this.ListenedCompositions = new HashSet<ListenedComposition>();
         }
     
-        public Nullable<long> ArtistID { get; set; }
         public System.DateTime GroupFormationDate { get; set; }
+        public Nullable<long> ArtistID { get; set; }
         public Nullable<long> DateOfDisband { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

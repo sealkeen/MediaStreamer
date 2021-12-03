@@ -11,13 +11,13 @@ namespace MediaStreamer.DataAccess.Net40.Models
 {
     using System;
     using System.Collections.Generic;
-
-    internal partial class ListenedArtist
+    
+    public partial class ListenedArtist
     {
-        public Nullable<System.DateTime> ListenDate { get; set; }
-        public Nullable<long> CountOfPlays { get; set; }
         public long UserID { get; set; }
         public long ArtistID { get; set; }
+        public Nullable<System.DateTime> ListenDate { get; set; }
+        public Nullable<long> CountOfPlays { get; set; }
     
         public virtual Artist Artist { get; set; }
         public virtual User User { get; set; }

@@ -10,7 +10,9 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net40')) ">
-    <PackageReference Include="Microsoft.Bcl.Async" Version="1.0.168" />
+	  <Reference Include="PresentationFramework" />
+	  <Reference Include="System.Windows.Forms" />
+	  <PackageReference Include="Microsoft.Bcl.Async" Version="1.0.168" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +24,7 @@
 
   <ItemGroup>
     <Reference Include="taglib-sharp">
-      <HintPath>C:\Users\Sealkeen\Documents\VCSharp\MediaStreamer\FirstFMCourse_Backup_3.1\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+      <HintPath>O:\VCSharp\MediaStreamer\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
 

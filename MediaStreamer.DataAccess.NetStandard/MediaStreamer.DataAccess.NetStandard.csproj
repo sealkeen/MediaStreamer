@@ -5,6 +5,10 @@
     <RootNamespace>DMEntitiesDataLibraryCore3._0</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Models\**" />
     <EmbeddedResource Remove="Models\**" />
@@ -23,6 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,7 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
     <ProjectReference Include="..\MediaStreamer.Exceptions\MediaStreamer.Exceptions.csproj" />
-    <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
+    <!--<ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />-->
   </ItemGroup>
 
 </Project>

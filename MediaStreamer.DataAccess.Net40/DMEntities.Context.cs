@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MediaStreamer.DataAccess.Net40
+namespace MediaStreamer.DataAccess.Net40.SQLite
 {
     using System;
     using System.Collections;
@@ -19,31 +19,19 @@ namespace MediaStreamer.DataAccess.Net40
     using System.Threading.Tasks;
     using MediaStreamer.Domain;
 
-    public partial class DMEntities : DbContext, IDMDBContext
+    public partial class DMEntities : DbContext, IDMDBContext//, MediaStreamer.Domain.IDMDBContext
     {
-        public DMEntities(string filePath = null)
+        public DMEntities()
             : base("name=DMEntities")
         {
-            try
-            {
-                Database.CreateIfNotExists();
-            }
-            catch (Exception ex) {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
+            
         }
-
-        public void Clear()
-        {
-            Database.Delete();
-            Database.Create();
-        }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
+            throw new UnintentionalCodeFirstException();
         }
-
+        
         public virtual DbSet<Administrator> Administrators { get; set; }
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<AlbumGenre> AlbumGenres { get; set; }
@@ -65,6 +53,12 @@ namespace MediaStreamer.DataAccess.Net40
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
 
+        //Custom Methods
+        public void Clear()
+        {
+            Database.Delete();
+            Database.Create();
+        }
         public void AddEntity<T>(T entity) where T : class
         {
             if (typeof(T) == typeof(Composition))
@@ -85,56 +79,271 @@ namespace MediaStreamer.DataAccess.Net40
                 ListenedCompositions.Remove(entity as ListenedComposition);
         }
 
-        public IQueryable<Administrator> GetAdministrators() { return Administrators; }
-        void IDMDBContext.Add(Administrator administrator) => Administrators.Add(administrator);
-        public IQueryable<Album> GetAlbums() { return Albums; }
-        void IDMDBContext.Add(Album album) => Albums.Add(album);
-        public IQueryable<AlbumGenre> GetAlbumGenres(){ return AlbumGenres; }
-        void IDMDBContext.Add(AlbumGenre albumGenre) => AlbumGenres.Add(albumGenre);
-        public IQueryable<Artist> GetArtists(){ return Artists; }
-        void IDMDBContext.Add(Artist artist) => Artists.Add(artist);
-        public IQueryable<ArtistGenre> GetArtistGenres(){ return ArtistGenres; }
-        void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
-        public IQueryable<Composition> GetCompositions(){ return Compositions; }
         public Task<IQueryable<Composition>> GetCompositionsAsync()
         {
             return Task.Factory.StartNew(GetCompositions);
         }
+        public IQueryable<Administrator> GetAdministrators() { return Administrators; }
+        public void Add(Administrator administrator) => Administrators.Add(administrator);
+        public IQueryable<Album> GetAlbums() { return Albums; }
+        public void Add(Album album) => Albums.Add(album);
+        public IQueryable<AlbumGenre> GetAlbumGenres(){ return AlbumGenres; }
+        public void Add(AlbumGenre albumGenre) => AlbumGenres.Add(albumGenre);
+        public IQueryable<Artist> GetArtists(){ return Artists; }
+        public void Add(Artist artist) => Artists.Add(artist);
+        public IQueryable<ArtistGenre> GetArtistGenres(){ return ArtistGenres; }
+        public void Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
+        public IQueryable<Composition> GetCompositions(){ return Compositions; }
         public IQueryable<IComposition> GetICompositions() { return Compositions; }
-        void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
+        public void Add(Composition composition) => Compositions.Add(composition);
         public IQueryable<CompositionVideo> GetCompositionVideos(){ return CompositionVideos; }
-        void IDMDBContext.Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
+        public void Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
         public IQueryable<Genre> GetGenres(){ return Genres; }
-        void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
+        public void Add(Genre genre) => Genres.Add(genre);
         public IQueryable<GroupMember> GetGroupMembers(){ return GroupMembers; }
-        void IDMDBContext.Add(GroupMember groupMember) => GroupMembers.Add(groupMember);
+        public void Add(GroupMember groupMember) => GroupMembers.Add(groupMember);
         public IQueryable<GroupRole> GetGroupRoles(){ return GroupRoles; }
-        void IDMDBContext.Add(GroupRole groupRole) => GroupRoles.Add(groupRole);
+        public void Add(GroupRole groupRole) => GroupRoles.Add(groupRole);
         public IQueryable<ListenedAlbum> GetListenedAlbums(){ return ListenedAlbums; }
-        void IDMDBContext.Add(ListenedAlbum listenedAlbum) => ListenedAlbums .Add(listenedAlbum);
+        public void Add(ListenedAlbum listenedAlbum) => ListenedAlbums .Add(listenedAlbum);
         public IQueryable<ListenedArtist> GetListenedArtists(){ return ListenedArtists; }
-        void IDMDBContext.Add(ListenedArtist listenedArtist) => ListenedArtists.Add(listenedArtist);
+        public void Add(ListenedArtist listenedArtist) => ListenedArtists.Add(listenedArtist);
         public IQueryable<ListenedComposition> GetListenedCompositions(){ return ListenedCompositions; }
-        void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
+        public void Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
         public IQueryable<ListenedGenre> GetListenedGenres(){ return ListenedGenres; }
-        void IDMDBContext.Add(ListenedGenre listenedGenre) => ListenedGenres.Add(listenedGenre);
+        public void Add(ListenedGenre listenedGenre) => ListenedGenres.Add(listenedGenre);
         public IQueryable<Moderator> GetModerators(){ return Moderators; }
-        void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);
+        public void Add(Moderator moderator) => Moderators.Add(moderator);
         public IQueryable<Musician> GetMusicians(){ return Musicians; }
-        void IDMDBContext.Add(Musician musician) => Musicians.Add(musician);
+        public void Add(Musician musician) => Musicians.Add(musician);
         public IQueryable<MusicianRole> GetMusicianRoles(){ return MusicianRoles; }
-        void IDMDBContext.Add(MusicianRole musicianRole) => MusicianRoles.Add(musicianRole);
+        public void Add(MusicianRole musicianRole) => MusicianRoles.Add(musicianRole);
         public IQueryable<Picture> GetPictures(){ return Pictures; }
-        void IDMDBContext.Add(Picture picture) => Pictures.Add(picture);
+        public void Add(Picture picture) => Pictures.Add(picture);
         public IQueryable<User> GetUsers(){ return Users; }
-        void IDMDBContext.Add(User user) => Users.Add(user);
+        public void Add(User user) => Users.Add(user);
         public IQueryable<Video> GetVideos(){ return Videos; }
-        void IDMDBContext.Add(Video video) => Videos.Add(video); 
-        void IDMDBContext.UpdateAndSaveChanges<TEntity>(TEntity entity)
+        public void Add(Video video) => Videos.Add(video);
+
+
+        public void UpdateAndSaveChanges<TEntity>(TEntity entity) where TEntity : class
         {
-            DbEntityEntry entry = Entry(entity);
-            entry.State = EntityState.Modified;
-            SaveChanges();
+            throw new NotImplementedException();
         }
+
+        public void EnsureCreated()
+        {
+            throw new NotImplementedException();
+        }
+
+        //IQueryable<MediaStreamer.Domain.Administrator> MediaStreamer.Domain.IDMDBContext.GetAdministrators()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Administrator administrator)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.Album> MediaStreamer.Domain.IDMDBContext.GetAlbums()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Album administrator)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.AlbumGenre> MediaStreamer.Domain.IDMDBContext.GetAlbumGenres()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.AlbumGenre albumGenre)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.Artist> MediaStreamer.Domain.IDMDBContext.GetArtists()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Artist artist)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.ArtistGenre> MediaStreamer.Domain.IDMDBContext.GetArtistGenres()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.ArtistGenre artistGenre)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.Composition> MediaStreamer.Domain.IDMDBContext.GetCompositions()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<IQueryable<MediaStreamer.Domain.Composition>> GetCompositionsAsync()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.IComposition> MediaStreamer.Domain.IDMDBContext.GetICompositions()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Composition composition)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.CompositionVideo> MediaStreamer.Domain.IDMDBContext.GetCompositionVideos()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.CompositionVideo compositionVideo)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.Genre> MediaStreamer.Domain.IDMDBContext.GetGenres()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Genre genre)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.GroupMember> MediaStreamer.Domain.IDMDBContext.GetGroupMembers()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.GroupMember groupMember)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.GroupRole> MediaStreamer.Domain.IDMDBContext.GetGroupRoles()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.GroupRole groupRole)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.ListenedAlbum> MediaStreamer.Domain.IDMDBContext.GetListenedAlbums()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.ListenedAlbum listenedAlbum)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.ListenedArtist> MediaStreamer.Domain.IDMDBContext.GetListenedArtists()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.ListenedArtist listenedArtist)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.ListenedComposition> MediaStreamer.Domain.IDMDBContext.GetListenedCompositions()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.ListenedComposition listenedComposition)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.ListenedGenre> MediaStreamer.Domain.IDMDBContext.GetListenedGenres()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.ListenedGenre listenedGenre)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.Moderator> MediaStreamer.Domain.IDMDBContext.GetModerators()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Moderator moderator)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.Musician> MediaStreamer.Domain.IDMDBContext.GetMusicians()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Musician musician)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.MusicianRole> MediaStreamer.Domain.IDMDBContext.GetMusicianRoles()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.MusicianRole musicianRole)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.Picture> MediaStreamer.Domain.IDMDBContext.GetPictures()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Picture picture)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.User> MediaStreamer.Domain.IDMDBContext.GetUsers()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.User user)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //IQueryable<MediaStreamer.Domain.Video> MediaStreamer.Domain.IDMDBContext.GetVideos()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Add(MediaStreamer.Domain.Video video)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

@@ -50,7 +50,7 @@
                 <!--<MenuItem Header="File" IsCheckable="true" FontSize="12"> </MenuItem>
                 <MenuItem Header="Settings" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>
                 <MenuItem Header="Security" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>-->
-                <MenuItem x:Name="btnDatabase" Click="btnDatabase_Click"  Header="Database" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnDatabase" Click="btnDatabase_Click"  Header="Database" IsCheckable="true" Foreground="White" FontSize="12" x:FieldModifier="public"></MenuItem>
             </Menu>
             <Border HorizontalAlignment="Right" DockPanel.Dock="Right" Padding="5 0 5 0">
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
@@ -72,9 +72,9 @@
             </DockPanel>
         </DockPanel>
         <!--Row 0, Column 0 LOGO-->
-        <StackPanel Orientation="Vertical" Grid.ColumnSpan="3">
+        <StackPanel Grid.Row="1" Orientation="Vertical" Grid.ColumnSpan="3">
             <Label Margin="10,0,0,12" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Content="DMHandler" FontSize="24"/>
-            <Label Margin="10,-12,90,12" x:Name="lblStatus" Content="You're on a main page"/>
+            <Label Margin="10,-12,90,12" x:Name="lblStatus" Content="You're on a main page" x:FieldModifier="public"/>
         </StackPanel>
         <!--<Rectangle Grid.Row="1" Grid.Column="1" Fill="#e8ebf1" Margin="0,0,0,0" />-->
         <!--Grid.Row="0" -Grid.Column="1"-->
@@ -172,12 +172,12 @@
                Grid.Row="3"
                Grid.Column="0" 
                Navigated="mainFrame_Navigated"
-               Content="Frame" 
+               Content="Frame" x:FieldModifier="public"
                x:Name="mainFrame" />
         <!--Row 3-->
         <StatusBar Margin="10,0,1.2,0.2" Grid.Row="4" Name="statusBar"  VerticalAlignment="Bottom" 
                        Height="30" HorizontalAlignment="Stretch" Grid.ColumnSpan="3">
-            <TextBlock Name="txtStatus">Loading completed.</TextBlock>
+            <TextBlock Name="txtStatus" x:FieldModifier="public">Loading completed.</TextBlock>
         </StatusBar>
     </Grid>
 </Page>

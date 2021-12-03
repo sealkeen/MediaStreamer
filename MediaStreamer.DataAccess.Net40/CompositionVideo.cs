@@ -11,8 +11,8 @@ namespace MediaStreamer.DataAccess.Net40.Models
 {
     using System;
     using System.Collections.Generic;
-
-    internal partial class CompositionVideo
+    
+    public partial class CompositionVideo
     {
         public long VideoID { get; set; }
         public long ArtistID { get; set; }

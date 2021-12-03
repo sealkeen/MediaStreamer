@@ -70,11 +70,13 @@ namespace MediaStreamer.WPF.Components
                 Session.MainPage.txtStatus.Text = status;
             }));
         }
+
         [MTAThread]
         public static void SetCurrentStatus(string status)
         {
             SetTxtStatusContents(status);
         }
+
         [MTAThread]
         public static void AddToStatus(string addition)
         {
@@ -110,6 +112,7 @@ namespace MediaStreamer.WPF.Components
         {
 
         }
+
         public static string ReturnEmptyIfZero(int value) => value == 0 ? "" : " [" + value.ToString() + "]";
 
         public static string ToMergedString(IEnumerable comps)

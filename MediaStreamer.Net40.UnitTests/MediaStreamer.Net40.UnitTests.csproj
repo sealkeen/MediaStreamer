@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net40</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediaStreamer.WPF.EventAction\MediaStreamer.WPF.EventAction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Plugin.FilePicker">
+      <HintPath>..\..\XamarinFilePicker\FilePicker-Plugin-for-Xamarin-and-Windows\src\Plugin.FilePicker\bin\Debug\net40\Plugin.FilePicker.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

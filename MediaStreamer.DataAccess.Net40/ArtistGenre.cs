@@ -11,10 +11,11 @@ namespace MediaStreamer.DataAccess.Net40.Models
 {
     using System;
     using System.Collections.Generic;
-
-    internal partial class ArtistGenre
+    
+    public partial class ArtistGenre
     {
         public long ArtistID { get; set; }
+        public long GenreID { get; set; }
         public string GenreName { get; set; }
         public Nullable<System.DateTime> DateOfApplication { get; set; }
     

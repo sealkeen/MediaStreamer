@@ -45,7 +45,7 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonListen_Click(object sender, RoutedEventArgs e)
         {
-            Program.FileManipulator.DecomposeAudioFile(Program.FileManipulator.OpenAudioFileInMSWindows());
+            Program.FileManipulator.DecomposeAudioFile(Program.FileManipulator.OpenAudioFileCrossPlatform().Result);
             ListCompositions();
         }
 

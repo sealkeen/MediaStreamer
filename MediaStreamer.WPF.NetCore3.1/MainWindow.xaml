@@ -9,15 +9,16 @@
         Title="MediaStreamer (WindowsDesktop.NetCore3.1)" 
             Height="450" Width="800"
             AllowsTransparency="False"
+            MouseLeftButtonDown="Window_MouseLeftButtonDown"
             >
     <Window.Resources>
-        <!--<Style TargetType="{x:Type local:MainWindow}">
+        <Style TargetType="{x:Type local:MainWindow}">
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome CornerRadius="0" GlassFrameThickness="0" ResizeBorderThickness="0" CaptionHeight="0"></WindowChrome>
                 </Setter.Value>
             </Setter>
-        </Style>-->
+        </Style>
     </Window.Resources>
         
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
