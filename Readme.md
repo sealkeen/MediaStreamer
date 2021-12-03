@@ -1,5 +1,5 @@
 ## Overview
-SQLite and .Net (Core) based application aimed to support cross-platform audio streaming / listening experience.
+SQLServer (Net40) / SQLite (NetCoreApp3.1) based application aimed to support cross-platform audio streaming / listening experience.
 Current versions support :
 WPF .Net 4.0 builds for Windows;
 WPF .Net Core 3.1 build for Windows;
