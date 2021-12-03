@@ -1,5 +1,6 @@
 ## Overview
 SQLite and .Net (Core) based application aimed to support cross-platform audio streaming / listening experience.
+
 Right now the functional of the project is limited to Music Explorer (Create music library and edit its content (e.g. tags, albums, genres, artists).
 
 Current versions support :
