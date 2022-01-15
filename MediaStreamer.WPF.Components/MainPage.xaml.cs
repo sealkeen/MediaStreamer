@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -20,9 +21,6 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class MainPage : Page
     {
-        private bool userIsDraggingSlider = false;
-        private bool canExecute = false;
-        public event Action OnConstructing;
         public MainPage()
         {
             InitializeComponent();
@@ -36,15 +34,21 @@ namespace MediaStreamer.WPF.Components
             Program.mePlayer = this.mePlayer;
             Program.txtStatus = this.txtStatus;
         }
+        private double volumeSliderValue = 0.025; 
+        private bool userIsDraggingSlider = false;
+        private bool canExecute = false;
+        public event Action OnConstructing;
 
         public Frame GetFrame()
         {
             return mainFrame;
         }
+
         public Label GetStatusLabel()
         {
             return lblStatus;
         }
+
         public TextBlock GetStatusTextBlock()
         {
             return txtStatus;
@@ -101,7 +105,11 @@ namespace MediaStreamer.WPF.Components
                 Session.CompositionsPage = new CompositionsPage();
             if (!Session.CompositionsPage.ListInitialized)
             {
+#if !NET40
                 await Session.CompositionsPage.ListCompositionsAsync();
+#else
+                Session.CompositionsPage.ListCompositionsAsync().Wait();
+#endif
             }
             Dispatcher.BeginInvoke(new Action(() => SetContentPageCompositions()));
             mainFrame.UpdateLayout();
@@ -256,6 +264,7 @@ namespace MediaStreamer.WPF.Components
         {
             userPagesStackPanel.IsEnabled = true;
         }
+
         public void DisableUserPages()
         {
             userPagesStackPanel.IsEnabled = false;
@@ -408,7 +417,7 @@ namespace MediaStreamer.WPF.Components
 
         private void Header_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            mePlayer.Volume += (e.Delta > 0) ? 0.05 : -0.05;
+            mePlayer.Volume += (e.Delta > 0) ? volumeSliderValue : -volumeSliderValue;
         }
 
         private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -456,10 +465,10 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        public event RoutedEventHandler DataBaseClick;
-        private void btnDatabase_Click(object sender, RoutedEventArgs e)
-        {
-            DataBaseClick?.Invoke(sender, e);
-        }
+        //public event RoutedEventHandler DataBaseClick;
+        //private void btnDatabase_Click(object sender, RoutedEventArgs e)
+        //{
+        //    DataBaseClick?.Invoke(sender, e);
+        //}
     }
 }

@@ -135,7 +135,10 @@ namespace MediaStreamer.DataAccess.Net40.SQLite
         {
             throw new NotImplementedException();
         }
+        public void DisableLazyLoading()
+        {
 
+        }
         //IQueryable<MediaStreamer.Domain.Administrator> MediaStreamer.Domain.IDMDBContext.GetAdministrators()
         //{
         //    throw new NotImplementedException();

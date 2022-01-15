@@ -7,7 +7,7 @@ using System.Text;
 using MediaStreamer.IO;
 using MediaStreamer.Domain;
 
-namespace MediaStreamer.WPF.Components
+namespace MediaStreamer.RAMControl
 {
     public class CompositionStorage
     {

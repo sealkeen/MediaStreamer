@@ -6,12 +6,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaStreamer.WPF.NetCore3_1"
         mc:Ignorable="d"
-        Title="MediaStreamer (WindowsDesktop.NetCore3.1)" 
+        Title="MediaStreamer (WindowsDesktop.NetCore3.1)"
             Height="450" Width="800"
             AllowsTransparency="False"
+            WindowStyle="None"
+            ResizeMode="CanResizeWithGrip"
             MouseLeftButtonDown="Window_MouseLeftButtonDown"
-            >
-    <Window.Resources>
+        >
+    <!--<Window.Resources>
         <Style TargetType="{x:Type local:MainWindow}">
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
@@ -19,7 +21,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-    </Window.Resources>
+    </Window.Resources>-->
         
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>

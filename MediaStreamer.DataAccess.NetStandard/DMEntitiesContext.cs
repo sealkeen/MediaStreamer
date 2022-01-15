@@ -6,7 +6,6 @@ using System.IO;
 using System.Threading.Tasks;
 //using MediaStreamer.IO;
 
-#nullable disable
 
 namespace MediaStreamer
 {
@@ -19,7 +18,7 @@ namespace MediaStreamer
 
         public DMEntitiesContext()
         {
-
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public void EnsureCreated()
@@ -90,7 +89,6 @@ namespace MediaStreamer
         public virtual DbSet<Picture> Pictures { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -577,13 +575,13 @@ namespace MediaStreamer
         void IDMDBContext.Add(Artist artist) => Artists.Add(artist);
         public IQueryable<ArtistGenre> GetArtistGenres() { return ArtistGenres; }
         void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
-        public IQueryable<Composition> GetCompositions() { return Compositions.Include(c => c.Artist); }
+        public IQueryable<Composition> GetCompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist); }
 
         public Task<IQueryable<Composition>> GetCompositionsAsync() 
         { 
             return Task.Factory.StartNew(GetCompositions); 
         }
-        public IQueryable<IComposition> GetICompositions() { return Compositions; }
+        public IQueryable<IComposition> GetICompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist); }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
         public IQueryable<CompositionVideo> GetCompositionVideos() { return CompositionVideos; }
         void IDMDBContext.Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
@@ -618,6 +616,11 @@ namespace MediaStreamer
         {
             Update(entity);
             SaveChanges();
+        }
+
+        public void DisableLazyLoading()
+        {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Windows.Controls;
 using MediaStreamer.Domain;
+using MediaStreamer.WPF.Components;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -23,18 +24,56 @@ namespace MediaStreamer.WPF.Components
         public static SignedUpPage SignedUpPage { get; set; }
         public static TagEditorPage TagEditorPage { get; set; }
         public static VideoPage VideoPage { get; set; }
-
-        public static LoadingPage loadingPage = new LoadingPage();
+        public static LoadingPage loadingPage { get; set; }
 
         private static Session _session = new Session();
         private static System.Reflection.PropertyInfo[] _propertyCollection = _session.GetType().GetProperties();
 
+        public static void HandleException(Exception ex)
+        {
+            SetCurrentStatus("Error to double click add composition");
+            SetCurrentStatus(ex.Message);
+        }
+
+
+        [MTAThread]
+        public static void SetCurrentStatus(string status)
+        {
+            SetTxtStatusContents(status);
+        }
+
+        [MTAThread]
+        public static void SetTxtStatusContents(string status)
+        {
+            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                Session.MainPage.txtStatus.Text = status;
+            }));
+        }
+        [MTAThread]
+        public static void AddToStatus(string addition)
+        {
+            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                Session.MainPage.txtStatus.Text += addition;
+            }));
+        }
+
+        [MTAThread]
+        public static void SetCurrentAction(string action)
+        {
+            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                Session.MainPage.lblStatus.Content = action;
+            }));
+        }
+
         public static void UpdatePages()
         {
             //CompositionsPage = new CompositionsPage();
-            if ((MainPage.mainFrame.Content as FirstFMPage) is CompositionsPage)
+            if ((MainPage.GetFrame().Content) is CompositionsPage)
             {
-                MainPage.mainFrame.Content = CompositionsPage;
+                MainPage.GetFrame().Content = CompositionsPage;
             }
         }
 
@@ -107,6 +146,9 @@ namespace MediaStreamer.WPF.Components
         {
             foreach (System.Reflection.PropertyInfo property in _propertyCollection)
             {
+                //TODO: page.Dispose()
+
+                //Debugging test //todo: remove
                 Page page = new Page();
                 property.GetValue(page, null);
             }
@@ -123,5 +165,4 @@ namespace MediaStreamer.WPF.Components
             }
         }
     }
-    
 } //namespace FirstFMCourse

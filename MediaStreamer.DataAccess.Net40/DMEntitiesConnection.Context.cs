@@ -21,6 +21,7 @@ namespace MediaStreamer.DataAccess.Net40
         public DMEntities()
             : base("name=DMEntities")
         {
+
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -48,7 +49,6 @@ namespace MediaStreamer.DataAccess.Net40
         public virtual DbSet<Picture> Pictures { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
-
 
         //Custom Methods
         public void Clear()
@@ -131,6 +131,10 @@ namespace MediaStreamer.DataAccess.Net40
         public void EnsureCreated()
         {
             throw new NotImplementedException();
+        }
+        public void DisableLazyLoading()
+        {
+
         }
     }
 }

@@ -9,9 +9,10 @@ using LinqExtensions;
 
 namespace MediaStreamer.RAMControl
 {
-
     public class Program
     {
+        //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
+        //TODO: Move CompositionStorage to RAMControl
         //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
         //TODO: Move CompositionStorage to RAMControl
 
@@ -65,32 +66,35 @@ namespace MediaStreamer.RAMControl
         [MTAThread]
         public static void SetTxtStatusContents(string status)
         {
-            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
-            {
-                Session.MainPage.txtStatus.Text = status;
-            }));
-        }
-        [MTAThread]
-        public static void SetCurrentStatus(string status)
-        {
-            SetTxtStatusContents(status);
+            Console.WriteLine(status);
+            //Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            //{
+            //    Session.MainPage.txtStatus.Text = status;
+            //}));
         }
         [MTAThread]
         public static void AddToStatus(string addition)
         {
-            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
-            {
-                txtStatus.Text += addition;
-            }));
+            Console.WriteLine(addition);
+            //Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            //{
+            //    txtStatus.Text += addition;
+            //}));
         }
 
         [MTAThread]
         public static void SetCurrentAction(string action)
         {
-            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
-            {
-                Session.MainPage.lblStatus.Content = action;
-            }));
+            Console.WriteLine(action);
+            //Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            //{
+            //    Session.MainPage.lblStatus.Content = action;
+            //}));
+        }
+        [MTAThread]
+        public static void SetCurrentStatus(string status)
+        {
+            SetTxtStatusContents(status);
         }
 
         public static string ToString(IEnumerable comps)
@@ -110,6 +114,7 @@ namespace MediaStreamer.RAMControl
         {
 
         }
+
         public static string ReturnEmptyIfZero(int value) => value == 0 ? "" : " [" + value.ToString() + "]";
 
         public static string ToMergedString(IEnumerable comps)
@@ -144,5 +149,5 @@ namespace MediaStreamer.RAMControl
             if (error)
                 Debug.WriteLine(status);
         }
-    }
-}
+    } // public class Program
+} // namespace MediaStreamer.RAMControl

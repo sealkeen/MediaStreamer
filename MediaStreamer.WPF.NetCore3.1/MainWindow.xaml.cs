@@ -21,9 +21,13 @@ namespace MediaStreamer.WPF.NetCore3_1
 
             //Program.DBAccess.LoadingTask = task;
 
-            InitializeComponent();
-            this.Content = new MainPage();
-            Session.MainPage.DataBaseClick += this.btnDatabase_Click;
+            InitializeComponent ();
+            this.windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
+
+            this.btnDatabase.Click += this.btnDatabase_Click;
+            //Session.MainPage.DataBaseClick += this.btnDatabase_Click;
+            //Session.MainPage.btnClose.Click += this.btnClose_Click;
+            //Session.MainPage.btnMinimize.Click += this.btnMinimize_Click;
         }
 
         private async void btnDatabase_Click(object sender, RoutedEventArgs e)
@@ -41,12 +45,13 @@ namespace MediaStreamer.WPF.NetCore3_1
 
         private void btnMinimize_Click(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;
+            App.Current.MainWindow.WindowState = WindowState.Minimized;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             App.Current.Shutdown();
+            App.Current.MainWindow.Close();
         }
 
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

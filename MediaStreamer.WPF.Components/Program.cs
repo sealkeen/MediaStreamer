@@ -6,12 +6,13 @@ using MediaStreamer.IO;
 using System.Collections;
 using System.Collections.Generic;
 using LinqExtensions;
-using System.Threading.Tasks;
 
 namespace MediaStreamer.WPF.Components
 {
     public class Program
     {
+        //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
+        //TODO: Move CompositionStorage to RAMControl
         //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
         //TODO: Move CompositionStorage to RAMControl
 
@@ -70,13 +71,6 @@ namespace MediaStreamer.WPF.Components
                 Session.MainPage.txtStatus.Text = status;
             }));
         }
-
-        [MTAThread]
-        public static void SetCurrentStatus(string status)
-        {
-            SetTxtStatusContents(status);
-        }
-
         [MTAThread]
         public static void AddToStatus(string addition)
         {
@@ -94,14 +88,19 @@ namespace MediaStreamer.WPF.Components
                 Session.MainPage.lblStatus.Content = action;
             }));
         }
+        [MTAThread]
+        public static void SetCurrentStatus(string status)
+        {
+            SetTxtStatusContents(status);
+        }
 
         public static string ToString(IEnumerable comps)
         {
             string result = "";
-            foreach (Composition cmp in comps)
+            foreach (ICompositionInstance cmp in comps)
             {
-                result += $"{ cmp?.Artist.ArtistName ?? "Unknown"} – " +
-                $"" + $"{cmp?.CompositionName ?? "Unknown"}" + ", ";
+                result += $"{ cmp?.GetInstance()?.Artist.ArtistName ?? "Unknown"} – " +
+                $"" + $"{cmp?.GetInstance()?.CompositionName ?? "Unknown"}" + ", ";
             }
             result = result.TrimEnd(new char[] { ',', ' ' });
             result += ".";
@@ -147,5 +146,5 @@ namespace MediaStreamer.WPF.Components
             if (error)
                 Debug.WriteLine(status);
         }
-    }
-}
+    } // public class Program
+} // namespace MediaStreamer.RAMControl

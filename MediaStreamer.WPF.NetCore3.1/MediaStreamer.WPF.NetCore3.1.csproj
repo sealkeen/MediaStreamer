@@ -5,6 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>MediaStreamer.WPF.NetCore3._1</RootNamespace>
     <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x86</Platforms>
+    <ApplicationIcon>DMXamarin.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

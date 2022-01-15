@@ -626,5 +626,9 @@ namespace MediaStreamer
             Update(entity);
             SaveChanges();
         }
+        public void DisableLazyLoading()
+        {
+            this.ChangeTracker.LazyLoadingEnabled = false;
+        }
     }
 }

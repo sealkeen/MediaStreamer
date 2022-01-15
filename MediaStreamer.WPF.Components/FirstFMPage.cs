@@ -13,6 +13,11 @@ namespace MediaStreamer.WPF.Components
             //    -1;
         }
 
+        public virtual System.Windows.Controls.Frame GetFrame()
+        {
+            return null;
+        }
+
         virtual public void LoadManagementElements()
         {
 

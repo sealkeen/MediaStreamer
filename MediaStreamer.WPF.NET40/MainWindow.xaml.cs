@@ -1,5 +1,4 @@
-﻿using MediaStreamerDataAccessNet40;
-using MediaStreamer.Domain;
+﻿using MediaStreamer.Domain;
 using MediaStreamer.WPF.Components;
 using Microsoft.Win32;
 using System;
@@ -14,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using MediaStreamer.DataAccess.Net40;
+using MediaStreamer.DataAccess.Net40;//.SQLite;
 
 namespace MediaStreamer.WPF.Net40
 {
@@ -31,8 +30,8 @@ namespace MediaStreamer.WPF.Net40
             {
                 MediaStreamer.WPF.Components.Program.DBAccess = new DBRepository { DB = new DMEntities() };
 
-                this.Content = new MainPage();
-                Session.MainPage.DataBaseClick += this.btnDatabase_Click;
+                this.windowFrame.Content = new MainPage();
+                //this.DataBaseClick += this.btnDatabase_Click;
             } catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
             }

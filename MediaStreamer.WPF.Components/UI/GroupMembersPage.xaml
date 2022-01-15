@@ -1,4 +1,5 @@
-﻿<local:FirstFMPage x:Class="MediaStreamer.WPF.Components.GroupMembersPage"
+﻿<local:FirstFMPage  xmlns:local1="clr-namespace:MediaStreamer.RAMControl;assembly=MediaStreamer.RAMControl"
+                     x:Class="MediaStreamer.WPF.Components.GroupMembersPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

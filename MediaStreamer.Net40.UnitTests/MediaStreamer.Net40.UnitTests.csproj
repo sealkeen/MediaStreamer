@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Plugin.FilePicker">
-      <HintPath>..\..\XamarinFilePicker\FilePicker-Plugin-for-Xamarin-and-Windows\src\Plugin.FilePicker\bin\Debug\net40\Plugin.FilePicker.dll</HintPath>
+    <Reference Include="Plugin.FilePicker.Net40">
+      <HintPath>..\..\XamarinFilePicker\FilePicker-Plugin-for-Xamarin-and-Windows\src\Plugin.FilePicker\bin\Release\net40\Plugin.FilePicker.Net40.dll</HintPath>
     </Reference>
   </ItemGroup>
 

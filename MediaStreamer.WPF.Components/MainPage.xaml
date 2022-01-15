@@ -30,14 +30,14 @@
             <ColumnDefinition MinWidth="1" MaxWidth="168"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
+            <!--<RowDefinition Height="20" />-->
             <RowDefinition MaxHeight="80" Height="120*"></RowDefinition>
             <RowDefinition MinHeight="34" Height="50"></RowDefinition>
             <RowDefinition MinHeight="100" Height="200*"></RowDefinition>
             <RowDefinition MinHeight ="15" Height="23*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Grid.ColumnSpan="3">
+        <!--<DockPanel Grid.Row="0" Grid.ColumnSpan="3">
             <DockPanel.Background>
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                     <GradientStop Color="#FF454545" Offset="0.528" />
@@ -47,19 +47,20 @@
                 </LinearGradientBrush>
             </DockPanel.Background>
             <Menu Width="Auto" Name="menu1" VerticalAlignment="Top" DockPanel.Dock="Left" Foreground="White" Background="Transparent" Padding="5 0 5 0">
-                <!--<MenuItem Header="File" IsCheckable="true" FontSize="12"> </MenuItem>
+                --><!--<MenuItem Header="File" IsCheckable="true" FontSize="12"> </MenuItem>
                 <MenuItem Header="Settings" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>
-                <MenuItem Header="Security" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>-->
+                <MenuItem Header="Security" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>--><!--
                 <MenuItem x:Name="btnDatabase" Click="btnDatabase_Click"  Header="Database" IsCheckable="true" Foreground="White" FontSize="12" x:FieldModifier="public"></MenuItem>
             </Menu>
             <Border HorizontalAlignment="Right" DockPanel.Dock="Right" Padding="5 0 5 0">
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                    <Button Content="Close" Width="50" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1"></Button>
-                    <Button Content="Minimize" Width="60" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1" Margin="5 0 0 0"></Button>
+                    <Button x:Name="btnClose" Content="Close" Width="50" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1" x:FieldModifier="public"></Button>
+                    <Button x:Name="btnMinimize" Content="Minimize" Width="60" Foreground="White" Background="Transparent" BorderBrush="#FFDDDDDD" BorderThickness="1" x:FieldModifier="public"></Button>
                 </StackPanel>
             </Border>
-        </DockPanel>
-        <DockPanel Margin="0,6,0.2,6" Grid.Row="1" HorizontalAlignment="Right" 
+        </DockPanel>-->
+        <!--Row 0-->
+        <DockPanel Margin="0,6,0.2,6" Grid.Row="0" HorizontalAlignment="Right" 
                     Grid.Column="2" Width="146">
             <DockPanel Margin="0,5,0,0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="42" >
                 <TextBox Margin="0,-9,0,0" Name="txtLogin" Text="Login" DockPanel.Dock="Top" ></TextBox>
@@ -71,14 +72,14 @@
                 <Button Background="AliceBlue" Margin="1,-13,0,0"  Height="20" Name="buttonSignUp" Content="Sign up" Click="buttonSignUp_Click"></Button>
             </DockPanel>
         </DockPanel>
-        <!--Row 0, Column 0 LOGO-->
-        <StackPanel Grid.Row="1" Orientation="Vertical" Grid.ColumnSpan="3">
+        <!--Row 1, Column 0 LOGO-->
+        <StackPanel Grid.Row="0" Orientation="Vertical" Grid.ColumnSpan="3">
             <Label Margin="10,0,0,12" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Content="DMHandler" FontSize="24"/>
             <Label Margin="10,-12,90,12" x:Name="lblStatus" Content="You're on a main page" x:FieldModifier="public"/>
         </StackPanel>
         <!--<Rectangle Grid.Row="1" Grid.Column="1" Fill="#e8ebf1" Margin="0,0,0,0" />-->
-        <!--Grid.Row="0" -Grid.Column="1"-->
-        <Grid Grid.Row="2" Height="22" MouseWheel="Header_MouseWheel" Margin="3,27,0,0.6" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Stretch">
+        <!--Grid.Row="1" -Grid.Column="1"-->
+        <Grid Grid.Row="1" Height="22" MouseWheel="Header_MouseWheel" Margin="3,27,0,0.6" Grid.ColumnSpan="4" Grid.Column="0" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="96"/>
                 <ColumnDefinition />
@@ -94,7 +95,8 @@
             <Button Grid.Column="4" x:Name="btnPrevious" Background="AliceBlue" Click="btnPrevious_Click">↞</Button>
             <Button Grid.Column="5" x:Name="btnNext" Background="AliceBlue" Click="btnNext_Click">↠</Button>
         </Grid>
-        <Grid Grid.Row="2" Grid.Column="0"  MouseWheel="Header_MouseWheel" Margin="0,0,1.2,0" VerticalAlignment="Top"
+        <!--Row 1-->
+        <Grid Grid.Row="1" Grid.Column="0"  MouseWheel="Header_MouseWheel" Margin="0,0,1.2,0" VerticalAlignment="Top"
                     Grid.ColumnSpan="3" >
             <!--Grid.Column="2"-->
             <StatusBar Margin="4,0,1,0" 
@@ -131,7 +133,7 @@
 
         <!--Row 2-->
         <!--Grid.Column="0"-->
-        <Grid Grid.Row="3" Background="AliceBlue" Margin="4,2.4,0.2,0" HorizontalAlignment="Stretch"
+        <Grid Grid.Row="2" Background="AliceBlue" Margin="4,2.4,0.2,0" HorizontalAlignment="Stretch"
                     Height="24" VerticalAlignment="Top" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -150,7 +152,8 @@
             <Button Grid.Column="5" x:Name="buttonGroupMembersGenres" Content="GroupMembers"  Background="AliceBlue" Click="buttonGroupMembers_Click" />
             <Button Grid.Column="6" x:Name="buttonVideo" Content="Video Clips"  Background="AliceBlue" Click="buttonVideo_Click"/>
         </Grid>
-        <Grid Background="AliceBlue"  Margin="4,28.4,0.2,0" Grid.Row="3" Grid.Column="0" IsEnabled="False"  Name="userPagesStackPanel"
+        <!--Row 2-->
+        <Grid Background="AliceBlue"  Margin="4,28.4,0.2,0" Grid.Row="2" Grid.Column="0" IsEnabled="False"  Name="userPagesStackPanel"
                     Height="24" VerticalAlignment="Top" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -165,17 +168,19 @@
             <Button Grid.Column="3" x:Name="buttonUserCompositions" Content="User Compositions" Click="buttonUserCompositions_Click"/>
             <Button Grid.Column="4" x:Name="buttonUserAlbums" Content="User Albums" Click="buttonUserAlbums_Click"/>
         </Grid>
+        <!--Row 2-->
         <Frame Margin="4,54.4,1.2,9.8" 
                    HorizontalAlignment="Stretch" 
                    VerticalAlignment="Stretch" 
                    Grid.ColumnSpan="3" 
-               Grid.Row="3"
+               Grid.Row="2"
                Grid.Column="0" 
                Navigated="mainFrame_Navigated"
                Content="Frame" x:FieldModifier="public"
+               JournalOwnership="OwnsJournal"
                x:Name="mainFrame" />
         <!--Row 3-->
-        <StatusBar Margin="10,0,1.2,0.2" Grid.Row="4" Name="statusBar"  VerticalAlignment="Bottom" 
+        <StatusBar Margin="10,0,1.2,0.2" Grid.Row="3" Name="statusBar"  VerticalAlignment="Bottom" 
                        Height="30" HorizontalAlignment="Stretch" Grid.ColumnSpan="3">
             <TextBlock Name="txtStatus" x:FieldModifier="public">Loading completed.</TextBlock>
         </StatusBar>

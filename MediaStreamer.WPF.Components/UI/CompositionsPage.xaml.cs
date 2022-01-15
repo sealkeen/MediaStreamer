@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,8 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MediaStreamer.Domain;
 using MediaStreamer.IO;
+using MediaStreamer.RAMControl;
 using LinqExtensions;
-using System.Collections;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -36,6 +37,7 @@ namespace MediaStreamer.WPF.Components
         protected bool _orderByDescending = false;
         public bool ListInitialized = false;
         public int LastCompositionIndex = -1;
+
 
         protected void ListView_OnColumnClick(object sender, RoutedEventArgs e)
         {
@@ -111,9 +113,14 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
+#if !NET40
                 var listCompsTask = Task.Factory.StartNew(GetICompositions);
-                var tsk = await listCompsTask;
+                //var tsk = await listCompsTask;
+                listCompsTask.Wait();
                 Compositions = listCompsTask.Result;
+#else
+                Compositions = GetICompositions();
+#endif
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
                 lastDataLoadWasPartial = false;
             }
