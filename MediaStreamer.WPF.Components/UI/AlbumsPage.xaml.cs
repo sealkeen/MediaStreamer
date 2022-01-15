@@ -47,7 +47,16 @@ namespace MediaStreamer.WPF.Components
 
         public void PartialListAlbums(string genreName)
         {
-            Albums = Program.DBAccess.DB.GetAlbums().Where(a => (a.GenreName == genreName)).ToList();
+            var genres = Program.DBAccess.DB.GetGenres().Where(g => g.GenreName == genreName);
+            if (genres.Count() == 0)
+                return;
+            var artists = Program.DBAccess.DB.GetArtistGenres().Where(ag => ag.GenreID == genres.First().GenreID);
+            if (artists.Count() == 0)
+                return;
+            var albums = Program.DBAccess.DB.GetAlbums().Where(a => (a.ArtistID == artists.First().ArtistID));
+            if (albums.Count() == 0)
+                return;
+            Albums = albums.ToList();
             lastDataLoadWasPartial = true;
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }

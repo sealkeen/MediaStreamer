@@ -1,7 +1,6 @@
 ﻿using System;
-using Plugin;
 
-namespace MediaStreamer.Net40.UnitTests
+namespace MediaStreamer.NetCoreApp.UnitTests
 {
     public class Program
     {

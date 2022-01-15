@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\XamarinFilePicker\FilePicker-Plugin-for-Xamarin-and-Windows\src\Plugin.FilePicker\Plugin.FilePicker.csproj" />
+    <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
+  </ItemGroup>
+
+</Project>
