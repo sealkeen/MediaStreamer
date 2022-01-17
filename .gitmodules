@@ -1,0 +1,3 @@
+[submodule "MediaStreamer.IO"]
+	path = MediaStreamer.IO
+	url = https://github.com/sealkeen/MediaStreamer.IO/

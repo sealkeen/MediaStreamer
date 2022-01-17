@@ -293,8 +293,8 @@ namespace MediaStreamer.WPF.Components
             return lstItems.SelectedItems;
         }
 
-        public delegate void AddDelegate(Composition composition);
-        public static void EnqueueOrPush(AddDelegate enquque, AddDelegate push, Composition comp, bool enqueue)
+        public delegate void AppendHandler(Composition composition);
+        public static void EnqueueOrPush(AppendHandler enquque, AppendHandler push, Composition comp, bool enqueue)
         {
             if (enqueue)
                 enquque(comp);
