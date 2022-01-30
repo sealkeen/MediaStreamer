@@ -4,3 +4,6 @@
 [submodule "MediaStreamer.Domain"]
 	path = MediaStreamer.Domain
 	url = https://github.com/sealkeen/MediaStreamer.Domain
+[submodule "MediaStreamer.Xamarin"]
+	path = MediaStreamer.Xamarin
+	url = https://github.com/sealkeen/MediaStreamer.Xamarin
