@@ -217,7 +217,7 @@ namespace MediaStreamer
 
                 entity.Property(e => e.CompositionName).IsRequired();
 
-                entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
+                //entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
 
                 entity.HasOne(d => d.Album)
                     .WithMany(p => p.Compositions)
@@ -227,9 +227,9 @@ namespace MediaStreamer
                     .WithMany(p => p.Compositions)
                     .HasForeignKey(d => d.ArtistID);
 
-                entity.HasOne(d => d.GroupMember)
-                    .WithMany(p => p.Compositions)
-                    .HasForeignKey(d => d.GroupFormationDate);
+                //entity.HasOne(d => d.GroupMember)
+                //    .WithMany(p => p.Compositions)
+                //    .HasForeignKey(d => d.GroupFormationDate);
             });
 
             modelBuilder.Entity<CompositionVideo>(entity =>
