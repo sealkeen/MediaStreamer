@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1; netstandard2.1; netstandard2.0; net40; net45</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
+    <ProjectReference Include="C:\Users\Sealkeen\Documents\VCSharp\EPAM\SealkeenJSON\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj" />
+  </ItemGroup>
+
+</Project>

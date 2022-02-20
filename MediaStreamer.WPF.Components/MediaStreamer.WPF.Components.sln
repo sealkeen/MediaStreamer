@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.FilePicker.Net40", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.TagEditor.UnitTests", "..\MediaStreamer.TagEditor.UnitTests\MediaStreamer.TagEditor.UnitTests.csproj", "{FFB04D3E-3565-4353-972A-692876835AFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.NetCoreApp.UnitTests", "..\MediaStreamer.NetCoreApp.UnitTests\MediaStreamer.NetCoreApp.UnitTests.csproj", "{754F1969-9812-4841-86B0-7888AC9F8C6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.NetCoreApp.UnitTests", "..\MediaStreamer.NetCoreApp.UnitTests\MediaStreamer.NetCoreApp.UnitTests.csproj", "{754F1969-9812-4841-86B0-7888AC9F8C6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
