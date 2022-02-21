@@ -9,19 +9,20 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
     {
         static void Main(string[] args)
         {
+            TestAddGenre();
+        }
+
+        //OK
+        public void TestGetGenres()
+        {
             JSONDataContext context = new JSONDataContext();
             var genres = context.GetGenres();
 
             foreach (var g in genres)
             {
-                Console.WriteLine(g.GenreID + g.GenreName);
+                Console.WriteLine(g.GenreID + " " + g.GenreName);
             }
             Console.ReadKey();
-        }
-
-        static void TestGetGenres()
-        {
-            
         }
 
         //OK
@@ -31,8 +32,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
             dc.EnsureCreated();
 
             Genre g = new Genre();
-            g.GenreID = 0;
-            g.GenreName = "new Genre";
+            g.GenreID = 2;
+            g.GenreName = "newGenre";
 
             dc.AddEntity(g);
         }

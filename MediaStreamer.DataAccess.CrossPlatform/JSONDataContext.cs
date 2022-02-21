@@ -313,7 +313,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (!File.Exists(AlbumsDB))
                 return (new List<AlbumGenre>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json").Descendants()[0];
             var jAlbums = root.Descendants();
 
             List<AlbumGenre> result = new List<AlbumGenre>();
@@ -335,8 +335,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.GenreID, DataBase.TryParseInt(kv.GetPairedValue()));
                             break;
                     }
-                    result.Add(received);
                 }
+                result.Add(received);
             }
 
             return result.AsQueryable();
@@ -349,7 +349,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (!File.Exists(AlbumsDB))
                 return (new List<Album>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json").Descendants()[0];
             var jAlbums = root.Descendants();
 
             List<Album> result = new List<Album>();
@@ -383,8 +383,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.Label, kv.GetPairedValue());
                             break;
                     }
-                    result.Add(received);
                 }
+                result.Add(received);
             }
 
             return result.AsQueryable();
@@ -397,7 +397,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (!File.Exists(ArtistsDB))
                 return (new List<ArtistGenre>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json").Descendants()[0];
             var jArtists = root.Descendants();
 
             List<ArtistGenre> result = new List<ArtistGenre>();
@@ -416,8 +416,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.GenreID, DataBase.TryParseInt(kv.GetPairedValue()));
                             break;
                     }
-                    result.Add(received);
                 }
+                result.Add(received);
             }
             return result.AsQueryable();
         }
@@ -429,7 +429,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (!File.Exists(ArtistsDB))
                 return (new List<Artist>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json").Descendants()[0];
             var jArtists = root.Descendants();
 
             List<Artist> result = new List<Artist>();
@@ -448,8 +448,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.ArtistName, DataBase.TryParseInt(kv.GetPairedValue()));
                             break;
                     }
-                    result.Add(received);
                 }
+                result.Add(received);
             }
 
             return result.AsQueryable();
@@ -462,7 +462,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (!File.Exists(CompositionsDB))
                 return (new List<Composition>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json").Descendants()[0];
             var jCompositions = root.Descendants();
 
             List<Composition> result = new List<Composition>();
@@ -499,8 +499,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.About, kv.GetPairedValue());
                             break;
                     }
-                    result.Add(received);
                 }
+                result.Add(received);
             }
 
             return result.AsQueryable();
@@ -542,8 +542,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.GenreName, kv.GetPairedValue());
                             break;
                     }
-                    result.Add(received);
                 }
+                result.Add(received);
             }
 
             return result.AsQueryable();
