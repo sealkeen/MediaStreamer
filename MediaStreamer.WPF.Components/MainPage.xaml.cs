@@ -12,7 +12,6 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
-using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {

@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
-    <ProjectReference Include="..\MediaStreamer.RAMControl\MediaStreamer.RAMControl.csproj" />
     <ProjectReference Include="..\MediaStreamer.WPF.Components\MediaStreamer.WPF.Components.csproj" />
   </ItemGroup>
 

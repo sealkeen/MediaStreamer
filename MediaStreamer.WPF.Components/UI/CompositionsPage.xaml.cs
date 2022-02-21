@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MediaStreamer.Domain;
 using MediaStreamer.IO;
-using MediaStreamer.RAMControl;
 using LinqExtensions;
 
 namespace MediaStreamer.WPF.Components

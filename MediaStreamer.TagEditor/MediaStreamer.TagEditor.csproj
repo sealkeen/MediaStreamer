@@ -17,8 +17,9 @@
 
   <ItemGroup>
     <Reference Include="taglib-sharp">
-      <HintPath>..\..\FirstFMCourse_Backup_3.1\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+      <HintPath>C:\Users\Sealkeen\Documents\VCSharp\MediaStreamer\FirstFMCourse_Backup_3.1\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
+
 
 </Project>

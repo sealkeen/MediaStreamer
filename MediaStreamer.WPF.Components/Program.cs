@@ -147,4 +147,4 @@ namespace MediaStreamer.WPF.Components
                 Debug.WriteLine(status);
         }
     } // public class Program
-} // namespace MediaStreamer.RAMControl
+} // namespace MediaStreamer.WPF.Components

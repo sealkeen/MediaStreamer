@@ -9,7 +9,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 {
     public class DataBase 
     {
-
         public static string Coalesce<T>(T line)
         {
             if (line == null)
