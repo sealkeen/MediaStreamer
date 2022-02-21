@@ -55,7 +55,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             string AlbumsDB = Path.Combine(FolderName, "Albums.json");
 
             var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
-            JObject jAlbum = new JObject(root);
+            JItem firstNode = null;
+            if (root.FirstNode() != null)
+                firstNode = root.FirstNode();
+            else
+                firstNode = new JObject(root);
+
+            JObject jAlbum = new JObject(firstNode);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>( );
 
@@ -72,8 +78,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 return;
 
             jAlbum.AddPairs(list);
-
-            root.Add(jAlbum);
+            firstNode.Add(jAlbum);
             root.ToFile(AlbumsDB);
         }
 
@@ -81,8 +86,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         {
             string AlbumGenresDB = Path.Combine(FolderName, "AlbumGenres.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres.json");
-            JObject jAlbum = new JObject(root);
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres.json"); 
+            JItem firstNode = null;
+            if (root.FirstNode() != null)
+                firstNode = root.FirstNode();
+            else
+                firstNode = new JObject(root);
+            JObject jAlbum = new JObject(firstNode);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.ArtistID, DataBase.Coalesce(albumGenre.ArtistID), jAlbum));
@@ -94,7 +104,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             jAlbum.AddPairs(list);
 
-            root.Add(jAlbum);
+            firstNode.Add(jAlbum);
             root.ToFile(AlbumGenresDB);
         }
 
@@ -102,8 +112,14 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         {
             string AlbumGenresDB = Path.Combine(FolderName, "Artists.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
-            JObject jArtist = new JObject(root);
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json"); 
+            JItem firstNode = null;
+            if (root.FirstNode() != null)
+                firstNode = root.FirstNode();
+            else
+                firstNode = new JObject(root);
+
+            JObject jArtist = new JObject(firstNode);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.ArtistID, DataBase.Coalesce(artist.ArtistID), jArtist));
@@ -114,8 +130,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 return;
 
             jArtist.AddPairs(list); 
-
-            root.Add(jArtist);
+            firstNode.Add(jArtist);
             root.ToFile(AlbumGenresDB);
         }
 
@@ -124,7 +139,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             string ArtistGenresDB = Path.Combine(FolderName, "ArtistGenres.json");
 
             var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres.json");
-            JObject jAG = new JObject(root);
+            JItem firstNode = null;
+            if (root.FirstNode() != null)
+                firstNode = root.FirstNode();
+            else
+                firstNode = new JObject(root);
+
+            JObject jAG = new JObject(firstNode);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.ArtistID, DataBase.Coalesce(artistGenre.ArtistID), jAG));
@@ -135,8 +156,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 return;
 
             jAG.AddPairs(list);
-
-            root.Add(jAG);
+            firstNode.Add(jAG);
             root.ToFile(ArtistGenresDB);
         }
 
@@ -145,7 +165,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             string CompositionsDB = Path.Combine(FolderName, "Compositions.json");
 
             var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
-            JObject jComposition = new JObject(root);
+            JItem firstNode = null;
+            if (root.FirstNode() != null)
+                firstNode = root.FirstNode();
+            else
+                firstNode = new JObject(root);
+
+            JObject jComposition = new JObject(firstNode);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.CompositionID, DataBase.Coalesce(composition.CompositionID), jComposition));
@@ -162,8 +188,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 return;
 
             jComposition.AddPairs(list);
-
-            root.Add(jComposition);
+            firstNode.Add(jComposition);
             root.ToFile(CompositionsDB);
         }
 
@@ -177,7 +202,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             string genresDB = Path.Combine(FolderName, "Genres.json");
 
             var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json");
-            var firstNode = root.FirstNode();
+            JItem firstNode = null;
+            if (root.FirstNode() != null)
+                firstNode = root.FirstNode();
+            else
+                firstNode = new JObject(root);
+
             JObject jAG = new JObject(firstNode);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
@@ -397,7 +427,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (!File.Exists(ArtistsDB))
                 return (new List<ArtistGenre>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json").Descendants()[0];
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres.json").Descendants()[0];
             var jArtists = root.Descendants();
 
             List<ArtistGenre> result = new List<ArtistGenre>();

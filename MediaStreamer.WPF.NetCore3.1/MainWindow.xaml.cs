@@ -19,6 +19,8 @@ namespace MediaStreamer.WPF.NetCore3_1
             Program.DBAccess = new DBRepository()
             { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() }; //);
 
+            Program.DBAccess.DB.EnsureCreated();
+
             //Program.DBAccess.LoadingTask = task;
 
             InitializeComponent ();

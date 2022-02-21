@@ -82,8 +82,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             // Change the static property value.
             PropertyInfo piShared = examType.GetProperty(propName);
-            
-            piShared.SetValue(entity, value, null);
+
+            if (value.GetType() == typeof(string))
+                piShared.SetValue(entity, value.ToString().Trim('\"'), null);
+            else
+                piShared.SetValue(entity, value, null);
         }
     }
 }
