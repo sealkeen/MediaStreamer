@@ -6,5 +6,6 @@ namespace MediaStreamer.Exceptions
 {
     public class DataBaseException : Exception
     {
+
     }
 }

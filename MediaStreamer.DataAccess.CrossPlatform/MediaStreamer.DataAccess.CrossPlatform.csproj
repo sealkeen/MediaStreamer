@@ -5,8 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\JSON-Parsing-Compiler\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj" />
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
-    <ProjectReference Include="C:\Users\Sealkeen\Documents\VCSharp\EPAM\SealkeenJSON\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

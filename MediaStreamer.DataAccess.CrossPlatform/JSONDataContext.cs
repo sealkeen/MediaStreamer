@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MediaStreamer.Domain;
 using EPAM.CSCourse2016.JSONParser.Library;
@@ -44,23 +43,23 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             string AlbumsDB = Path.Combine(FolderName, "Albums");
 
             var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums");
-            
-            List<JKeyValuePair> list = new List<JKeyValuePair>( );
-            list.Add(new JKeyValuePair("ArtistID", album.ArtistID.ToString()));
-            list.Add(new JKeyValuePair("AlbumName", album.AlbumName));
+            JObject jAlbum = new JObject(root);
 
+            List<JKeyValuePair> list = new List<JKeyValuePair>( );
+
+            list.Add(new JKeyValuePair(Key.AlbumID, DataBase.Coalesce(album.AlbumID), jAlbum));
+            list.Add(new JKeyValuePair(Key.AlbumName, DataBase.Coalesce(album.AlbumName), jAlbum));
+            list.Add(new JKeyValuePair(Key.ArtistID, DataBase.Coalesce(album.ArtistID), jAlbum));
+            list.Add(new JKeyValuePair(Key.GenreID, DataBase.Coalesce(album.GenreID), jAlbum));
+            list.Add(new JKeyValuePair(Key.Year, DataBase.Coalesce(album.Year), jAlbum));
+            list.Add(new JKeyValuePair(Key.Type, DataBase.Coalesce(album.Type), jAlbum));
+            list.Add(new JKeyValuePair(Key.Label, DataBase.Coalesce(album.Label), jAlbum));
+
+            // Already Exists, return 
             if (root.HasThesePairsRecursive(list) != null)
                 return;
 
-            JObject jAlbum = new JObject(root);
-
-            jAlbum.Add(new JKeyValuePair("ID", DataBase.Coalesce(album.AlbumID), jAlbum));
-            jAlbum.Add(new JKeyValuePair("AlbumName", DataBase.Coalesce(album.AlbumName), jAlbum));
-            jAlbum.Add(new JKeyValuePair("ArtistID", DataBase.Coalesce(album.ArtistID), jAlbum));
-            jAlbum.Add(new JKeyValuePair("GenreID", DataBase.Coalesce(album.GenreID), jAlbum));
-            jAlbum.Add(new JKeyValuePair("Year", DataBase.Coalesce(album.Year), jAlbum));
-            jAlbum.Add(new JKeyValuePair("Type", DataBase.Coalesce(album.Type), jAlbum));
-            jAlbum.Add(new JKeyValuePair("Label", DataBase.Coalesce(album.Label), jAlbum));
+            jAlbum.AddPairs(list);
 
             root.Add(jAlbum);
             root.ToFile(AlbumsDB);
@@ -68,22 +67,92 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(AlbumGenre albumGenre)
         {
-            throw new NotImplementedException();
+            string AlbumGenresDB = Path.Combine(FolderName, "AlbumGenres");
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres");
+            JObject jAlbum = new JObject(root);
+
+            List<JKeyValuePair> list = new List<JKeyValuePair>();
+            list.Add(new JKeyValuePair(Key.ArtistID, DataBase.Coalesce(albumGenre.ArtistID), jAlbum));
+            list.Add(new JKeyValuePair(Key.AlbumID, DataBase.Coalesce(albumGenre.AlbumID), jAlbum));
+
+            // Already Exists, return 
+            if (root.HasThesePairsRecursive(list) != null)
+                return;
+
+            jAlbum.AddPairs(list);
+
+            root.Add(jAlbum);
+            root.ToFile(AlbumGenresDB);
         }
 
         public void Add(Artist artist)
         {
-            throw new NotImplementedException();
+            string AlbumGenresDB = Path.Combine(FolderName, "Artists");
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists");
+            JObject jArtist = new JObject(root);
+
+            List<JKeyValuePair> list = new List<JKeyValuePair>();
+            list.Add(new JKeyValuePair(Key.ArtistID, DataBase.Coalesce(artist.ArtistID), jArtist));
+            list.Add(new JKeyValuePair(Key.ArtistName, DataBase.Coalesce(artist.ArtistName), jArtist));
+
+            // Already Exists, return 
+            if (root.HasThesePairsRecursive(list) != null)
+                return;
+
+            jArtist.AddPairs(list); 
+
+            root.Add(jArtist);
+            root.ToFile(AlbumGenresDB);
         }
 
         public void Add(ArtistGenre artistGenre)
         {
-            throw new NotImplementedException();
+            string ArtistGenresDB = Path.Combine(FolderName, "ArtistGenres");
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres");
+            JObject jAG = new JObject(root);
+
+            List<JKeyValuePair> list = new List<JKeyValuePair>();
+            list.Add(new JKeyValuePair(Key.ArtistID, DataBase.Coalesce(artistGenre.ArtistID), jAG));
+            list.Add(new JKeyValuePair(Key.GenreID, DataBase.Coalesce(artistGenre.GenreID), jAG));
+
+            // Already Exists, return 
+            if (root.HasThesePairsRecursive(list) != null)
+                return;
+
+            jAG.AddPairs(list);
+
+            root.Add(jAG);
+            root.ToFile(ArtistGenresDB);
         }
 
         public void Add(Composition composition)
         {
-            throw new NotImplementedException();
+            string CompositionsDB = Path.Combine(FolderName, "Compositions");
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions");
+            JObject jComposition = new JObject(root);
+
+            List<JKeyValuePair> list = new List<JKeyValuePair>();
+            list.Add(new JKeyValuePair(Key.CompositionID, DataBase.Coalesce(composition.CompositionID), jComposition));
+            list.Add(new JKeyValuePair(Key.CompositionName, DataBase.Coalesce(composition.CompositionName), jComposition));
+            list.Add(new JKeyValuePair(Key.ArtistID, DataBase.Coalesce(composition.ArtistID), jComposition));
+            list.Add(new JKeyValuePair(Key.AlbumID, DataBase.Coalesce(composition.ArtistID), jComposition));
+            list.Add(new JKeyValuePair(Key.Duration, DataBase.Coalesce(composition.Duration), jComposition));
+            list.Add(new JKeyValuePair(Key.FilePath, DataBase.Coalesce(composition.FilePath), jComposition));
+            list.Add(new JKeyValuePair(Key.Lyrics, DataBase.Coalesce(composition.Lyrics), jComposition));
+            list.Add(new JKeyValuePair(Key.About, DataBase.Coalesce(composition.About), jComposition));
+
+            // Already Exists, return 
+            if (root.HasThesePairsRecursive(list) != null)
+                return;
+
+            jComposition.AddPairs(list);
+
+            root.Add(jComposition);
+            root.ToFile(CompositionsDB);
         }
 
         public void Add(CompositionVideo compositionVideo)
@@ -93,7 +162,23 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(Genre genre)
         {
-            throw new NotImplementedException();
+            string genresDB = Path.Combine(FolderName, "Genres");
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres");
+            JObject jAG = new JObject(root);
+
+            List<JKeyValuePair> list = new List<JKeyValuePair>();
+            list.Add(new JKeyValuePair(Key.GenreID, DataBase.Coalesce(genre.GenreID), jAG));
+            list.Add(new JKeyValuePair(Key.GenreName, DataBase.Coalesce(genre.GenreName), jAG));
+
+            // Already Exists, return 
+            if (root.HasThesePairsRecursive(list) != null)
+                return;
+
+            jAG.AddPairs(list);
+
+            root.Add(jAG);
+            root.ToFile(genresDB);
         }
 
         public void Add(GroupMember groupMember)
@@ -163,7 +248,14 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Clear()
         {
-            //throw new NotImplementedException();
+            DataBase.DeleteTable(FolderName, "Genres");
+            DataBase.DeleteTable(FolderName, "Artists");
+            DataBase.DeleteTable(FolderName, "Albums");
+            DataBase.DeleteTable(FolderName, "Compositions");
+            DataBase.DeleteTable(FolderName, "ArtistGenres");
+            DataBase.DeleteTable(FolderName, "AlbumGenres");
+
+            EnsureCreated();
         }
 
         public void DisableLazyLoading()
@@ -181,6 +273,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             var genres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres");
             var artists = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists");
             var albums = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums");
+            var artistGenres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres");
+            var albumGenres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres");
             var compositions = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions");
         }
 
@@ -190,8 +284,39 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         }
 
         public IQueryable<AlbumGenre> GetAlbumGenres()
-        {
-            throw new NotImplementedException();
+        {            
+            string AlbumsDB = Path.Combine(FolderName, "AlbumGenres");
+
+            if (!File.Exists(AlbumsDB))
+                return (new List<AlbumGenre>()).AsQueryable();
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums");
+            var jAlbums = root.Descendants();
+
+            List<AlbumGenre> result = new List<AlbumGenre>();
+            foreach (var jAlbum in jAlbums)
+            {
+                AlbumGenre received = new AlbumGenre();
+                var fields = jAlbum.DescendantPairs();
+                foreach (var kv in fields) 
+                {
+                    switch (kv.Key.ToString())
+                    {
+                        case Key.AlbumID:
+                            DataBase.SetProperty(received, Key.AlbumID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.ArtistID:
+                            DataBase.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.GenreID:
+                            DataBase.SetProperty(received, Key.GenreID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                    }
+                    result.Add(received);
+                }
+            }
+
+            return result.AsQueryable();
         }
 
         public IQueryable<Album> GetAlbums()
@@ -202,34 +327,165 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 return (new List<Album>()).AsQueryable();
 
             var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums");
-
             var jAlbums = root.Descendants();
 
+            List<Album> result = new List<Album>();
+            foreach (var jAlbum in jAlbums)
+            {
+                Album received = new Album();
+                var fields = jAlbum.DescendantPairs();
+                foreach (var kv in fields) 
+                {
+                    switch (kv.Key.ToString())
+                    {
+                        case Key.AlbumID:
+                            DataBase.SetProperty(received, Key.AlbumID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.AlbumName:
+                            DataBase.SetProperty(received, Key.AlbumName, kv.GetPairedValue());
+                            break;
+                        case Key.ArtistID:
+                            DataBase.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.GenreID:
+                            DataBase.SetProperty(received, Key.GenreID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.Year:
+                            DataBase.SetProperty(received, Key.Year, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.Type:
+                            DataBase.SetProperty(received, Key.Type, kv.GetPairedValue());
+                            break;
+                        case Key.Label:
+                            DataBase.SetProperty(received, Key.Label, kv.GetPairedValue());
+                            break;
+                    }
+                    result.Add(received);
+                }
+            }
 
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-
-            if (root.HasThesePairsRecursive(list) != null)
-                return;
+            return result.AsQueryable();
         }
 
         public IQueryable<ArtistGenre> GetArtistGenres()
         {
-            throw new NotImplementedException();
+            string ArtistsDB = Path.Combine(FolderName, "ArtistGenres");
+
+            if (!File.Exists(ArtistsDB))
+                return (new List<ArtistGenre>()).AsQueryable();
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists");
+            var jArtists = root.Descendants();
+
+            List<ArtistGenre> result = new List<ArtistGenre>();
+            foreach (var jArtist in jArtists)
+            {
+                ArtistGenre received = new ArtistGenre();
+                var fields = jArtist.DescendantPairs();
+                foreach (var kv in fields)
+                {
+                    switch (kv.Key.ToString())
+                    {
+                        case Key.ArtistID:
+                            DataBase.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.GenreID:
+                            DataBase.SetProperty(received, Key.GenreID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                    }
+                    result.Add(received);
+                }
+            }
+            return result.AsQueryable();
         }
 
         public IQueryable<Artist> GetArtists()
         {
-            throw new NotImplementedException();
+            string ArtistsDB = Path.Combine(FolderName, "Artists");
+
+            if (!File.Exists(ArtistsDB))
+                return (new List<Artist>()).AsQueryable();
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists");
+            var jArtists = root.Descendants();
+
+            List<Artist> result = new List<Artist>();
+            foreach (var jArtist in jArtists)
+            {
+                Artist received = new Artist();
+                var fields = jArtist.DescendantPairs();
+                foreach (var kv in fields)
+                {
+                    switch (kv.Key.ToString())
+                    {
+                        case Key.ArtistID:
+                            DataBase.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.ArtistName:
+                            DataBase.SetProperty(received, Key.ArtistName, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                    }
+                    result.Add(received);
+                }
+            }
+
+            return result.AsQueryable();
         }
 
         public IQueryable<Composition> GetCompositions()
         {
-            throw new NotImplementedException();
+            string CompositionsDB = Path.Combine(FolderName, "Compositions");
+
+            if (!File.Exists(CompositionsDB))
+                return (new List<Composition>()).AsQueryable();
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions");
+            var jCompositions = root.Descendants();
+
+            List<Composition> result = new List<Composition>();
+            foreach (var jComposition in jCompositions)
+            {
+                Composition received = new Composition();
+                var fields = jComposition.DescendantPairs();
+                foreach (var kv in fields)
+                {
+                    switch (kv.Key.ToString())
+                    {
+                        case Key.CompositionID:
+                            DataBase.SetProperty(received, Key.CompositionID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.CompositionName:
+                            DataBase.SetProperty(received, Key.CompositionName, kv.GetPairedValue());
+                            break;
+                        case Key.ArtistID:
+                            DataBase.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.AlbumID:
+                            DataBase.SetProperty(received, Key.AlbumID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.Duration:
+                            DataBase.SetProperty(received, Key.Duration, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.FilePath:
+                            DataBase.SetProperty(received, Key.FilePath, kv.GetPairedValue());
+                            break;
+                        case Key.Lyrics:
+                            DataBase.SetProperty(received, Key.Lyrics, kv.GetPairedValue());
+                            break;
+                        case Key.About:
+                            DataBase.SetProperty(received, Key.About, kv.GetPairedValue());
+                            break;
+                    }
+                    result.Add(received);
+                }
+            }
+
+            return result.AsQueryable();
         }
 
         public Task<IQueryable<Composition>> GetCompositionsAsync()
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() => GetCompositions());
         }
 
         public IQueryable<CompositionVideo> GetCompositionVideos()
@@ -239,7 +495,35 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<Genre> GetGenres()
         {
-            throw new NotImplementedException();
+            string GenresDB = Path.Combine(FolderName, "Genres");
+
+            if (!File.Exists(GenresDB))
+                return (new List<Genre>()).AsQueryable();
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres");
+            var jGenres = root.Descendants();
+
+            List<Genre> result = new List<Genre>();
+            foreach (var jGenre in jGenres)
+            {
+                Genre received = new Genre();
+                var fields = jGenre.DescendantPairs();
+                foreach (var kv in fields)
+                {
+                    switch (kv.Key.ToString())
+                    {
+                        case Key.GenreID:
+                            DataBase.SetProperty(received, Key.GenreID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                        case Key.GenreName:
+                            DataBase.SetProperty(received, Key.GenreName, DataBase.TryParseInt(kv.GetPairedValue()));
+                            break;
+                    }
+                    result.Add(received);
+                }
+            }
+
+            return result.AsQueryable();
         }
 
         public IQueryable<GroupMember> GetGroupMembers()
@@ -254,7 +538,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<IComposition> GetICompositions()
         {
-            throw new NotImplementedException();
+            return GetCompositions().AsQueryable();//.Include(c => c.Artist); 
         }
 
         public IQueryable<ListenedAlbum> GetListenedAlbums()
