@@ -59,7 +59,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             {
                 JSONParser parser = new JSONParser(fullName);
                 result = parser.Parse();
-                if (result.GetType() != typeof(JObject))
+                
+                if (!result.IsCollection())
                 {
                     JObject jObject = new JObject(null);
                     jObject.Add(result);

@@ -177,7 +177,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             string genresDB = Path.Combine(FolderName, "Genres.json");
 
             var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json");
-            JObject jAG = new JObject(root);
+            var firstNode = root.FirstNode();
+            JObject jAG = new JObject(firstNode);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.GenreID, DataBase.Coalesce(genre.GenreID), jAG));
@@ -188,8 +189,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 return;
 
             jAG.AddPairs(list);
-
-            root.Add(jAG);
+            firstNode.Add(jAG);
             root.ToFile(genresDB);
         }
 
@@ -256,17 +256,17 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public void AddEntity<T>(T entity) where T : class
         {
             if (typeof(T) == typeof(Composition))
-                Compositions.Add(entity as Composition);
+                Add(entity as Composition);
             else if (typeof(T) == typeof(Album))
-                Albums.Add(entity as Album);
+                Add(entity as Album);
             else if (typeof(T) == typeof(ListenedComposition))
-                ListenedCompositions.Add(entity as ListenedComposition);
+                Add(entity as ListenedComposition);
             else if (typeof(T) == typeof(Genre))
-                Genres.Add(entity as Genre);
+                Add(entity as Genre);
             else if (typeof(T) == typeof(AlbumGenre))
-                AlbumGenres.Add(entity as AlbumGenre);
+                Add(entity as AlbumGenre);
             else if (typeof(T) == typeof(ArtistGenre))
-                ArtistGenres.Add(entity as ArtistGenre);
+                Add(entity as ArtistGenre);
         }
 
         public void Clear()
@@ -523,7 +523,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (!File.Exists(GenresDB))
                 return (new List<Genre>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json").Descendants()[0];
             var jGenres = root.Descendants();
 
             List<Genre> result = new List<Genre>();
@@ -533,13 +533,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 var fields = jGenre.DescendantPairs();
                 foreach (var kv in fields)
                 {
-                    switch (kv.Key.ToString())
+                    switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.GenreID:
                             DataBase.SetProperty(received, Key.GenreID, DataBase.TryParseInt(kv.GetPairedValue()));
                             break;
                         case Key.GenreName:
-                            DataBase.SetProperty(received, Key.GenreName, DataBase.TryParseInt(kv.GetPairedValue()));
+                            DataBase.SetProperty(received, Key.GenreName, kv.GetPairedValue());
                             break;
                     }
                     result.Add(received);
