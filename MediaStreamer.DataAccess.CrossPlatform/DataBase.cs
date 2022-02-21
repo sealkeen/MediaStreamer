@@ -56,7 +56,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Directory.CreateDirectory(folderPath);
             }
 
-            if (File.Exists(fileName))
+            if (File.Exists(fullName))
             {
                 JSONParser parser = new JSONParser(fullName);
                 result = parser.Parse();

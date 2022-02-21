@@ -10,6 +10,18 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 {
     public class JSONDataContext : IDMDBContext
     {
+
+        public JSONDataContext()
+        {
+            Genres = new List<Genre>();
+            Artists = new List<Artist>();
+            Albums = new List<Album>();
+            Compositions = new List<Composition>();
+            ArtistGenres = new List<ArtistGenre>();
+            AlbumGenres = new List<AlbumGenre>();
+            GroupMembers = new List<GroupMember>();
+        }
+
         public virtual List<Administrator> Administrators { get; set; }
         public virtual List<Album> Albums { get; set; }
         public virtual List<AlbumGenre> AlbumGenres { get; set; }
@@ -40,9 +52,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(Album album)
         {
-            string AlbumsDB = Path.Combine(FolderName, "Albums");
+            string AlbumsDB = Path.Combine(FolderName, "Albums.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
             JObject jAlbum = new JObject(root);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>( );
@@ -67,9 +79,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(AlbumGenre albumGenre)
         {
-            string AlbumGenresDB = Path.Combine(FolderName, "AlbumGenres");
+            string AlbumGenresDB = Path.Combine(FolderName, "AlbumGenres.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres.json");
             JObject jAlbum = new JObject(root);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
@@ -88,9 +100,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(Artist artist)
         {
-            string AlbumGenresDB = Path.Combine(FolderName, "Artists");
+            string AlbumGenresDB = Path.Combine(FolderName, "Artists.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
             JObject jArtist = new JObject(root);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
@@ -109,9 +121,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(ArtistGenre artistGenre)
         {
-            string ArtistGenresDB = Path.Combine(FolderName, "ArtistGenres");
+            string ArtistGenresDB = Path.Combine(FolderName, "ArtistGenres.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres.json");
             JObject jAG = new JObject(root);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
@@ -130,9 +142,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(Composition composition)
         {
-            string CompositionsDB = Path.Combine(FolderName, "Compositions");
+            string CompositionsDB = Path.Combine(FolderName, "Compositions.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
             JObject jComposition = new JObject(root);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
@@ -162,9 +174,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(Genre genre)
         {
-            string genresDB = Path.Combine(FolderName, "Genres");
+            string genresDB = Path.Combine(FolderName, "Genres.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json");
             JObject jAG = new JObject(root);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
@@ -259,12 +271,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Clear()
         {
-            DataBase.DeleteTable(FolderName, "Genres");
-            DataBase.DeleteTable(FolderName, "Artists");
-            DataBase.DeleteTable(FolderName, "Albums");
-            DataBase.DeleteTable(FolderName, "Compositions");
-            DataBase.DeleteTable(FolderName, "ArtistGenres");
-            DataBase.DeleteTable(FolderName, "AlbumGenres");
+            DataBase.DeleteTable(FolderName, "Genres.json");
+            DataBase.DeleteTable(FolderName, "Artists.json");
+            DataBase.DeleteTable(FolderName, "Albums.json");
+            DataBase.DeleteTable(FolderName, "Compositions.json");
+            DataBase.DeleteTable(FolderName, "ArtistGenres.json");
+            DataBase.DeleteTable(FolderName, "AlbumGenres.json");
 
             EnsureCreated();
         }
@@ -281,12 +293,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void EnsureCreated()
         {
-            var genres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres");
-            var artists = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists");
-            var albums = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums");
-            var artistGenres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres");
-            var albumGenres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres");
-            var compositions = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions");
+            var genres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json");
+            var artists = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
+            var albums = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
+            var artistGenres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres.json");
+            var albumGenres = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres.json");
+            var compositions = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
         }
 
         public IQueryable<Administrator> GetAdministrators()
@@ -296,12 +308,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<AlbumGenre> GetAlbumGenres()
         {            
-            string AlbumsDB = Path.Combine(FolderName, "AlbumGenres");
+            string AlbumsDB = Path.Combine(FolderName, "AlbumGenres.json");
 
             if (!File.Exists(AlbumsDB))
                 return (new List<AlbumGenre>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
             var jAlbums = root.Descendants();
 
             List<AlbumGenre> result = new List<AlbumGenre>();
@@ -332,12 +344,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<Album> GetAlbums()
         {
-            string AlbumsDB = Path.Combine(FolderName, "Albums");
+            string AlbumsDB = Path.Combine(FolderName, "Albums.json");
 
             if (!File.Exists(AlbumsDB))
                 return (new List<Album>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
             var jAlbums = root.Descendants();
 
             List<Album> result = new List<Album>();
@@ -380,12 +392,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<ArtistGenre> GetArtistGenres()
         {
-            string ArtistsDB = Path.Combine(FolderName, "ArtistGenres");
+            string ArtistsDB = Path.Combine(FolderName, "ArtistGenres.json");
 
             if (!File.Exists(ArtistsDB))
                 return (new List<ArtistGenre>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
             var jArtists = root.Descendants();
 
             List<ArtistGenre> result = new List<ArtistGenre>();
@@ -412,12 +424,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<Artist> GetArtists()
         {
-            string ArtistsDB = Path.Combine(FolderName, "Artists");
+            string ArtistsDB = Path.Combine(FolderName, "Artists.json");
 
             if (!File.Exists(ArtistsDB))
                 return (new List<Artist>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
             var jArtists = root.Descendants();
 
             List<Artist> result = new List<Artist>();
@@ -445,12 +457,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<Composition> GetCompositions()
         {
-            string CompositionsDB = Path.Combine(FolderName, "Compositions");
+            string CompositionsDB = Path.Combine(FolderName, "Compositions.json");
 
             if (!File.Exists(CompositionsDB))
                 return (new List<Composition>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
             var jCompositions = root.Descendants();
 
             List<Composition> result = new List<Composition>();
@@ -506,12 +518,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<Genre> GetGenres()
         {
-            string GenresDB = Path.Combine(FolderName, "Genres");
+            string GenresDB = Path.Combine(FolderName, "Genres.json");
 
             if (!File.Exists(GenresDB))
                 return (new List<Genre>()).AsQueryable();
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json");
             var jGenres = root.Descendants();
 
             List<Genre> result = new List<Genre>();
