@@ -183,67 +183,78 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(GroupMember groupMember)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(GroupRole groupRole)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(ListenedAlbum listenedAlbum)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(ListenedArtist listenedArtist)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(ListenedComposition listenedComposition)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(ListenedGenre listenedGenre)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(Moderator moderator)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(Musician musician)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(MusicianRole musicianRole)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(Picture picture)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(User user)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Add(Video video)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
-        public void AddEntity<T>(T o) where T : class
+        public void AddEntity<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            if (typeof(T) == typeof(Composition))
+                Compositions.Add(entity as Composition);
+            else if (typeof(T) == typeof(Album))
+                Albums.Add(entity as Album);
+            else if (typeof(T) == typeof(ListenedComposition))
+                ListenedCompositions.Add(entity as ListenedComposition);
+            else if (typeof(T) == typeof(Genre))
+                Genres.Add(entity as Genre);
+            else if (typeof(T) == typeof(AlbumGenre))
+                AlbumGenres.Add(entity as AlbumGenre);
+            else if (typeof(T) == typeof(ArtistGenre))
+                ArtistGenres.Add(entity as ArtistGenre);
         }
 
         public void Clear()
@@ -490,7 +501,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<CompositionVideo> GetCompositionVideos()
         {
-            throw new NotImplementedException();
+            return new List<CompositionVideo>().AsQueryable();
         }
 
         public IQueryable<Genre> GetGenres()
@@ -528,12 +539,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<GroupMember> GetGroupMembers()
         {
-            throw new NotImplementedException();
+            return new List<GroupMember>().AsQueryable();
         }
 
         public IQueryable<GroupRole> GetGroupRoles()
         {
-            throw new NotImplementedException();
+            return new List<GroupRole>().AsQueryable();
         }
 
         public IQueryable<IComposition> GetICompositions()
@@ -543,27 +554,27 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<ListenedAlbum> GetListenedAlbums()
         {
-            throw new NotImplementedException();
+            return new List<ListenedAlbum>().AsQueryable();
         }
 
         public IQueryable<ListenedArtist> GetListenedArtists()
         {
-            throw new NotImplementedException();
+            return new List<ListenedArtist>().AsQueryable();
         }
 
         public IQueryable<ListenedComposition> GetListenedCompositions()
         {
-            throw new NotImplementedException();
+            return new List<ListenedComposition>().AsQueryable();
         }
 
         public IQueryable<ListenedGenre> GetListenedGenres()
         {
-            throw new NotImplementedException();
+            return new List<ListenedGenre>().AsQueryable();
         }
 
         public IQueryable<Moderator> GetModerators()
         {
-            throw new NotImplementedException();
+            return new List<Moderator>().AsQueryable();
         }
 
         public IQueryable<MusicianRole> GetMusicianRoles()
@@ -583,7 +594,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<User> GetUsers()
         {
-            throw new NotImplementedException();
+            return new List<User>().AsQueryable();
         }
 
         public IQueryable<Video> GetVideos()
@@ -593,17 +604,18 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void RemoveEntity<T>(T o) where T : class
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public int SaveChanges()
         {
-            throw new NotImplementedException();
+            return 1;
+            //throw new NotImplementedException();
         }
 
         public void UpdateAndSaveChanges<TEntity>(TEntity entity) where TEntity : class
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }
