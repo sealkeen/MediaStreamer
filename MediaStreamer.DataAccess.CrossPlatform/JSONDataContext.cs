@@ -404,7 +404,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.GenreID, DataBase.TryParseInt(kv.GetPairedValue()));
                             break;
                         case Key.Year:
-                            DataBase.SetProperty(received, Key.Year, DataBase.TryParseInt(kv.GetPairedValue()));
+                            DataBase.SetProperty(received, Key.Year, DataBase.TryParseNullableInt(kv.GetPairedValue()));
                             break;
                         case Key.Type:
                             DataBase.SetProperty(received, Key.Type, kv.GetPairedValue());
@@ -475,7 +475,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
                             break;
                         case Key.ArtistName:
-                            DataBase.SetProperty(received, Key.ArtistName, DataBase.TryParseInt(kv.GetPairedValue()));
+                            DataBase.SetProperty(received, Key.ArtistName, kv.GetPairedValue());
                             break;
                     }
                 }
@@ -502,7 +502,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 var fields = jComposition.DescendantPairs();
                 foreach (var kv in fields)
                 {
-                    switch (kv.Key.ToString())
+                    switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.CompositionID:
                             DataBase.SetProperty(received, Key.CompositionID, DataBase.TryParseInt(kv.GetPairedValue()));
@@ -511,13 +511,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             DataBase.SetProperty(received, Key.CompositionName, kv.GetPairedValue());
                             break;
                         case Key.ArtistID:
-                            DataBase.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            DataBase.SetProperty(received, Key.ArtistID, DataBase.TryParseNullableLong(kv.GetPairedValue()));
                             break;
                         case Key.AlbumID:
-                            DataBase.SetProperty(received, Key.AlbumID, DataBase.TryParseInt(kv.GetPairedValue()));
+                            DataBase.SetProperty(received, Key.AlbumID, DataBase.TryParseNullableLong(kv.GetPairedValue()));
                             break;
                         case Key.Duration:
-                            DataBase.SetProperty(received, Key.Duration, DataBase.TryParseInt(kv.GetPairedValue()));
+                            DataBase.SetProperty(received, Key.Duration, DataBase.TryParseNullableLong(kv.GetPairedValue()));
                             break;
                         case Key.FilePath:
                             DataBase.SetProperty(received, Key.FilePath, kv.GetPairedValue());

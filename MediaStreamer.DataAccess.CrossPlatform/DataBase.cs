@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using EPAM.CSCourse2016.JSONParser.Library;
-using MediaStreamer.Domain;
+using StringExtensions;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
@@ -25,13 +25,32 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             else
                 return res;
         }
+
         public static int TryParseInt(string value)
         {
             int res = 0;
-            if (int.TryParse(value.ToString(), out res) == false)
+            if (int.TryParse(value.ToString().Trim('\"'), out res) == false)
                 return 0;
             else
                 return res;
+        }
+
+        public static int? TryParseNullableInt(string value)
+        {
+            //int res = 0;
+            //if (int.TryParse(value.ToString().Trim('\"'), out res) == false)
+            //    res = 0;
+            int? res = ToNullableStringExtension.ToNullable<int>(value.Trim('\"'));
+            return res;
+        }
+
+        public static long? TryParseNullableLong(string value)
+        {
+            //int res = 0;
+            //if (int.TryParse(value.ToString().Trim('\"'), out res) == false)
+            //    res = 0;
+            long? res = ToNullableStringExtension.ToNullable<long>(value.Trim('\"'));
+            return res;
         }
 
         public static void DeleteTable(string folderPath, string fileName)

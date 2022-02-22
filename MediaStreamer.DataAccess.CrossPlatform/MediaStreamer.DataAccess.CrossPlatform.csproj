@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
     <ProjectReference Include="..\..\JSON-Parsing-Compiler\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj" />
+    <ProjectReference Include="..\StringExtensions\StringExtensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
