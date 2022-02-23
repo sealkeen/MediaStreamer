@@ -10,7 +10,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 {
     public class JSONDataContext : IDMDBContext
     {
-
         public JSONDataContext()
         {
             Genres = new List<Genre>();

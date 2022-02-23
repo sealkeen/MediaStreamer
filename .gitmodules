@@ -7,3 +7,6 @@
 [submodule "MediaStreamer.Xamarin"]
 	path = MediaStreamer.Xamarin
 	url = https://github.com/sealkeen/MediaStreamer.Xamarin
+[submodule "taglib-sharp"]
+	path = taglib-sharp
+	url = https://github.com/mono/taglib-sharp
