@@ -10,9 +10,16 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
     {
         public static void Main(string[] args)
         {
-            GetNewID();
+            GetCompositions();
         }
 
+        public static void GetCompositions()
+        {
+            JSONDataContext context = new JSONDataContext();
+            var comps = context.GetCompositions();
+        }
+
+        // ok / not ok (not all cases checked)
         public static void GetNewID()
         {
             JSONDataContext context = new JSONDataContext();

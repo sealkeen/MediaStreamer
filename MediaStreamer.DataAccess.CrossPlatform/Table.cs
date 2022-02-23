@@ -8,6 +8,23 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 {
     public class Table
     {
+        public static TLinkedTarget GetLinkedEntity<TLinkedTarget>(object id, IEnumerable<TLinkedTarget> target, string propName) 
+        {
+            TLinkedTarget result = default(TLinkedTarget);
+            Type examType = typeof(TLinkedTarget);
+            PropertyInfo piShared = null;
+            foreach (var v in target)
+            {
+                piShared = examType.GetProperty(propName);
+                var trgtID = piShared.GetValue(v, null);
+                if (trgtID.Equals(id))
+                {
+                    return v;
+                }
+            }
+            return result;
+        }
+
         public static bool HasFieldValue(JItem jObject, JString field, JString value)
         {
             if (jObject.ContainsKeyAndValueRecursive(field, value))

@@ -284,14 +284,28 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void AddEntity<T>(T entity) where T : class
         {
-            if (typeof(T) == typeof(Composition))
+            if (typeof(T) == typeof(Composition)) {
+                var id = DataBase.GetMaxID<Composition, long>(Compositions.AsQueryable(), "CompositionID") + 1;
+                id++;
+                Table.SetProperty(entity, "CompositionID", id);
                 Add(entity as Composition);
-            else if (typeof(T) == typeof(Album))
+            } else if (typeof(T) == typeof(Artist)) {
+                var id = DataBase.GetMaxID<Artist, long>(Artists.AsQueryable(), "ArtistID");
+                id++;
+                Table.SetProperty(entity, "ArtistID", id);
+                Add(entity as Artist);
+            } else if (typeof(T) == typeof(Album)) {
+                var id = DataBase.GetMaxID<Album, long>(Albums.AsQueryable(), "AlbumID");
+                id++;
+                Table.SetProperty(entity, "AlbumID", id);
                 Add(entity as Album);
-            else if (typeof(T) == typeof(ListenedComposition))
-                Add(entity as ListenedComposition);
-            else if (typeof(T) == typeof(Genre))
+            } else if (typeof(T) == typeof(Genre)) {
+                var id = DataBase.GetMaxID<Genre, long>(Genres.AsQueryable(), "GenreID");
+                id++;
+                Table.SetProperty(entity, "GenreID", id);
                 Add(entity as Genre);
+            } else if (typeof(T) == typeof(ListenedComposition))
+                Add(entity as ListenedComposition); 
             else if (typeof(T) == typeof(AlbumGenre))
                 Add(entity as AlbumGenre);
             else if (typeof(T) == typeof(ArtistGenre))
@@ -346,7 +360,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 var fields = jAlbum.DescendantPairs();
                 foreach (var kv in fields) 
                 {
-                    switch (kv.Key.ToString())
+                    switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.AlbumID:
                             Table.SetProperty(received, Key.AlbumID, DataBase.TryParseInt(kv.GetPairedValue()));
@@ -376,7 +390,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 var fields = jAlbum.DescendantPairs();
                 foreach (var kv in fields) 
                 {
-                    switch (kv.Key.ToString())
+                    switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.AlbumID:
                             Table.SetProperty(received, Key.AlbumID, DataBase.TryParseInt(kv.GetPairedValue()));
@@ -418,7 +432,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 var fields = jArtist.DescendantPairs();
                 foreach (var kv in fields)
                 {
-                    switch (kv.Key.ToString())
+                    switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.ArtistID:
                             Table.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
@@ -444,7 +458,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 var fields = jArtist.DescendantPairs();
                 foreach (var kv in fields)
                 {
-                    switch (kv.Key.ToString())
+                    switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.ArtistID:
                             Table.SetProperty(received, Key.ArtistID, DataBase.TryParseInt(kv.GetPairedValue()));
@@ -499,6 +513,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             break;
                     }
                 }
+
+                received.Artist = Table.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
                 Compositions.Add(received);
             }
 
