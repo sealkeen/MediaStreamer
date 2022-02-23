@@ -99,7 +99,7 @@ namespace MediaStreamer.WPF.Components
             string result = "";
             foreach (ICompositionInstance cmp in comps)
             {
-                result += $"{ cmp?.GetInstance()?.Artist.ArtistName ?? "Unknown"} – " +
+                result += $"{ cmp?.GetInstance()?.Artist?.ArtistName ?? "Unknown"} – " +
                 $"" + $"{cmp?.GetInstance()?.CompositionName ?? "Unknown"}" + ", ";
             }
             result = result.TrimEnd(new char[] { ',', ' ' });

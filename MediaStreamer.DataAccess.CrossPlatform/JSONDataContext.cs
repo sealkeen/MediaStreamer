@@ -12,6 +12,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
     {
         public JSONDataContext()
         {
+            FolderName = Path.Combine(Environment.CurrentDirectory, "Compositions");
             Genres = new List<Genre>();
             Artists = new List<Artist>();
             Albums = new List<Album>();
@@ -513,7 +514,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             break;
                     }
                 }
-
+                if(Artists.Count == 0)
+                    GetArtists();
                 received.Artist = Table.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
                 Compositions.Add(received);
             }

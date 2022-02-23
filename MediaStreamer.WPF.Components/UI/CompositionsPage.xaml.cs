@@ -186,6 +186,10 @@ namespace MediaStreamer.WPF.Components
         {
             return ((LastCompositionIndex + 1) < Compositions.Count());
         }
+        public bool HasFirstElement()
+        {
+            return (Compositions != null && Compositions.Count > 1);
+        }
 
         public bool HasNextInQueue()
         {
@@ -278,6 +282,9 @@ namespace MediaStreamer.WPF.Components
                 {
                     LastCompositionIndex = lstItems.SelectedIndex;
                     lstItems.SelectedIndex += 1;
+                } else if (HasFirstElement() && Queue.Empty()) {
+                    LastCompositionIndex = lstItems.SelectedIndex;
+                    lstItems.SelectedIndex = 0;
                 }
             }
         }
