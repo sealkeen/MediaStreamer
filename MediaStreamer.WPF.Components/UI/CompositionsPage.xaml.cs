@@ -372,6 +372,7 @@ namespace MediaStreamer.WPF.Components
             PlayTarget(Compositions[lstItems.SelectedIndex]);
         }
 
+        //TODO: Remove TagEditing import from WPF.Components
         public void ChangeComposition(IList selectedItems)
         {
             try

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using EPAM.CSCourse2016.JSONParser.Library;
 using StringExtensions;
@@ -9,6 +10,32 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 {
     public class DataBase 
     {
+        public static TFieldType GetMaxID<TEntity, TFieldType>(IQueryable<TEntity> entities, string keyPropertyName)
+        {
+            // Get a type object that represents the Example type.
+            Type examType = typeof(TEntity);
+
+            // Change the static property value.
+            PropertyInfo[] properties = examType.GetProperties();
+
+            TFieldType result = default(TFieldType);
+            TFieldType fromData = default(TFieldType);
+            var maxID = properties.Where(p => p.Name == keyPropertyName).Max();
+            foreach (var e in entities)
+            {
+                if (maxID != null)
+                {
+                    if ((fromData = (TFieldType)maxID.GetValue(e, null)) != null)
+                    {
+                        if (Comparer<TFieldType>.Default.Compare(result, fromData) < 0) {
+                            result = (TFieldType)maxID.GetValue(e, null);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
         public static string Coalesce<T>(T line)
         {
             if (line == null)
@@ -94,18 +121,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             }
         }
 
-        public static void SetProperty<TEntity, TValue>(TEntity entity, string propName, TValue value)
-        {
-            // Get a type object that represents the Example type.
-            Type examType = typeof(TEntity);
 
-            // Change the static property value.
-            PropertyInfo piShared = examType.GetProperty(propName);
-
-            if (value.GetType() == typeof(string))
-                piShared.SetValue(entity, value.ToString().Trim('\"'), null);
-            else
-                piShared.SetValue(entity, value, null);
-        }
     }
 }

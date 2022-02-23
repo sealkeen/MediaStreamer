@@ -20,12 +20,7 @@
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
     <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
     <ProjectReference Include="..\MediaStreamer.TagEditor\MediaStreamer.TagEditor.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="taglib-sharp">
-      <HintPath>O:\VCSharp\MediaStreamer\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\taglib-sharp\src\TaglibSharp\TaglibSharp.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,19 +1,28 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using EPAM.CSCourse2016.JSONParser.Library;
 using MediaStreamer.Domain;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            TestAddGenre();
+            GetNewID();
+        }
+
+        public static void GetNewID()
+        {
+            JSONDataContext context = new JSONDataContext();
+            var genres = context.GetGenres();
+
+            var maxID = DataBase.GetMaxID<Genre, Int64>(genres.AsQueryable(), "GenreID");
         }
 
         //OK
-        public void TestGetGenres()
+        public static void TestGetGenres()
         {
             JSONDataContext context = new JSONDataContext();
             var genres = context.GetGenres();
@@ -26,7 +35,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
         }
 
         //OK
-        static void TestAddGenre()
+        public static void TestAddGenre()
         {
             JSONDataContext dc = new JSONDataContext();
             dc.EnsureCreated();
@@ -39,7 +48,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
         }
 
         //OK
-        static void TestLoadingDB()
+        public static void TestLoadingDB()
         {
             JSONParser jSONParser = new JSONParser("Compositions/Genres.json");
             JItem jItem = jSONParser.Parse();
@@ -55,7 +64,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
 
             descendant = jItem.Descendants()[0];
             descendant1 = descendant.Descendants()[0];
-
         }
     }
 }
