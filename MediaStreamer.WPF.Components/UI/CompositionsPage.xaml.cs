@@ -283,7 +283,7 @@ namespace MediaStreamer.WPF.Components
                     LastCompositionIndex = lstItems.SelectedIndex;
                     lstItems.SelectedIndex += 1;
                 } else if (HasFirstElement() && Queue.Empty()) {
-                    LastCompositionIndex = lstItems.SelectedIndex;
+                    LastCompositionIndex = -1;
                     lstItems.SelectedIndex = 0;
                 }
             }

@@ -120,7 +120,5 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 return jObject;
             }
         }
-
-
     }
 }
