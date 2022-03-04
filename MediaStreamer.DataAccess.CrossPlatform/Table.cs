@@ -48,16 +48,30 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public static void SetProperty<TEntity, TValue>(TEntity entity, string propName, TValue value)
         {
-            // Get a type object that represents the Example type.
-            Type examType = typeof(TEntity);
-
-            // Change the static property value.
+            Type examType = typeof(TEntity);    // Get a type object that represents the Example type.
+                                                // Change the static property value.
             PropertyInfo piShared = examType.GetProperty(propName);
-
-            if (value.GetType() == typeof(string))
-                piShared.SetValue(entity, value.ToString().Trim('\"'), null);
-            else
-                piShared.SetValue(entity, value, null);
+            try
+            {
+                if (value.GetType() == typeof(string))
+                    piShared.SetValue(entity, value.ToString().Trim('\"'), null);
+                else
+                    piShared.SetValue(entity, value, null);
+            } catch (NullReferenceException) {
+                piShared.SetValue(entity, default(TValue), null);
+            } catch (System.ArgumentException ex) {
+                try
+                {
+                    var convertedValue = System.Convert.ChangeType(value,
+                        Nullable.GetUnderlyingType(piShared.PropertyType));
+                    piShared.SetValue(entity, convertedValue, null);
+                }
+                catch (InvalidCastException)
+                {
+                    // the input string could not be converted to the target type - abort
+                    return;
+                }
+            }
         }
     }
 }

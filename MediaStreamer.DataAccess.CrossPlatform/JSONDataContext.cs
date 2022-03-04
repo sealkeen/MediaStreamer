@@ -416,6 +416,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             break;
                     }
                 }
+                if (Artists.Count == 0)
+                    GetArtists();
+                received.Artist = Table.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
                 Albums.Add(received);
             }
 
