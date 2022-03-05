@@ -3,28 +3,27 @@ using System.Collections;
 using System.Linq;
 using System.Windows.Controls;
 using MediaStreamer.Domain;
-using MediaStreamer.WPF.Components;
 
-namespace MediaStreamer.WPF.Components
+namespace MediaStreamer.RAMControl
 {
     public class Session : IEnumerable
     {
         public static IDBRepository DBAccess;
-        public static CompositionsPage CompositionsPage { get; set; }
-        public static AlbumsPage AlbumsPage { get; set; }
-        public static ArtistGenresPage AGenresPage { get; set; }
-        public static GroupMembersPage MembersPage { get; set; }
-        public static ArtistsPage ArtistsPage { get; set; }
-        public static GenresPage GenresPage { get; set; }
-        public static SignUpPage SignUpPage { get; set; }
-        public static MainPage MainPage { get; set; }
-        public static UserCompositionsPage ListenedCompositionsPage { get; set; }
-        public static UserAlbumsPage ListenedAlbumsPage { get; set; }
-        public static UserGenresPage UserGenresPage { get; set; }
-        public static SignedUpPage SignedUpPage { get; set; }
-        public static TagEditorPage TagEditorPage { get; set; }
-        public static VideoPage VideoPage { get; set; }
-        public static LoadingPage loadingPage { get; set; }
+        public static FirstFMPage CompositionsPage { get; set; }
+        public static FirstFMPage AlbumsPage { get; set; }
+        public static FirstFMPage AGenresPage { get; set; }
+        public static FirstFMPage MembersPage { get; set; }
+        public static FirstFMPage ArtistsPage { get; set; }
+        public static FirstFMPage GenresPage { get; set; }
+        public static FirstFMPage SignUpPage { get; set; }
+        public static StatusPage MainPage { get; set; }
+        public static FirstFMPage ListenedCompositionsPage { get; set; }
+        public static FirstFMPage ListenedAlbumsPage { get; set; }
+        public static FirstFMPage UserGenresPage { get; set; }
+        public static FirstFMPage SignedUpPage { get; set; }
+        public static FirstFMPage TagEditorPage { get; set; }
+        public static FirstFMPage VideoPage { get; set; }
+        public static FirstFMPage loadingPage { get; set; }
 
         private static Session _session = new Session();
         private static System.Reflection.PropertyInfo[] _propertyCollection = _session.GetType().GetProperties();
@@ -47,7 +46,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.txtStatus.Text = status;
+                Session.MainPage.SetStatus(status);
             }));
         }
         [MTAThread]
@@ -55,7 +54,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.txtStatus.Text += addition;
+                Session.MainPage.AddToStatus(addition);
             }));
         }
 
@@ -64,10 +63,15 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.lblStatus.Content = action;
+                Session.MainPage.SetAction(action);
             }));
         }
 
+
+        public static void TryLog(string login, string password)
+        {
+
+        }
 
         public static LogStatus Log(string login, string password)
         {

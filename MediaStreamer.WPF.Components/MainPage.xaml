@@ -7,7 +7,7 @@
       mc:Ignorable="d"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
-    Title="First FM Course Project" 
+    Title="First FM Course Project"
     MinWidth="480" MinHeight="440" Loaded="Window_Loaded"
       >
     <Page.CommandBindings>

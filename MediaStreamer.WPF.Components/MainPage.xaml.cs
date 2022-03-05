@@ -223,7 +223,6 @@ namespace MediaStreamer.WPF.Components
                         txtLogin.Visibility = Visibility.Hidden;
                         txtPassword.Visibility = Visibility.Hidden;
                         EnableUserPages();
-                        Session.UpdatePages();
                         return;
                     case LogStatus.PasswordIsIncorrect:
                         return;
