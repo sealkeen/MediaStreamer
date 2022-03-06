@@ -39,21 +39,6 @@ namespace MediaStreamer.WPF.Components
         private bool canExecute = false;
         public event Action OnConstructing;
 
-        public Frame GetFrame()
-        {
-            return mainFrame;
-        }
-
-        public Label GetStatusLabel()
-        {
-            return lblStatus;
-        }
-
-        public TextBlock GetStatusTextBlock()
-        {
-            return txtStatus;
-        }
-
         private void timer_Tick(object sender, EventArgs e)
         {
             if ((mePlayer.Source != null) && mePlayer.NaturalDuration.HasTimeSpan && (!userIsDraggingSlider))
@@ -113,7 +98,7 @@ namespace MediaStreamer.WPF.Components
             }
             Dispatcher.BeginInvoke(new Action(() => SetContentPageCompositions())).Wait();
             mainFrame.UpdateLayout();
-            SetCurrentStatus("All compositions listing");
+            SetStatus("All compositions listing");
         }
 
         private void buttonAlbums_Click(object sender, RoutedEventArgs e)
@@ -125,7 +110,7 @@ namespace MediaStreamer.WPF.Components
                 Session.AlbumsPage.ListAlbums();
             mainFrame.Content = Session.AlbumsPage;
             mainFrame.UpdateLayout();
-            SetCurrentStatus("All albums listing");
+            SetStatus("All albums listing");
         }
 
         private void buttonArtistGenres_Click(object sender, RoutedEventArgs e)
@@ -136,7 +121,7 @@ namespace MediaStreamer.WPF.Components
                 Session.AGenresPage.RetrieveArtistGenres();
             mainFrame.Content = Session.AGenresPage;
             mainFrame.UpdateLayout();
-            SetCurrentStatus("All artist genres listing");
+            SetStatus("All artist genres listing");
         }
 
         private void buttonGroupMembers_Click(object sender, RoutedEventArgs e)
@@ -148,7 +133,7 @@ namespace MediaStreamer.WPF.Components
                 Session.MembersPage.ListGroupMembers();
             mainFrame.Content = Session.MembersPage;
             mainFrame.UpdateLayout();
-            SetCurrentStatus("All group members by band listing");
+            SetStatus("All group members by band listing");
         }
 
         private void buttonArtists_Click(object sender, RoutedEventArgs e)
@@ -160,7 +145,7 @@ namespace MediaStreamer.WPF.Components
                 Session.ArtistsPage.ListArtists();
             mainFrame.Content = Session.ArtistsPage;
             mainFrame.UpdateLayout();
-            SetCurrentStatus("All artists listing");
+            SetStatus("All artists listing");
         }
 
         private void buttonGenres_Click(object sender, RoutedEventArgs e)
@@ -172,15 +157,15 @@ namespace MediaStreamer.WPF.Components
                 Session.GenresPage.ListGenres();
             mainFrame.Content = Session.GenresPage;
             mainFrame.UpdateLayout();
-            SetCurrentStatus("All genres listing");
+            SetStatus("All genres listing");
         }
 
-        public void SetCurrentAction(string action)
+        public override void SetAction(string action)
         {
             lblStatus.Content = action;
         }
 
-        public void SetCurrentStatus(string status)
+        public override void SetStatus(string status)
         {
             txtStatus.Text = status;
         }
@@ -286,7 +271,7 @@ namespace MediaStreamer.WPF.Components
                 Session.ListenedCompositionsPage.ListCompositions();
             mainFrame.Content = Session.ListenedCompositionsPage;
             mainFrame.UpdateLayout();
-            SetCurrentStatus("User listened compositions listing");
+            SetStatus("User listened compositions listing");
         }
 
         private void buttonUserGenres_Click(object sender, RoutedEventArgs e)
@@ -299,11 +284,11 @@ namespace MediaStreamer.WPF.Components
                     Session.UserGenresPage.ListGenres(SessionInformation.CurrentUser.UserID);
                 mainFrame.Content = Session.UserGenresPage;
                 mainFrame.UpdateLayout();
-                SetCurrentStatus("Your added and listened genres listing:");
+                SetStatus("Your added and listened genres listing:");
             }
             else
             {
-                SetCurrentStatus("An error occured, you're not logged in.");
+                SetStatus("An error occured, you're not logged in.");
             }
         }
 
@@ -316,7 +301,7 @@ namespace MediaStreamer.WPF.Components
                 Session.ListenedAlbumsPage.PartialListAlbums(SessionInformation.CurrentUser.UserID);
             mainFrame.Content = Session.ListenedAlbumsPage;
             mainFrame.UpdateLayout();
-            SetCurrentStatus("User albums listing");
+            SetStatus("User albums listing");
         }
 
         private void buttonUserArtists_Click(object sender, RoutedEventArgs e)
@@ -331,7 +316,7 @@ namespace MediaStreamer.WPF.Components
                 Session.VideoPage = new VideoPage();
             mainFrame.Content = Session.VideoPage;
             mainFrame.UpdateLayout();
-            SetCurrentStatus("User albums listing");
+            SetStatus("User albums listing");
         }
 
         //MEDIA PLAYER METHODS
