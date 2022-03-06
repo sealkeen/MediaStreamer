@@ -20,5 +20,15 @@ namespace MediaStreamer.RAMControl
         {
 
         }
+
+        public virtual void SetFrameContent(object o)
+        {
+            
+        }
+
+        public virtual void UpdateFrameLayout()
+        {
+            
+        }
     }
 }

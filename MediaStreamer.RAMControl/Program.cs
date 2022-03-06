@@ -62,34 +62,30 @@ namespace MediaStreamer.RAMControl
             //    }
             //}
         }
-
         [MTAThread]
         public static void SetTxtStatusContents(string status)
         {
-            Console.WriteLine(status);
-            //Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
-            //{
-            //    Session.MainPage.txtStatus.Text = status;
-            //}));
+            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                Session.MainPage.SetStatus(status);
+            }));
         }
         [MTAThread]
         public static void AddToStatus(string addition)
         {
-            Console.WriteLine(addition);
-            //Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
-            //{
-            //    txtStatus.Text += addition;
-            //}));
+            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                Session.MainPage.AddToStatus(addition);
+            }));
         }
 
         [MTAThread]
         public static void SetCurrentAction(string action)
         {
-            Console.WriteLine(action);
-            //Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
-            //{
-            //    Session.MainPage.lblStatus.Content = action;
-            //}));
+            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                Session.MainPage.SetAction(action);
+            }));
         }
         [MTAThread]
         public static void SetCurrentStatus(string status)

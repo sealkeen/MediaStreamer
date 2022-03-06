@@ -90,9 +90,9 @@ namespace MediaStreamer.WPF.Components
                     Session.CompositionsPage = new CompositionsPage(artistID, albumID);
                 else
                     Session.CompositionsPage.PartialListCompositions(artistID, albumID);
-                Session.MainPage.mainFrame.Content = Session.CompositionsPage;
-                Session.MainPage.mainFrame.UpdateLayout();
-                Session.MainPage.SetCurrentStatus($"Chosen artit's <{name}> compositions listing:");
+                Session.MainPage.SetFrameContent( Session.CompositionsPage );
+                Session.MainPage.UpdateFrameLayout();
+                Session.MainPage.SetStatus($"Chosen artit's <{name}> compositions listing:");
             }
             catch (Exception ex)
             {

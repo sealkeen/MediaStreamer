@@ -12,13 +12,14 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class MainPage : Page
+    public partial class MainPage : StatusPage
     {
         public MainPage()
         {
@@ -110,7 +111,7 @@ namespace MediaStreamer.WPF.Components
                 Session.CompositionsPage.ListCompositionsAsync().Wait();
 #endif
             }
-            Dispatcher.BeginInvoke(new Action(() => SetContentPageCompositions()));
+            Dispatcher.BeginInvoke(new Action(() => SetContentPageCompositions())).Wait();
             mainFrame.UpdateLayout();
             SetCurrentStatus("All compositions listing");
         }

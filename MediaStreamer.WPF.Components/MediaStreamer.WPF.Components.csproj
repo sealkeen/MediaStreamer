@@ -19,6 +19,7 @@
     <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
     <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
+    <ProjectReference Include="..\MediaStreamer.RAMControl\MediaStreamer.RAMControl.csproj" />
     <ProjectReference Include="..\MediaStreamer.TagEditor\MediaStreamer.TagEditor.csproj" />
     <ProjectReference Include="..\taglib-sharp\src\TaglibSharp\TaglibSharp.csproj" />
   </ItemGroup>

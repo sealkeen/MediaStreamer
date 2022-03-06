@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
-    <ProjectReference Include="..\..\EPAM\SealkeenJSON\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj" />
+    <ProjectReference Include="..\..\JSON-Parsing-Compiler\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj" />
   </ItemGroup>
 
 </Project>

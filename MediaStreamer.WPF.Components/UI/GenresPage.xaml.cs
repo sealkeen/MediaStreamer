@@ -40,9 +40,9 @@ namespace MediaStreamer.WPF.Components
                 Session.ArtistsPage = new ArtistsPage(genreName);
             else
                 Session.ArtistsPage.PartialListArtists(genreName);
-            Session.MainPage.mainFrame.Content = Session.ArtistsPage;
-            Session.MainPage.mainFrame.UpdateLayout();
-            Session.MainPage.SetCurrentStatus($"Chosen genres's <{genreName}> artist listing:");
+            Session.MainPage.SetFrameContent( Session.ArtistsPage );
+            Session.MainPage.UpdateFrameLayout();
+            Session.MainPage.SetStatus($"Chosen genres's <{genreName}> artist listing:");
         }
     }
 }

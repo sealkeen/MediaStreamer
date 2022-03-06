@@ -47,8 +47,9 @@ namespace MediaStreamer.WPF.Components
 
                 txtStatus.Text = "Successfully signed up!";
 
-                Session.MainPage.mainFrame.Content = Session.SignedUpPage ??
-                    (Session.SignedUpPage = new SignedUpPage($"{user.UserName ?? "Unknown"}"));
+                Session.MainPage.SetFrameContent( Session.SignedUpPage ??
+                    (Session.SignedUpPage = new SignedUpPage($"{user.UserName ?? "Unknown"}"))
+                    );
                 return user;
 
             } catch (Exception ex) {
@@ -75,9 +76,10 @@ namespace MediaStreamer.WPF.Components
 
                 txtStatus.Text = "Successfully changed password!";
 
-                Session.MainPage.mainFrame.Content = Session.SignedUpPage == null ?
+                Session.MainPage.SetFrameContent( Session.SignedUpPage == null ?
                     Session.SignedUpPage = new SignedUpPage($"Successfully changed Password to {user.UserName}", false) :
-                    Session.SignedUpPage;
+                    Session.SignedUpPage
+                    );
                 return user;
             }
             catch (Exception ex)

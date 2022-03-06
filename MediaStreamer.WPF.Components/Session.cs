@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Windows.Controls;
 using MediaStreamer.Domain;
-using MediaStreamer.WPF.Components;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -17,7 +17,7 @@ namespace MediaStreamer.WPF.Components
         public static ArtistsPage ArtistsPage { get; set; }
         public static GenresPage GenresPage { get; set; }
         public static SignUpPage SignUpPage { get; set; }
-        public static MainPage MainPage { get; set; }
+        public static StatusPage MainPage { get; set; }
         public static UserCompositionsPage ListenedCompositionsPage { get; set; }
         public static UserAlbumsPage ListenedAlbumsPage { get; set; }
         public static UserGenresPage UserGenresPage { get; set; }
@@ -47,7 +47,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.txtStatus.Text = status;
+                Session.MainPage.SetStatus(status);
             }));
         }
         [MTAThread]
@@ -55,7 +55,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.txtStatus.Text += addition;
+                Session.MainPage.AddToStatus(addition);
             }));
         }
 
@@ -64,7 +64,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.lblStatus.Content = action;
+                Session.MainPage.SetAction(action);
             }));
         }
 

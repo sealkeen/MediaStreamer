@@ -29,9 +29,9 @@ namespace MediaStreamer.WPF.Components
                 Session.AlbumsPage = new AlbumsPage(artistID);
             else
                 Session.AlbumsPage.PartialListAlbums(artistID);
-            Session.MainPage.mainFrame.Content = Session.AlbumsPage;
-            Session.MainPage.mainFrame.UpdateLayout();
-            Session.MainPage.SetCurrentStatus($"You listened albums by artist <{name}> listing:");
+            Session.MainPage.SetFrameContent( Session.AlbumsPage );
+            Session.MainPage.UpdateFrameLayout();
+            Session.MainPage.SetStatus($"You listened albums by artist <{name}> listing:");
         }
 
         public void ListArtists()

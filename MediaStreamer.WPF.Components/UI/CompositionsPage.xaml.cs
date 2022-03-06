@@ -21,12 +21,12 @@ namespace MediaStreamer.WPF.Components
         public CompositionsPage()
         {
             ListInitialized = false;
-            //Session.MainPage.mainFrame.Content = Session.loadingPage; //LoadManagementElements(); //ListCompositionsAsync();
+            //Session.MainPage.SetFrameContent( Session.loadingPage; //LoadManagementElements(); //ListCompositionsAsync();
             Compositions = new List<IComposition>();
             Queue = new LinkedList<Composition>();
             InitializeComponent();
             DataContext = this;
-            //tsk.Wait(); //Session.MainPage.mainFrame.Content = this;
+            //tsk.Wait(); //Session.MainPage.SetFrameContent( = this;
         }
         public IList<IComposition> Compositions { get; set; }
         public LinkedList<Composition> Queue { get; set; }
@@ -72,7 +72,7 @@ namespace MediaStreamer.WPF.Components
             try {
                 //DBAccess.Update();
                 var result = Program.DBAccess.DB.GetICompositions().ToList();
-                Dispatcher.BeginInvoke(new Action(() => Session.MainPage.SetContentPageCompositions()));
+                Dispatcher.BeginInvoke(new Action(() => Session.MainPage.SetFrameContent(Session.CompositionsPage)));
                 ListInitialized = true;
                 return result;
             } catch (Exception ex) {
@@ -347,7 +347,7 @@ namespace MediaStreamer.WPF.Components
                 var art = target?.Artist?.ArtistName;
                 var comp = target?.CompositionName;
                 Program.SetCurrentStatus($"Played: [{art ?? "Unknown"} – " + $"{comp ?? "Unknown"}]");
-                Session.MainPage.SetCurrentAction($"Now playing {art ?? "Unknown"} – " + $"{comp ?? "Unknown"}");
+                Session.MainPage.SetAction($"Now playing {art ?? "Unknown"} – " + $"{comp ?? "Unknown"}");
                 Program.AddToStatus(", Queued: {");
                 Program.AddToStatus(Program.ToString(Queue));
                 Program.AddToStatus(" }.");
@@ -403,7 +403,7 @@ namespace MediaStreamer.WPF.Components
                         }
                     }
                     Session.TagEditorPage = new TagEditorPage(files, compositions);
-                    Session.MainPage.mainFrame.Content = Session.TagEditorPage;
+                    Session.MainPage.SetFrameContent( Session.TagEditorPage );
                 }
             }
             catch (Exception ex)

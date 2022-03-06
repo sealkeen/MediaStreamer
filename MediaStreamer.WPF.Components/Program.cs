@@ -68,7 +68,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.txtStatus.Text = status;
+                Session.MainPage.SetStatus(status);
             }));
         }
         [MTAThread]
@@ -76,7 +76,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                txtStatus.Text += addition;
+                Session.MainPage.AddToStatus(addition);
             }));
         }
 
@@ -85,7 +85,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
             {
-                Session.MainPage.lblStatus.Content = action;
+                Session.MainPage.SetAction(action);
             }));
         }
         [MTAThread]
