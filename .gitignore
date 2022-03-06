@@ -7,6 +7,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# backup folders
+_MediaStreamer.Domain
+_MediaStreamer.Xamarin
+
 # User-specific files
 *.rsuser
 *.suo
