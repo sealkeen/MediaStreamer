@@ -12,16 +12,24 @@ namespace MediaStreamer.RAMControl
 {
     public class CompositionStorage
     {
-        public static List<Composition> Compositions { get; set; }
-        public static LinkedList<Composition> Queue { get; set; }
+        public CompositionStorage()
+        {
+            Compositions = new List<IComposition>();
+            Queue = new LinkedList<Composition>();
+        }
+        //public static List<Composition> Compositions { get; set; }
+        //public static LinkedList<Composition> Queue { get; set; }
 
-        public static void ChangeCompositionTags(IList selectedItems)
+        public IList<IComposition> Compositions { get; set; }
+        public LinkedList<Composition> Queue { get; set; }
+
+        public void ChangeCompositionTags(IList selectedItems)
         {
             IComposition currentComp;
             List<Composition> compositions = new List<Composition>();
             foreach (var song in selectedItems)
             {
-                currentComp = CompositionStorage.Compositions[selectedItems.IndexOf(song)];
+                currentComp = Compositions[selectedItems.IndexOf(song)];
                 string filePath = currentComp.FilePath;
                 if (filePath != null)
                 {
