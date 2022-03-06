@@ -1,4 +1,6 @@
-﻿namespace MediaStreamer.WPF.Components
+﻿using MediaStreamer.RAMControl;
+
+namespace MediaStreamer.WPF.Components
 {
     /// <summary>
     /// Логика взаимодействия для GuestPage.xaml

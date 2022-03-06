@@ -1,4 +1,4 @@
-﻿
+﻿using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {

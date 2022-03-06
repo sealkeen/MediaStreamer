@@ -6,6 +6,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MediaStreamer.TagEditing;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {

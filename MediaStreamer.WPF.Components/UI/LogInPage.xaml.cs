@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {

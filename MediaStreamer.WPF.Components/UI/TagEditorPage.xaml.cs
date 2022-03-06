@@ -5,13 +5,14 @@ using System.Windows;
 using System.Windows.Controls;
 using MediaStreamer.Domain;
 using MediaStreamer.TagEditing;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {
     /// <summary>
     /// Логика взаимодействия для TagEditorPage.xaml
     /// </summary>
-    public partial class TagEditorPage : Page
+    public partial class TagEditorPage : FirstFMPage
     {
         private DMTagEditor _dmTagEditor;
 

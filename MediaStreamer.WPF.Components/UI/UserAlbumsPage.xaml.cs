@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MediaStreamer.Domain;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {

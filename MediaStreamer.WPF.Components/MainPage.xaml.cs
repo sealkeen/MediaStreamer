@@ -16,9 +16,6 @@ using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {
-    /// <summary>
-    /// Interaction logic for Page1.xaml
-    /// </summary>
     public partial class MainPage : StatusPage
     {
         public MainPage()
@@ -82,6 +79,17 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
+        public override void SetFrameContent(object o)
+        {
+            mainFrame.Content = o;
+            mainFrame.UpdateLayout();
+        }
+
+        [MTAThread]
+        public void SetContentPageCompositions(FirstFMPage page = null)
+        {
+            mainFrame.Content = page ?? Session.CompositionsPage;
+        }
         [MTAThread]
         public async void UpdateCompositionsPage()
         {
@@ -170,11 +178,6 @@ namespace MediaStreamer.WPF.Components
             txtStatus.Text = status;
         }
 
-        [MTAThread]
-        public void SetContentPageCompositions(FirstFMPage page = null)
-        {
-            mainFrame.Content = page ?? Session.CompositionsPage;
-        }
 
         private void buttonLog_Click(object sender, RoutedEventArgs e)
         {

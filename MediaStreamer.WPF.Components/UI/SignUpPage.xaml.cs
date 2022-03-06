@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using MediaStreamer.Domain;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {

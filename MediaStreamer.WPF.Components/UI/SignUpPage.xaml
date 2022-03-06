@@ -1,9 +1,10 @@
-﻿<local:FirstFMPage x:Class="MediaStreamer.WPF.Components.SignUpPage"
+﻿<VM:FirstFMPage x:Class="MediaStreamer.WPF.Components.SignUpPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MediaStreamer.WPF.Components"
+      xmlns:VM="clr-namespace:MediaStreamer.RAMControl;assembly=MediaStreamer.RAMControl"
       mc:Ignorable="d" 
       d:DesignHeight="480"
       Title="SignUp" Width="480">
@@ -41,4 +42,4 @@
             <TextBlock Name="txtStatus">Please, enter all the required information.</TextBlock>
         </StatusBar>
     </Grid>
-</local:FirstFMPage>
+</VM:FirstFMPage>
