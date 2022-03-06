@@ -37,13 +37,13 @@ namespace MediaStreamer.WPF.Components
         {
             var genreName = this.Genres[lstItems.SelectedIndex].GenreName;
 
-            if (Session.ArtistsPage == null)
-                Session.ArtistsPage = new ArtistsPage(genreName);
+            if (Selector.ArtistsPage == null)
+                Selector.ArtistsPage = new ArtistsPage(genreName);
             else
-                Session.ArtistsPage.PartialListArtists(genreName);
-            Session.MainPage.SetFrameContent( Session.ArtistsPage );
-            Session.MainPage.UpdateFrameLayout();
-            Session.MainPage.SetStatus($"Chosen genres's <{genreName}> artist listing:");
+                Selector.ArtistsPage.ListByTitle(genreName);
+            Selector.MainPage.SetFrameContent( Selector.ArtistsPage);
+            Selector.MainPage.UpdateFrameLayout();
+            Selector.MainPage.SetStatus($"Chosen genres's <{genreName}> artist listing:");
         }
     }
 }

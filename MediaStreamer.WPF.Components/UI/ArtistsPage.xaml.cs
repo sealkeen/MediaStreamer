@@ -68,21 +68,21 @@ namespace MediaStreamer.WPF.Components
             //Artists = new List<Artist>();
             InitializeComponent();
             ListArtists();
-            DataContext = this;
+            DataContext = Session.ArtistsVM;
         }
         public ArtistsPage(string genreName)
         {
             //Artists = new List<Artist>();
             InitializeComponent();
             PartialListArtists(genreName);
-            DataContext = this;
+            DataContext = Session.ArtistsVM;
         }
         public ArtistsPage(long userID, long artistID)
         {
             //Artists = new List<Artist>();
             InitializeComponent();
             PartialListArtists(userID, artistID);
-            DataContext = this;
+            DataContext = Session.ArtistsVM;
         }
 
         private void lstItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -92,13 +92,13 @@ namespace MediaStreamer.WPF.Components
                 var name = this.Artists[lstItems.SelectedIndex].ArtistName;
                 var artistID = this.Artists[lstItems.SelectedIndex].ArtistID;
 
-                if (Session.AlbumsPage == null)
-                    Session.AlbumsPage = new AlbumsPage(artistID);
+                if (Selector.AlbumsPage == null)
+                    Selector.AlbumsPage = new AlbumsPage(artistID);
                 else
-                    Session.AlbumsPage.PartialListAlbums(artistID);
-                Session.MainPage.SetFrameContent( Session.AlbumsPage);
-                Session.MainPage.UpdateFrameLayout();
-                Session.MainPage.SetStatus($"Chosen artit's <{name}> albums listing:");
+                    Selector.AlbumsPage.ListByID(artistID);
+                Selector.MainPage.SetFrameContent( Selector.AlbumsPage);
+                Selector.MainPage.UpdateFrameLayout();
+                Selector.MainPage.SetStatus($"Chosen artit's <{name}> albums listing:");
             }
         }
 

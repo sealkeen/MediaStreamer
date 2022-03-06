@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using MediaStreamer.Domain;
-using MediaStreamer.WPF.Components;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {

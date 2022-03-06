@@ -87,13 +87,13 @@ namespace MediaStreamer.WPF.Components
                 var artistID = this.Albums[lstItems.SelectedIndex].ArtistID;
                 var albumID = this.Albums[lstItems.SelectedIndex].AlbumID;
 
-                if (Session.CompositionsPage == null)
-                    Session.CompositionsPage = new CompositionsPage(artistID, albumID);
+                if (Selector.CompositionsPage == null)
+                    Selector.CompositionsPage = new CompositionsPage(artistID, albumID);
                 else
-                    Session.CompositionsPage.PartialListCompositions(artistID, albumID);
-                Session.MainPage.SetFrameContent( Session.CompositionsPage );
-                Session.MainPage.UpdateFrameLayout();
-                Session.MainPage.SetStatus($"Chosen artit's <{name}> compositions listing:");
+                    Selector.CompositionsPage.PartialListCompositions(artistID, albumID);
+                Selector.MainPage.SetFrameContent( Selector.CompositionsPage );
+                Selector.MainPage.UpdateFrameLayout();
+                Selector.MainPage.SetStatus($"Chosen artit's <{name}> compositions listing:");
             }
             catch (Exception ex)
             {

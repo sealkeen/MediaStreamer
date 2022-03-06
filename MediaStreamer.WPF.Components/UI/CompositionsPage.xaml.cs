@@ -22,12 +22,14 @@ namespace MediaStreamer.WPF.Components
         public CompositionsPage()
         {
             ListInitialized = false;
-            //Session.MainPage.SetFrameContent( Session.loadingPage; //LoadManagementElements(); //ListCompositionsAsync();
+            Selector.MainPage.SetFrameContent( Selector.LoadingPage ); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
 
             CompositionsStore = new CompositionStorage();
+            Session.CompositionsVM = new CompositionsViewModel();
             DataContext = CompositionsStore;
-            //tsk.Wait(); //Session.MainPage.SetFrameContent( = this;
+            //tsk.Wait();
+            Selector.MainPage.SetFrameContent(this);
         }
         public CompositionStorage CompositionsStore { get; set; }
 
@@ -74,7 +76,7 @@ namespace MediaStreamer.WPF.Components
             try {
                 //DBAccess.Update();
                 var result = Program.DBAccess.DB.GetICompositions().ToList();
-                Dispatcher.BeginInvoke(new Action(() => Session.MainPage.SetFrameContent(Session.CompositionsPage)));
+                Dispatcher.BeginInvoke(new Action(() => Selector.MainPage.SetFrameContent(Selector.CompositionsPage)));
                 ListInitialized = true;
                 return result;
             } catch (Exception ex) {
@@ -110,7 +112,7 @@ namespace MediaStreamer.WPF.Components
             buttonDelete.IsEnabled = false;
         }
 
-        public async Task ListCompositionsAsync()
+        public override async Task ListAsync()
         {
             try
             {
@@ -142,7 +144,7 @@ namespace MediaStreamer.WPF.Components
             InitializeComponent();
             LoadManagementElements();
             PartialListCompositions(ArtistID, albumID);
-            DataContext = this;
+            DataContext = Session.CompositionsVM;
         }
 
         [MTAThread]
@@ -349,7 +351,7 @@ namespace MediaStreamer.WPF.Components
                 var art = target?.Artist?.ArtistName;
                 var comp = target?.CompositionName;
                 Program.SetCurrentStatus($"Played: [{art ?? "Unknown"} – " + $"{comp ?? "Unknown"}]");
-                Session.MainPage.SetAction($"Now playing {art ?? "Unknown"} – " + $"{comp ?? "Unknown"}");
+                Selector.MainPage.SetAction($"Now playing {art ?? "Unknown"} – " + $"{comp ?? "Unknown"}");
                 Program.AddToStatus(", Queued: {");
                 Program.AddToStatus(Program.ToString(CompositionsStore.Queue));
                 Program.AddToStatus(" }.");
@@ -404,8 +406,8 @@ namespace MediaStreamer.WPF.Components
                             files.Add(file);
                         }
                     }
-                    Session.TagEditorPage = new TagEditorPage(files, compositions);
-                    Session.MainPage.SetFrameContent( Session.TagEditorPage );
+                    Selector.TagEditorPage = new TagEditorPage(files, compositions);
+                    Selector.MainPage.SetFrameContent( Selector.TagEditorPage );
                 }
             }
             catch (Exception ex)
@@ -440,7 +442,7 @@ namespace MediaStreamer.WPF.Components
         {
             if (lastDataLoadWasPartial != true)
             {
-                ListCompositionsAsync();
+                ListAsync();
             }
             else
             {

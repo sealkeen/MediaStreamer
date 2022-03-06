@@ -62,6 +62,7 @@ namespace MediaStreamer.RAMControl
             //    }
             //}
         }
+
         [MTAThread]
         public static void SetTxtStatusContents(string status)
         {
@@ -96,10 +97,10 @@ namespace MediaStreamer.RAMControl
         public static string ToString(IEnumerable comps)
         {
             string result = "";
-            foreach (Composition cmp in comps)
+            foreach (ICompositionInstance cmp in comps)
             {
-                result += $"{ cmp?.Artist.ArtistName ?? "Unknown"} – " +
-                $"" + $"{cmp?.CompositionName ?? "Unknown"}" + ", ";
+                result += $"{ cmp?.GetInstance()?.Artist?.ArtistName ?? "Unknown"} – " +
+                $"" + $"{cmp?.GetInstance()?.CompositionName ?? "Unknown"}" + ", ";
             }
             result = result.TrimEnd(new char[] { ',', ' ' });
             result += ".";
@@ -146,4 +147,4 @@ namespace MediaStreamer.RAMControl
                 Debug.WriteLine(status);
         }
     } // public class Program
-} // namespace MediaStreamer.RAMControl
+}  // namespace MediaStreamer.RAMControl

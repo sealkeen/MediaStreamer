@@ -61,7 +61,7 @@ namespace MediaStreamer.WPF.Components
                 return;
             var lcomp = Compositions[lstItems.SelectedIndex];
 
-            Session.CompositionsPage.PlayTarget(lcomp.Composition);
+            Selector.CompositionsPage.PlayTarget(lcomp.Composition);
         }
 
         private void buttonDelete_Click(object sender, RoutedEventArgs e)
@@ -71,7 +71,7 @@ namespace MediaStreamer.WPF.Components
 
         private void cmiChangeComposition_Click(object sender, RoutedEventArgs e)
         {
-            Session.CompositionsPage.ChangeComposition(lstItems.SelectedItems);
+            Selector.CompositionsPage.ChangeComposition(lstItems.SelectedItems);
         }
 
         private void cmiPlaySeveral_Click(object sender, RoutedEventArgs e)
@@ -107,7 +107,7 @@ namespace MediaStreamer.WPF.Components
 
         private void cmiQueue_Click(object sender, RoutedEventArgs e)
         {
-            Session.CompositionsPage.QueueSelected(lstItems.SelectedItems);
+            Selector.CompositionsPage.QueueSelected(lstItems.SelectedItems);
         }
     }
 }

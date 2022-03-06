@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
 using MediaStreamer.RAMControl;
+using MediaStreamer.Domain;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -22,6 +23,7 @@ namespace MediaStreamer.WPF.Components
         {
             InitializeComponent();
             Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            Selector.MainPage = this;
             Session.MainPage = this;
 
             DispatcherTimer timer = new DispatcherTimer();
@@ -31,6 +33,7 @@ namespace MediaStreamer.WPF.Components
             Program.mePlayer = this.mePlayer;
             Program.txtStatus = this.txtStatus;
         }
+
         private double volumeSliderValue = 0.025; 
         private bool userIsDraggingSlider = false;
         private bool canExecute = false;
@@ -54,12 +57,12 @@ namespace MediaStreamer.WPF.Components
                 if (Program.currentComposition != null &&
                     Math.Ceiling(Program.mePlayer.Position.TotalSeconds) >= Program.currentComposition?.Duration &&
                     !userIsDraggingSlider &&
-                    Session.CompositionsPage.HasNextInListOrQueue() &&
+                    Selector.CompositionsPage.HasNextInListOrQueue() &&
                     !Program.PlayerStopped
                 )
                 {
-                    Session.CompositionsPage?.SwitchToNextSelected();
-                    Session.CompositionsPage?.PlayTarget(Session.CompositionsPage.GetNextComposition());
+                    Selector.CompositionsPage?.SwitchToNextSelected();
+                    Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
                 }
             }
             catch (Exception ex)
@@ -72,7 +75,7 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                UpdateCompositionsPage();
+                ListAsync().Wait();
             }
             catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
@@ -88,20 +91,20 @@ namespace MediaStreamer.WPF.Components
         [MTAThread]
         public void SetContentPageCompositions(FirstFMPage page = null)
         {
-            mainFrame.Content = page ?? Session.CompositionsPage;
+            mainFrame.Content = page ?? Selector.CompositionsPage;
         }
         [MTAThread]
-        public async void UpdateCompositionsPage()
+        public override async Task ListAsync()
         {
-            mainFrame.Content = Session.loadingPage;
-            if (Session.CompositionsPage == null)
-                Session.CompositionsPage = new CompositionsPage();
-            if (!Session.CompositionsPage.ListInitialized)
+            mainFrame.Content = Selector.LoadingPage;
+            if (Selector.CompositionsPage == null)
+                Selector.CompositionsPage = new CompositionsPage();
+            if (!Selector.CompositionsPage.ListInitialized)
             {
 #if !NET40
-                await Session.CompositionsPage.ListCompositionsAsync();
+                await Selector.CompositionsPage.ListAsync();
 #else
-                Session.CompositionsPage.ListCompositionsAsync().Wait();
+                Selector.CompositionsPage.ListAsync().Wait();
 #endif
             }
             Dispatcher.BeginInvoke(new Action(() => SetContentPageCompositions())).Wait();
@@ -111,59 +114,59 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonAlbums_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Session.loadingPage;
-            if (Session.AlbumsPage == null)
-                Session.AlbumsPage = new AlbumsPage();
+            mainFrame.Content = Selector.LoadingPage;
+            if (Selector.AlbumsPage == null)
+                Selector.AlbumsPage = new AlbumsPage();
             else
-                Session.AlbumsPage.ListAlbums();
-            mainFrame.Content = Session.AlbumsPage;
+                Selector.AlbumsPage.List();
+            mainFrame.Content = Selector.AlbumsPage;
             mainFrame.UpdateLayout();
             SetStatus("All albums listing");
         }
 
         private void buttonArtistGenres_Click(object sender, RoutedEventArgs e)
         {
-            if (Session.AGenresPage == null)
-                Session.AGenresPage = new ArtistGenresPage();
+            if (Selector.AGenresPage == null)
+                Selector.AGenresPage = new ArtistGenresPage();
             else
-                Session.AGenresPage.RetrieveArtistGenres();
-            mainFrame.Content = Session.AGenresPage;
+                Selector.AGenresPage.List();
+            mainFrame.Content = Selector.AGenresPage;
             mainFrame.UpdateLayout();
             SetStatus("All artist genres listing");
         }
 
         private void buttonGroupMembers_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Session.loadingPage;
-            if (Session.MembersPage == null)
-                Session.MembersPage = new GroupMembersPage();
+            mainFrame.Content = Selector.LoadingPage;
+            if (Selector.MembersPage == null)
+                Selector.MembersPage = new GroupMembersPage();
             else
-                Session.MembersPage.ListGroupMembers();
-            mainFrame.Content = Session.MembersPage;
+                Selector.MembersPage.List();
+            mainFrame.Content = Selector.MembersPage;
             mainFrame.UpdateLayout();
             SetStatus("All group members by band listing");
         }
 
         private void buttonArtists_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Session.loadingPage;
-            if (Session.ArtistsPage == null)
-                Session.ArtistsPage = new ArtistsPage();
+            mainFrame.Content = Selector.LoadingPage;
+            if (Selector.ArtistsPage == null)
+                Selector.ArtistsPage = new ArtistsPage();
             else
-                Session.ArtistsPage.ListArtists();
-            mainFrame.Content = Session.ArtistsPage;
+                Selector.ArtistsPage.List();
+            mainFrame.Content = Selector.ArtistsPage;
             mainFrame.UpdateLayout();
             SetStatus("All artists listing");
         }
 
         private void buttonGenres_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Session.loadingPage;
-            if (Session.GenresPage == null)
-                Session.GenresPage = new GenresPage();
+            mainFrame.Content = Selector.LoadingPage;
+            if (Selector.GenresPage == null)
+                Selector.GenresPage = new GenresPage();
             else
-                Session.GenresPage.ListGenres();
-            mainFrame.Content = Session.GenresPage;
+                Selector.GenresPage.List();
+            mainFrame.Content = Selector.GenresPage;
             mainFrame.UpdateLayout();
             SetStatus("All genres listing");
         }
@@ -225,9 +228,9 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonSignUp_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Session.SignUpPage == null ?
-                Session.SignUpPage = new SignUpPage() :
-                Session.SignUpPage;
+            mainFrame.Content = Selector.SignUpPage == null ?
+                Selector.SignUpPage = new SignUpPage() :
+                Selector.SignUpPage;
         }
 
         private void mainFrame_Navigated(object sender, NavigationEventArgs e)
@@ -267,12 +270,12 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonUserCompositions_Click(object sender, RoutedEventArgs e)
         {
-            if (Session.ListenedCompositionsPage == null)
-                Session.ListenedCompositionsPage =
-                    new MediaStreamer.WPF.Components.UserCompositionsPage();
+            if (Selector.ListenedCompositionsPage == null)
+                Selector.ListenedCompositionsPage =
+                    new UserCompositionsPage();
             else
-                Session.ListenedCompositionsPage.ListCompositions();
-            mainFrame.Content = Session.ListenedCompositionsPage;
+                Selector.ListenedCompositionsPage.List();
+            mainFrame.Content = Selector.ListenedCompositionsPage;
             mainFrame.UpdateLayout();
             SetStatus("User listened compositions listing");
         }
@@ -281,11 +284,11 @@ namespace MediaStreamer.WPF.Components
         {
             if (SessionInformation.CurrentUser != null)
             {
-                if (Session.UserGenresPage == null)
-                    Session.UserGenresPage = new UserGenresPage(SessionInformation.CurrentUser.UserID);
+                if (Selector.UserGenresPage == null)
+                    Selector.UserGenresPage = new UserGenresPage(SessionInformation.CurrentUser.UserID);
                 else
-                    Session.UserGenresPage.ListGenres(SessionInformation.CurrentUser.UserID);
-                mainFrame.Content = Session.UserGenresPage;
+                    Selector.UserGenresPage.ListByID(SessionInformation.CurrentUser.UserID);
+                mainFrame.Content = Selector.UserGenresPage;
                 mainFrame.UpdateLayout();
                 SetStatus("Your added and listened genres listing:");
             }
@@ -297,12 +300,12 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonUserAlbums_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Session.loadingPage;
-            if (Session.ListenedAlbumsPage == null)
-                Session.ListenedAlbumsPage = new UserAlbumsPage();
+            mainFrame.Content = Selector.LoadingPage;
+            if (Selector.ListenedAlbumsPage == null)
+                Selector.ListenedAlbumsPage = new UserAlbumsPage();
             else
-                Session.ListenedAlbumsPage.PartialListAlbums(SessionInformation.CurrentUser.UserID);
-            mainFrame.Content = Session.ListenedAlbumsPage;
+                Selector.ListenedAlbumsPage.ListByID(SessionInformation.CurrentUser.UserID);
+            mainFrame.Content = Selector.ListenedAlbumsPage;
             mainFrame.UpdateLayout();
             SetStatus("User albums listing");
         }
@@ -314,10 +317,10 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonVideo_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Session.loadingPage;
-            if (Session.VideoPage == null)
-                Session.VideoPage = new VideoPage();
-            mainFrame.Content = Session.VideoPage;
+            mainFrame.Content = Selector.LoadingPage;
+            if (Selector.VideoPage == null)
+                Selector.VideoPage = new VideoPage();
+            mainFrame.Content = Selector.VideoPage;
             mainFrame.UpdateLayout();
             SetStatus("User albums listing");
         }
@@ -387,15 +390,15 @@ namespace MediaStreamer.WPF.Components
                 Program.PlayerStopped = false;
                 return;
             }
-            int selected = Session.CompositionsPage.SelectedItemsCount();
+            int selected = Selector.CompositionsPage.SelectedItemsCount();
             if (selected > 0)
             {
-                Session.CompositionsPage.QueueSelected();
-                Program.ShowQueue(Session.CompositionsPage.SelectedItems());
+                Selector.CompositionsPage.QueueSelected();
+                Program.ShowQueue(Selector.CompositionsPage.SelectedItems());
             }
             else if (selected == 0)
             {
-                if (Session.CompositionsPage.lstItems.Items.Count != 0)
+                if (Selector.CompositionsPage.ItemsCount() != 0)
                 {
                     Program.SetCurrentStatus("No items selected to play.");
                 }
@@ -414,7 +417,7 @@ namespace MediaStreamer.WPF.Components
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            Session.Dispose();
+            Selector.Dispose();
             Program.DBAccess?.DB?.Dispose();
         }
 
@@ -422,11 +425,11 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                if (Session.CompositionsPage.HasNextInListOrQueue()
+                if (Selector.CompositionsPage.HasNextInListOrQueue()
                 )
                 {
-                    Session.CompositionsPage?.SwitchToNextSelected();
-                    Session.CompositionsPage?.PlayTarget(Session.CompositionsPage.GetNextComposition());
+                    Selector.CompositionsPage?.SwitchToNextSelected();
+                    Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
                 }
             }
             catch (Exception ex)
@@ -439,11 +442,11 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                if (Session.CompositionsPage.HasPreviousInList()
+                if (Selector.CompositionsPage.HasPreviousInList()
                 )
                 {
-                    Session.CompositionsPage?.SwitchToPreviousSelected();
-                    Session.CompositionsPage?.PlayTarget(Session.CompositionsPage?.GetCurrentComposition());
+                    Selector.CompositionsPage?.SwitchToPreviousSelected();
+                    Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage?.GetCurrentComposition());
                 }
             }
             catch (Exception ex)

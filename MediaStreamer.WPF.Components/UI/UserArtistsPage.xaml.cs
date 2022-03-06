@@ -26,13 +26,13 @@ namespace MediaStreamer.WPF.Components
             var name = this.Artists[lstItems.SelectedIndex].Artist.ArtistName;
             var artistID = this.Artists[lstItems.SelectedIndex].ArtistID;
 
-            if (Session.AlbumsPage == null)
-                Session.AlbumsPage = new AlbumsPage(artistID);
+            if (Selector.AlbumsPage == null)
+                Selector.AlbumsPage = new AlbumsPage(artistID);
             else
-                Session.AlbumsPage.PartialListAlbums(artistID);
-            Session.MainPage.SetFrameContent( Session.AlbumsPage );
-            Session.MainPage.UpdateFrameLayout();
-            Session.MainPage.SetStatus($"You listened albums by artist <{name}> listing:");
+                Selector.AlbumsPage.ListByID(artistID);
+            Selector.MainPage.SetFrameContent( Selector.AlbumsPage );
+            Selector.MainPage.UpdateFrameLayout();
+            Selector.MainPage.SetStatus($"You listened albums by artist <{name}> listing:");
         }
 
         public void ListArtists()

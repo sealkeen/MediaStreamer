@@ -16,9 +16,26 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class AlbumsPage : FirstFMPage
     {
-        public bool lastDataLoadWasPartial = false;
-        private bool _orderByDescending = true;
-        public List<Album> Albums { get; set; }
+        public AlbumsPage()
+        {
+            Session.AlbumsVM = new AlbumsViewModel();
+            InitializeComponent();
+            ListAlbums();
+            DataContext = Session.AlbumsVM;
+        }
+
+        public AlbumsPage(long ArtistID)
+        {
+            InitializeComponent();
+            PartialListAlbums(ArtistID);
+            DataContext = Session.AlbumsVM;
+        }
+        public AlbumsPage(string genreName)
+        {
+            InitializeComponent();
+            PartialListAlbums(genreName);
+            DataContext = Session.AlbumsVM;
+        }
         public List<Album> GetAlbums()
         {
             try
@@ -30,15 +47,16 @@ namespace MediaStreamer.WPF.Components
                 return new List<Album>();
             }
         }
+
         public void ListAlbums()
         {
-            Albums = GetAlbums();
+            Session.AlbumsVM.Albums = GetAlbums();
             lastDataLoadWasPartial = false;
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
         public void PartialListAlbums(long artistID)
         {
-            Albums = (from album in Program.DBAccess.DB.GetAlbums()
+            Session.AlbumsVM.Albums = (from album in Program.DBAccess.DB.GetAlbums()
                       where album.ArtistID == artistID
                       select album).ToList();
 
@@ -57,32 +75,9 @@ namespace MediaStreamer.WPF.Components
             var albums = Program.DBAccess.DB.GetAlbums().Where(a => (a.ArtistID == artists.First().ArtistID));
             if (albums.Count() == 0)
                 return;
-            Albums = albums.ToList();
+            Session.AlbumsVM.Albums = albums.ToList();
             lastDataLoadWasPartial = true;
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-        }
-
-        public AlbumsPage()
-        {
-            Albums = new List<Album>();
-            InitializeComponent();
-            ListAlbums();
-            DataContext = this;
-        }
-
-        public AlbumsPage(long ArtistID)
-        {
-            Albums = new List<Album>();
-            InitializeComponent();
-            PartialListAlbums(ArtistID);
-            DataContext = this;
-        }
-        public AlbumsPage(string genreName)
-        {
-            Albums = new List<Album>();
-            InitializeComponent();
-            PartialListAlbums(genreName);
-            DataContext = this;
         }
 
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
@@ -92,7 +87,7 @@ namespace MediaStreamer.WPF.Components
                 int? index = lstItems?.SelectedIndex;
                 if (index != null && index != -1)
                 {
-                    Program.DBAccess?.DeleteAlbum(Albums[index.Value]);
+                    Program.DBAccess?.DeleteAlbum(Session.AlbumsVM.Albums[index.Value]);
                 }
                 ListAlbums();
             }
@@ -139,11 +134,11 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                txtArtistName.Text = Albums[lstItems.SelectedIndex].Artist.ArtistName;
-                txtAlbumName.Text = Albums[lstItems.SelectedIndex].AlbumName;
-                txtYear.Text = (Albums[lstItems.SelectedIndex].Year == null) ? "-" : Albums[lstItems.SelectedIndex].Year.ToString();
-                txtLabel.Text = (Albums[lstItems.SelectedIndex].Label == null) ? "-" : Albums[lstItems.SelectedIndex].Label;
-                txtType.Text = (Albums[lstItems.SelectedIndex].Type == null) ? "-" : Albums[lstItems.SelectedIndex].Type;
+                txtArtistName.Text = Session.AlbumsVM.Albums[lstItems.SelectedIndex].Artist.ArtistName;
+                txtAlbumName.Text = Session.AlbumsVM.Albums[lstItems.SelectedIndex].AlbumName;
+                txtYear.Text = (Session.AlbumsVM.Albums[lstItems.SelectedIndex].Year == null) ? "-" : Session.AlbumsVM.Albums[lstItems.SelectedIndex].Year.ToString();
+                txtLabel.Text = (Session.AlbumsVM.Albums[lstItems.SelectedIndex].Label == null) ? "-" : Session.AlbumsVM.Albums[lstItems.SelectedIndex].Label;
+                txtType.Text = (Session.AlbumsVM.Albums[lstItems.SelectedIndex].Type == null) ? "-" : Session.AlbumsVM.Albums[lstItems.SelectedIndex].Type;
             }
             catch (Exception ex)
             {
@@ -155,17 +150,17 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                var name = this.Albums[lstItems.SelectedIndex].AlbumName;
-                var artistID = this.Albums[lstItems.SelectedIndex].ArtistID;
-                var albumID = this.Albums[lstItems.SelectedIndex].AlbumID;
+                var name = Session.AlbumsVM.Albums[lstItems.SelectedIndex].AlbumName;
+                var artistID = Session.AlbumsVM.Albums[lstItems.SelectedIndex].ArtistID;
+                var albumID = Session.AlbumsVM.Albums[lstItems.SelectedIndex].AlbumID;
 
-                if (Session.CompositionsPage == null)
-                    Session.CompositionsPage = new CompositionsPage(artistID.Value, albumID);
+                if (Selector.CompositionsPage == null)
+                    Selector.CompositionsPage = new CompositionsPage(artistID.Value, albumID);
                 else
-                    Session.CompositionsPage.PartialListCompositions(artistID.Value, albumID);
-                Session.MainPage.SetFrameContent(Session.CompositionsPage);
-                Session.MainPage.UpdateFrameLayout();
-                Session.MainPage.SetStatus($"Chosen artit's <{name}> compositions listing:");
+                    Selector.CompositionsPage.PartialListCompositions(artistID.Value, albumID);
+                Selector.MainPage.SetFrameContent(Selector.CompositionsPage);
+                Selector.MainPage.UpdateFrameLayout();
+                Selector.MainPage.SetStatus($"Chosen artit's <{name}> compositions listing:");
             }
             catch (Exception ex)
             {
@@ -187,13 +182,13 @@ namespace MediaStreamer.WPF.Components
                 switch (columnName)
                 {
                     case "AlbumName":
-                        Albums = Albums.OrderByWithDirection(x => x.AlbumName, _orderByDescending).ToList();
+                        Session.AlbumsVM.Albums = Session.AlbumsVM.Albums.OrderByWithDirection(x => x.AlbumName, _orderByDescending).ToList();
                         break;
                     case "Artist":
-                        Albums = Albums.OrderByWithDirection(x => x.Artist.ArtistName, _orderByDescending).ToList();
+                        Session.AlbumsVM.Albums = Session.AlbumsVM.Albums.OrderByWithDirection(x => x.Artist.ArtistName, _orderByDescending).ToList();
                         break;
                     case "Year":
-                        Albums = Albums.OrderByWithDirection(x => x.Year, _orderByDescending).ToList();
+                        Session.AlbumsVM.Albums = Session.AlbumsVM.Albums.OrderByWithDirection(x => x.Year, _orderByDescending).ToList();
                         break;
                 }
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();

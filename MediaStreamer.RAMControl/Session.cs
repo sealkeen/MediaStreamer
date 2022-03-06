@@ -9,21 +9,21 @@ namespace MediaStreamer.RAMControl
     public class Session : IEnumerable
     {
         public static IDBRepository DBAccess;
-        public static FirstFMPage CompositionsPage { get; set; }
-        public static FirstFMPage AlbumsPage { get; set; }
-        public static FirstFMPage AGenresPage { get; set; }
-        public static FirstFMPage MembersPage { get; set; }
-        public static FirstFMPage ArtistsPage { get; set; }
-        public static FirstFMPage GenresPage { get; set; }
-        public static FirstFMPage SignUpPage { get; set; }
         public static StatusPage MainPage { get; set; }
-        public static FirstFMPage ListenedCompositionsPage { get; set; }
-        public static FirstFMPage ListenedAlbumsPage { get; set; }
-        public static FirstFMPage UserGenresPage { get; set; }
-        public static FirstFMPage SignedUpPage { get; set; }
-        public static FirstFMPage TagEditorPage { get; set; }
-        public static FirstFMPage VideoPage { get; set; }
-        public static FirstFMPage loadingPage { get; set; }
+        public static CompositionsViewModel CompositionsVM { get; set; }
+        public static AlbumsViewModel AlbumsVM { get; set; }
+        public static ArtistsViewModel ArtistsVM { get; set; }
+        public static FirstFMPage AGenresVM { get; set; }
+        public static FirstFMPage MembersVM { get; set; }
+        public static FirstFMPage GenresVM { get; set; }
+        public static FirstFMPage SignUpVM { get; set; }
+        public static CompositionsViewModel ListenedCompositionsPage { get; set; }
+        public static FirstFMPage ListenedAlbumsVM { get; set; }
+        public static FirstFMPage UserGenresVM { get; set; }
+        public static FirstFMPage SignedUpVM { get; set; }
+        public static FirstFMPage TagEditorVM { get; set; }
+        public static FirstFMPage VideoVM { get; set; }
+        public static FirstFMPage LoadingVM { get; set; }
 
         private static Session _session = new Session();
         private static System.Reflection.PropertyInfo[] _propertyCollection = _session.GetType().GetProperties();
@@ -67,11 +67,6 @@ namespace MediaStreamer.RAMControl
             }));
         }
 
-
-        public static void TryLog(string login, string password)
-        {
-
-        }
 
         public static LogStatus Log(string login, string password)
         {

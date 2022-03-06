@@ -11,6 +11,11 @@ namespace MediaStreamer.RAMControl
             
         }
 
+        public virtual System.Windows.Controls.Frame GetFrame()
+        {
+            return null;
+        }
+
         public virtual void AddToStatus(string line)
         {
             
@@ -21,14 +26,15 @@ namespace MediaStreamer.RAMControl
 
         }
 
-        public virtual void SetFrameContent(object o)
-        {
-            
-        }
 
         public virtual void UpdateFrameLayout()
         {
             
+        }
+
+        public virtual void SetFrameContent(object o)
+        {
+
         }
     }
 }
