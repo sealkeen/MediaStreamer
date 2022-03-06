@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MediaStreamer.RAMControl
 {
-    public class AlbumsViewModel : FirstFMPage
+    public class AlbumsViewModel
     {
         public List<Album> Albums { get; set; }
         public AlbumsViewModel()

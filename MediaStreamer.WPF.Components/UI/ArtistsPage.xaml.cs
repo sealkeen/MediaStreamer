@@ -14,38 +14,53 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class ArtistsPage : FirstFMPage
     {
-        public bool lastDataLoadWasPartial = false;
-        public bool _orderByDescending = true;
-        public List<Artist> Artists { get; set; }
-
+        public ArtistsPage()
+        {
+            Session.ArtistsVM = new ArtistsViewModel();
+            InitializeComponent();
+            ListArtists();
+            DataContext = Session.ArtistsVM;
+        }
+        public ArtistsPage(string genreName)
+        {
+            Session.ArtistsVM = new ArtistsViewModel();
+            InitializeComponent();
+            ListByTitle(genreName);
+            DataContext = Session.ArtistsVM;
+        }
+        public ArtistsPage(long userID, long artistID)
+        {
+            Session.ArtistsVM = new ArtistsViewModel();
+            InitializeComponent();
+            ListByUserAndID(userID, artistID);
+            DataContext = Session.ArtistsVM;
+        }
         public void ListArtists()
         {
             try
             {
-                Artists = Program.DBAccess.DB.GetArtists().ToList();
+                Session.ArtistsVM.Artists = Program.DBAccess.DB.GetArtists().ToList();
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
             }
             catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
             }
         }
-        public void PartialListArtists(long ArtistID)
+        public override void ListByID(long ArtistID)
         {
-            Artists = Program.DBAccess.DB.GetArtists().Where(art => art.ArtistID == ArtistID).ToList();
+            Session.ArtistsVM.Artists = Program.DBAccess.DB.GetArtists().Where(art => art.ArtistID == ArtistID).ToList();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
-
-        public void PartialListArtists(long userID, long ArtistID)
+        public override void ListByUserAndID(long userID, long ArtistID)
         {
-            Artists = (from art in Program.DBAccess.DB.GetArtists()
+            Session.ArtistsVM.Artists = (from art in Program.DBAccess.DB.GetArtists()
                        join listComp in Program.DBAccess.DB.GetListenedCompositions()
                        on art.ArtistID equals listComp.ArtistID
                        select art).ToList();
 
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
-
-        public void PartialListArtists(string genreName)
+        public override void ListByTitle(string genreName) //TODO: optimize the method
         {
             var genres = Program.DBAccess.DB.GetGenres().Where(g => g.GenreName == genreName);
             if (genres.Count() == 0)
@@ -55,42 +70,19 @@ namespace MediaStreamer.WPF.Components
             if (artists.Count() == 0)
                 return;
 
-            Artists = (from ag in artists
+            Session.ArtistsVM.Artists = (from ag in artists
                        join art in Program.DBAccess.DB.GetArtists()
                        on ag.ArtistID equals art.ArtistID
                        select art).ToList();
 
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
-
-        public ArtistsPage()
-        {
-            //Artists = new List<Artist>();
-            InitializeComponent();
-            ListArtists();
-            DataContext = Session.ArtistsVM;
-        }
-        public ArtistsPage(string genreName)
-        {
-            //Artists = new List<Artist>();
-            InitializeComponent();
-            PartialListArtists(genreName);
-            DataContext = Session.ArtistsVM;
-        }
-        public ArtistsPage(long userID, long artistID)
-        {
-            //Artists = new List<Artist>();
-            InitializeComponent();
-            PartialListArtists(userID, artistID);
-            DataContext = Session.ArtistsVM;
-        }
-
         private void lstItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (lstItems.SelectedIndex < lstItems.Items.Count)
             {
-                var name = this.Artists[lstItems.SelectedIndex].ArtistName;
-                var artistID = this.Artists[lstItems.SelectedIndex].ArtistID;
+                var name = Session.ArtistsVM.Artists[lstItems.SelectedIndex].ArtistName;
+                var artistID = Session.ArtistsVM.Artists[lstItems.SelectedIndex].ArtistID;
 
                 if (Selector.AlbumsPage == null)
                     Selector.AlbumsPage = new AlbumsPage(artistID);
@@ -101,12 +93,10 @@ namespace MediaStreamer.WPF.Components
                 Selector.MainPage.SetStatus($"Chosen artit's <{name}> albums listing:");
             }
         }
-
         private void lstItems_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
         }
-
         private void lstItems_ColumnClick(object sender, System.Windows.RoutedEventArgs e)
         {
             try
@@ -116,7 +106,7 @@ namespace MediaStreamer.WPF.Components
                 switch (columnName)
                 {
                     case "Artist Name":
-                        Artists = Artists.OrderByWithDirection(x => x.ArtistName, _orderByDescending).ToList();
+                        Session.ArtistsVM.Artists = Session.ArtistsVM.Artists.OrderByWithDirection(x => x.ArtistName, _orderByDescending).ToList();
                         break;
                 }
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();

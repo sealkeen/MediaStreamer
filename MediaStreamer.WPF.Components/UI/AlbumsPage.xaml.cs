@@ -26,14 +26,16 @@ namespace MediaStreamer.WPF.Components
 
         public AlbumsPage(long ArtistID)
         {
+            Session.AlbumsVM = new AlbumsViewModel();
             InitializeComponent();
-            PartialListAlbums(ArtistID);
+            ListByID(ArtistID);
             DataContext = Session.AlbumsVM;
         }
         public AlbumsPage(string genreName)
         {
+            Session.AlbumsVM = new AlbumsViewModel();
             InitializeComponent();
-            PartialListAlbums(genreName);
+            ListByTitle(genreName);
             DataContext = Session.AlbumsVM;
         }
         public List<Album> GetAlbums()
@@ -54,7 +56,8 @@ namespace MediaStreamer.WPF.Components
             lastDataLoadWasPartial = false;
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
-        public void PartialListAlbums(long artistID)
+
+        public override void ListByID(long artistID)
         {
             Session.AlbumsVM.Albums = (from album in Program.DBAccess.DB.GetAlbums()
                       where album.ArtistID == artistID
@@ -64,7 +67,7 @@ namespace MediaStreamer.WPF.Components
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
-        public void PartialListAlbums(string genreName)
+        public override void ListByTitle(string genreName)
         {
             var genres = Program.DBAccess.DB.GetGenres().Where(g => g.GenreName == genreName);
             if (genres.Count() == 0)

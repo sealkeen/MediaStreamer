@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MediaStreamer.RAMControl
 {
-    public class CompositionsViewModel : FirstFMPage, ICompositionsPage
+    public class CompositionsViewModel : ICompositionsPage
     {
         public CompositionsViewModel()
         {

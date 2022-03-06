@@ -51,5 +51,10 @@ namespace MediaStreamer.RAMControl
         {
             
         }
+
+        public virtual void ListByUserAndID(long userID, long id)
+        {
+            
+        }
     }
 }
