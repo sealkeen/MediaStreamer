@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using MediaStreamer.IO;
 using MediaStreamer.Domain;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.RAMControl
 {
