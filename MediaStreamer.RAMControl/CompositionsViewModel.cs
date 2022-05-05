@@ -1,16 +1,53 @@
 ﻿using MediaStreamer.Domain;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace MediaStreamer.RAMControl
 {
     public class CompositionsViewModel : ICompositionsPage
     {
+        public bool lastDataLoadWasPartial = false;
+        protected long _lastPartialArtistID = -1;
+        protected long _lastPartialAlbumID = -1;
+        protected bool _orderByDescending = false;
+        public bool ListInitialized = false;
+        public int LastCompositionIndex = -1;
+        public CompositionStorage CompositionsStore { get; set; }
         public CompositionsViewModel()
         {
+            Session.CompositionsVM = this;
+            Session.CompositionsVM.CompositionsStore = new CompositionStorage();
+        }
 
+        public void SetLastAlbumAndArtistID(long albumID, long artistID)
+        {
+            _lastPartialAlbumID = albumID;
+            _lastPartialArtistID = artistID;
+        }
+
+        public async void PartialListCompositions(long albumID, long artistID)
+        {
+            SetLastAlbumAndArtistID(albumID, artistID);
+            ListInitialized = false;
+            lastDataLoadWasPartial = true;
+            await Task.Factory.StartNew(GetPartOfCompositions);
+        }
+        public async void PartialListCompositions()
+        {
+            ListInitialized = false;
+            lastDataLoadWasPartial = true;
+            await Task.Factory.StartNew(GetPartOfCompositions);
+        }
+
+        public void GetPartOfCompositions()
+        {
+            CompositionsStore.Compositions = (from composition in Program.DBAccess.DB.GetICompositions()
+                                where composition.AlbumID == _lastPartialAlbumID &&
+                                composition.ArtistID == _lastPartialArtistID
+                                select composition).ToList();
         }
 
         public CompositionsViewModel(long ArtistID, long albumID)
@@ -43,10 +80,6 @@ namespace MediaStreamer.RAMControl
             throw new NotImplementedException();
         }
 
-        public void PartialListCompositions(long ArtistID, long albumID)
-        {
-            throw new NotImplementedException();
-        }
 
         public virtual void PlayTarget(IComposition composition)
         {
@@ -68,7 +101,7 @@ namespace MediaStreamer.RAMControl
             throw new NotImplementedException();
         }
 
-        public int SelectedItemsCount()
+        public virtual int SelectedItemsCount()
         {
             throw new NotImplementedException();
         }
@@ -80,7 +113,7 @@ namespace MediaStreamer.RAMControl
 
         public void SwitchToPreviousSelected()
         {
-            throw new NotImplementedException();
+
         }
     }
 }

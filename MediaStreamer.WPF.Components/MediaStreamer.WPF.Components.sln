@@ -53,9 +53,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaglibSharp", "..\taglib-sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DataAccess.CrossPlatform.UnitTest", "..\MediaStreamer.DataAccess.CrossPlatform.UnitTest\MediaStreamer.DataAccess.CrossPlatform.UnitTest.csproj", "{A9F67D75-44D2-4223-9690-8CF4730419C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAM.CSCourse2016.JSONParser.Library", "..\..\EPAM\SealkeenJSON\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj", "{DD0DC257-9C04-4EC0-B437-AB1A73922432}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.RAMControl", "..\MediaStreamer.RAMControl\MediaStreamer.RAMControl.csproj", "{2DAD561D-0E91-41AA-BB13-051F5D97A411}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAM.CSCourse2016.JSONParser.Library", "C:\Users\Sealkeen\Documents\VCSharp\EPAM\SealkeenJSON\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj", "{45C5FDD7-0607-4420-B7BE-D903F6A8D339}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,14 +257,6 @@ Global
 		{A9F67D75-44D2-4223-9690-8CF4730419C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A9F67D75-44D2-4223-9690-8CF4730419C0}.Release|x86.ActiveCfg = Release|Any CPU
 		{A9F67D75-44D2-4223-9690-8CF4730419C0}.Release|x86.Build.0 = Release|Any CPU
-		{DD0DC257-9C04-4EC0-B437-AB1A73922432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD0DC257-9C04-4EC0-B437-AB1A73922432}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD0DC257-9C04-4EC0-B437-AB1A73922432}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DD0DC257-9C04-4EC0-B437-AB1A73922432}.Debug|x86.Build.0 = Debug|Any CPU
-		{DD0DC257-9C04-4EC0-B437-AB1A73922432}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD0DC257-9C04-4EC0-B437-AB1A73922432}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD0DC257-9C04-4EC0-B437-AB1A73922432}.Release|x86.ActiveCfg = Release|Any CPU
-		{DD0DC257-9C04-4EC0-B437-AB1A73922432}.Release|x86.Build.0 = Release|Any CPU
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -273,6 +265,14 @@ Global
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Release|x86.ActiveCfg = Release|Any CPU
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Release|x86.Build.0 = Release|Any CPU
+		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Debug|x86.Build.0 = Debug|Any CPU
+		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Release|x86.ActiveCfg = Release|Any CPU
+		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

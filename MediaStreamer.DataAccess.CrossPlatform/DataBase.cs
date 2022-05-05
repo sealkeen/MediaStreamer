@@ -96,6 +96,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         {
             JItem result = null;
             string fullName = System.IO.Path.Combine(folderPath, fileName);
+            string itemsObjectKey = Path.GetFileNameWithoutExtension(fileName);
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
@@ -105,17 +106,25 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             {
                 JSONParser parser = new JSONParser(fullName);
                 result = parser.Parse();
-                
-                if (!result.IsCollection())
+                JItem array = null;
+                if ((array = result.FindPairByKey(new JString(itemsObjectKey))) == null)
                 {
                     JObject jObject = new JObject(null);
-                    jObject.Add(result);
+                    if (result.FirstNode() != null)
+                        jObject.Add(new JKeyValuePair(new JString(itemsObjectKey), result.FirstNode().ToArray(), jObject));
+                    else
+                        jObject.Add(new JKeyValuePair(new JString(itemsObjectKey), new JArray(jObject), jObject));
+
                     jObject.ToFile(fullName);
                     return jObject;
-                } else
-                    return result;
+                }
+                else if (result is JRoot)
+                    return result.FirstNode();
+                else
+                    return result.GetPairedValue();
             } else {
                 JObject jObject = new JObject(null);
+                jObject.Add(new JKeyValuePair(new JString(itemsObjectKey), new JArray(jObject), jObject));
                 jObject.ToFile(fullName, true);
                 return jObject;
             }

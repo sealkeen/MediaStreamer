@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EPAM.CSCourse2016.JSONParser.Library;
 using System;
 using System.Reflection;
+using System.Linq;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
@@ -32,14 +33,19 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             return false;
         }
 
+        /// <summary>
+        /// Loads List of Entities (JItems) into memory.
+        /// </summary> /// <param name="dataBasePath"></param> /// <param name="tableName"></param> /// <param name="entities"></param>
+        /// <returns>List of Entities (JItems)</returns>
+
         public static List<JItem> LoadInMemory(string dataBasePath, string tableName)
         {
             List<JItem> result = null;
             var tablePath = Path.Combine(dataBasePath, tableName);
 
             if (File.Exists(tablePath)) {
-                var root = DataBase.LoadFromFileOrCreateRootObject(dataBasePath, tableName).Descendants()[0];
-                result = root.Descendants();
+                var root = DataBase.LoadFromFileOrCreateRootObject(dataBasePath, tableName);
+                result = root.FindPairByKey(Path.GetFileNameWithoutExtension(tableName).ToJString()).Value.Descendants();
             } else {
                 result = new List<JItem>();
             }
@@ -53,7 +59,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             PropertyInfo piShared = examType.GetProperty(propName);
             try
             {
-                if (value.GetType() == typeof(string))
+                if (value.Equals(null))
+                    piShared.SetValue(entity, default(TValue), null);
+                else if (value.GetType() == typeof(string))
                     piShared.SetValue(entity, value.ToString().Trim('\"'), null);
                 else
                     piShared.SetValue(entity, value, null);

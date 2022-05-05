@@ -160,7 +160,7 @@ namespace MediaStreamer.WPF.Components
                 if (Selector.CompositionsPage == null)
                     Selector.CompositionsPage = new CompositionsPage(artistID.Value, albumID);
                 else
-                    Selector.CompositionsPage.PartialListCompositions(artistID.Value, albumID);
+                    Session.CompositionsVM.PartialListCompositions(artistID.Value, albumID);
                 Selector.MainPage.SetFrameContent(Selector.CompositionsPage);
                 Selector.MainPage.UpdateFrameLayout();
                 Selector.MainPage.SetStatus($"Chosen artit's <{name}> compositions listing:");

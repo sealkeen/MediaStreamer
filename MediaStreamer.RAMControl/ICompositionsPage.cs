@@ -6,9 +6,11 @@ namespace MediaStreamer.RAMControl
     interface ICompositionsPage
     {
         IComposition GetCurrentComposition();
+
+        void SetLastAlbumAndArtistID(long albumID, long artistID);
         void SwitchToNextSelected();
         void PlayTarget(IComposition composition);
-        void PartialListCompositions(long ArtistID, long albumID);
+        void PartialListCompositions();
         void QueueSelected(bool queueOrPush = true);
         void QueueSelected(IList selectedItems, bool queueOrPush = true);
         bool HasNextInListOrQueue();

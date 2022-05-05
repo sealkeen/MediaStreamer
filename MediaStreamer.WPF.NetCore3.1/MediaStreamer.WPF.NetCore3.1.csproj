@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework><!--netcoreapp3.1-->
     <RootNamespace>MediaStreamer.WPF.NetCore3._1</RootNamespace>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86</Platforms>
@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
     <ProjectReference Include="..\MediaStreamer.WPF.Components\MediaStreamer.WPF.Components.csproj" />
   </ItemGroup>

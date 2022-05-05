@@ -12,7 +12,6 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class GenresPage : FirstFMPage
     {
-        public bool lastDataLoadWasPartial = false;
         public List<Genre> Genres { get; set; }
 
         public void ListGenres()
