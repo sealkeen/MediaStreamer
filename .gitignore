@@ -10,6 +10,7 @@
 # backup folders
 _MediaStreamer.Domain
 _MediaStreamer.Xamarin
+_MediaStreamer.DataAccess.Net40.SQLServer.VS2010
 
 # User-specific files
 *.rsuser
