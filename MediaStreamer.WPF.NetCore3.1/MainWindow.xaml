@@ -12,6 +12,7 @@
             WindowStyle="None"
             ResizeMode="CanResizeWithGrip"
             MouseLeftButtonDown="Window_MouseLeftButtonDown"
+            Closing="Window_Closing"
         >
     <!--<Window.Resources>
         <Style TargetType="{x:Type local:MainWindow}">
@@ -44,7 +45,8 @@
                 <!--<MenuItem Header="File" IsCheckable="true" FontSize="12"> </MenuItem>
                 <MenuItem Header="Settings" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>
                 <MenuItem Header="Security" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>-->
-                <MenuItem x:Name="btnDatabase" Click="btnDatabase_Click" Header="Database" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>
+                <MenuItem x:Name="btnDatabase" Click="btnDatabase_Click" Header="Database" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnBrowser" Click="btnBrowser_Click" Header="Browser" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
             </Menu>
             <Border HorizontalAlignment="Right" DockPanel.Dock="Right" Padding="5 0 5 0">
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">

@@ -56,5 +56,10 @@ namespace MediaStreamer.RAMControl
         {
             
         }
+
+        public virtual void ClosePageResources() 
+        {
+            
+        }
     }
 }

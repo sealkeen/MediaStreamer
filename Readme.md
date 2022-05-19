@@ -47,4 +47,7 @@
 ### IO:
 - Implement "Play several songs cross-platformely" with XamarinMediaManager (for both .Net 4.0 and .Net Core 3.1).
 
+### DataAccess.CrossPlatform:
+– Create a "restore previously played queue on startup" implementation;
+– ...
 

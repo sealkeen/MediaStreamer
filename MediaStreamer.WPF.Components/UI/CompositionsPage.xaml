@@ -69,8 +69,8 @@
                 <ColumnDefinition Width="*" MinWidth="84" />
                 <ColumnDefinition Width="*" MinWidth="65" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" IsEnabled="False" Visibility="Visible"  x:Name="buttonListen" Content="Add listen" 
-                Click="buttonListen_Click" Height="21" />
+            <!--<Button Grid.Column="0" IsEnabled="False" Visibility="Visible"  x:Name="buttonListen" Content="Add listen" 
+                Click="buttonListen_Click" Height="21" />-->
             <Button Grid.Column="1" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
                Background="AliceBlue"
                     Click="buttonDelete_Click"/>

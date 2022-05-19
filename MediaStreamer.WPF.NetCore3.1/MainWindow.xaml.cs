@@ -1,7 +1,9 @@
 ﻿
 using MediaStreamer.Domain;
 using MediaStreamer.RAMControl;
+using MediaStreamer.WPF.Components;
 using System;
+using System.Threading.Tasks;
 //using Xamarin.Forms;
 using System.Windows;
 
@@ -16,15 +18,16 @@ namespace MediaStreamer.WPF.NetCore3_1
         public MainWindow()
         {
             //MediaStreamer.DMEntitiesContext.UseSQLServer = true;
-            //var task = Task.Factory.StartNew(() => 
-            Program.DBAccess = new DBRepository()
-            { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() }; //);
-
-            Program.DBAccess.DB.EnsureCreated();
-
             //Program.DBAccess.LoadingTask = task;
 
-            InitializeComponent ();
+            InitializeComponent();
+
+            var task = Task.Factory.StartNew(() =>
+            Program.DBAccess = new DBRepository()
+            { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() });
+
+            task.Wait();
+            Program.DBAccess.DB.EnsureCreated();
             this.windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
 
             this.btnDatabase.Click += this.btnDatabase_Click;
@@ -53,8 +56,8 @@ namespace MediaStreamer.WPF.NetCore3_1
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            App.Current.Shutdown();
             App.Current.MainWindow.Close();
+            App.Current.Shutdown();
         }
 
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -63,6 +66,24 @@ namespace MediaStreamer.WPF.NetCore3_1
 
             // Begin dragging the window
             this.DragMove();
+        }
+
+        private void btnBrowser_Click(object sender, RoutedEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke(new Action
+                (
+                    delegate
+                    {
+                        Session.ChromiumPage = new MediaStreamer.WPF.Components.Web.ChromiumPage();
+                        Selector.MainPage.mainFrame.Content = Session.ChromiumPage;
+                    }
+                )
+            ).Wait();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Session.ChromiumPage?.ClosePageResources();
         }
     }
 }

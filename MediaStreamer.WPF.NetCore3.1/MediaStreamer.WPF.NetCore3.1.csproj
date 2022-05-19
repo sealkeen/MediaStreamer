@@ -13,6 +13,7 @@
     <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
     <ProjectReference Include="..\MediaStreamer.WPF.Components\MediaStreamer.WPF.Components.csproj" />
+    <ProjectReference Include="..\MediaStreamer.WPF.WebBrowser\MediaStreamer.WPF.WebBrowser.csproj" />
   </ItemGroup>
 
 </Project>

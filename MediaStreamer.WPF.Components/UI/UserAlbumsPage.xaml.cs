@@ -14,7 +14,6 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class UserAlbumsPage : FirstFMPage
     {
-        public bool lastDataLoadWasPartial = false;
         public List<ListenedAlbum> Albums { get; set; }
         public UserAlbumsPage()
         {

@@ -24,6 +24,7 @@ namespace MediaStreamer.RAMControl
         public static FirstFMPage TagEditorVM { get; set; }
         public static FirstFMPage VideoVM { get; set; }
         public static FirstFMPage LoadingVM { get; set; }
+        public static FirstFMPage ChromiumPage { get; set; }
 
         private static Session _session = new Session();
         private static System.Reflection.PropertyInfo[] _propertyCollection = _session.GetType().GetProperties();

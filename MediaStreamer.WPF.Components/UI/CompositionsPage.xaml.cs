@@ -71,6 +71,16 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
+        public override void ListByID(long albumID)
+        {
+            if (!Program.DBAccess.DB.GetAlbums().Where(a => a.AlbumID == albumID).Any())
+                return;
+
+            Session.CompositionsVM.CompositionsStore.Compositions = Program.DBAccess.DB.GetICompositions().Where(comp => comp.AlbumID == albumID).ToList();
+            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+            Session.CompositionsVM.lastDataLoadWasPartial = true;
+        }
+
         public virtual List<IComposition> GetICompositions()
         {
             try {
@@ -134,7 +144,6 @@ namespace MediaStreamer.WPF.Components
                 } catch { 
 
                 }
-                lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
             }
         }
 

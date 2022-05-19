@@ -16,7 +16,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (log != null)
                 _log = log;
             else
-                _log = Console.WriteLine;ы
+                _log = Console.WriteLine;
             FolderName = Path.Combine(Environment.CurrentDirectory, "Compositions");
             Genres = new List<Genre>();
             Artists = new List<Artist>();
