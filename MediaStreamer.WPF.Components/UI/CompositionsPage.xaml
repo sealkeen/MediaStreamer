@@ -23,6 +23,7 @@
                   GridViewColumnHeader.Click="ListView_OnColumnClick"
                   PreviewMouseLeftButtonDown="LstItems_PreviewMouseLeftButtonDown"
                   SelectionChanged="lstItems_SelectionChanged"
+                  Drop="lstItems_Drop" AllowDrop="true"
                   Margin="0,0,0,50" Grid.RowSpan="2">
             <ListView.ContextMenu>
                 <ContextMenu x:Name="conMen">

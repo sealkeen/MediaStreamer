@@ -634,5 +634,22 @@ namespace MediaStreamer.WPF.Components
         {
             ReList();
         }
+
+        private async void lstItems_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                // Note that you can have more than one file.
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                // Assuming you have one file that you care about, pass it off to whatever
+                // handling code you have defined.
+                //HandleFileOpen(files[0]);
+
+                List<string> lstFiles = new List<string>(files);
+                var tsk = await Task.Factory.StartNew( () => Program.FileManipulator.DecomposeAudioFiles(lstFiles, Program.SetCurrentStatus) );
+                ReList();
+            }
+        }
     }
 }
