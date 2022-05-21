@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using MediaStreamer.Domain;
@@ -24,7 +25,7 @@ namespace MediaStreamer.RAMControl
         public static FirstFMPage TagEditorVM { get; set; }
         public static FirstFMPage VideoVM { get; set; }
         public static FirstFMPage LoadingVM { get; set; }
-        public static FirstFMPage ChromiumPage { get; set; }
+        public static Dictionary<int, FirstFMPage> ChromiumPages { get; set; }
 
         private static Session _session = new Session();
         private static System.Reflection.PropertyInfo[] _propertyCollection = _session.GetType().GetProperties();

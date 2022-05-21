@@ -34,7 +34,7 @@
             <RowDefinition MaxHeight="80" Height="120*"></RowDefinition>
             <RowDefinition MinHeight="34" Height="50"></RowDefinition>
             <RowDefinition MinHeight="100" Height="200*"></RowDefinition>
-            <RowDefinition MinHeight ="15" Height="23*"></RowDefinition>
+            <RowDefinition MinHeight ="15" Height="32"></RowDefinition>
         </Grid.RowDefinitions>
 
         <!--<DockPanel Grid.Row="0" Grid.ColumnSpan="3">
@@ -149,8 +149,7 @@
             <Button Grid.Column="2" x:Name="buttonArtists" Content="Artists"  Background="AliceBlue" Click="buttonArtists_Click" />
             <Button Grid.Column="3" x:Name="buttonCompositions" Content="Compositions"  Background="AliceBlue" Click="buttonCompositions_Click" />
             <Button Grid.Column="4" x:Name="buttonAlbums" Content="Albums"  Background="AliceBlue" Click="buttonAlbums_Click" />
-            <Button Grid.Column="5" x:Name="buttonGroupMembersGenres" Content="GroupMembers"  Background="AliceBlue" Click="buttonGroupMembers_Click" />
-            <Button Grid.Column="6" x:Name="buttonVideo" Content="Video Clips"  Background="AliceBlue" Click="buttonVideo_Click"/>
+            <Button Grid.Column="5" x:Name="buttonVideo" Content="Video Clips"  Background="AliceBlue" Click="buttonVideo_Click"/>
         </Grid>
         <!--Row 2-->
         <Grid Background="AliceBlue"  Margin="4,28.4,0.2,0" Grid.Row="2" Grid.Column="0" IsEnabled="False"  Name="userPagesStackPanel"

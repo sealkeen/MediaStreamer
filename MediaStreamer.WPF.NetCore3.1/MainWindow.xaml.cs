@@ -3,6 +3,7 @@ using MediaStreamer.Domain;
 using MediaStreamer.RAMControl;
 using MediaStreamer.WPF.Components;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 //using Xamarin.Forms;
 using System.Windows;
@@ -74,8 +75,11 @@ namespace MediaStreamer.WPF.NetCore3_1
                 (
                     delegate
                     {
-                        Session.ChromiumPage = new MediaStreamer.WPF.Components.Web.ChromiumPage();
-                        Selector.MainPage.mainFrame.Content = Session.ChromiumPage;
+                        var page = new MediaStreamer.WPF.Components.Web.ChromiumPage();
+                        if (Session.ChromiumPages == null)
+                            Session.ChromiumPages = new Dictionary<int, FirstFMPage>();
+                        Session.ChromiumPages.Add(page.PageID, page);
+                        Selector.MainPage.mainFrame.Content = Session.ChromiumPages[page.PageID];
                     }
                 )
             ).Wait();
@@ -83,7 +87,9 @@ namespace MediaStreamer.WPF.NetCore3_1
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Session.ChromiumPage?.ClosePageResources();
+            if(Session.ChromiumPages != null)
+                foreach(var page in Session.ChromiumPages.Values)
+                    page?.ClosePageResources();
         }
     }
 }

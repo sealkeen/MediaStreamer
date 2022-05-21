@@ -6,10 +6,13 @@ namespace MediaStreamer.RAMControl
 {
     public class FirstFMPage : System.Windows.Controls.Page
     {
+        readonly public int PageID;
         public long? ownerID { get; set; }
         public bool ListInitialized = false;
+        
         protected bool lastDataLoadWasPartial = false;
         protected bool _orderByDescending = true;
+        protected static int NewPageID = 0;
 
         public virtual int ItemsCount()
         {
@@ -22,6 +25,9 @@ namespace MediaStreamer.RAMControl
             //    SessionInformation.UserStatus == LogStatus.Logged ?
             //    SessionInformation.CurrentUser.UserID :
             //    -1;
+
+            PageID = NewPageID;
+            NewPageID++;
         }
         virtual public void LoadManagementElements()
         {
