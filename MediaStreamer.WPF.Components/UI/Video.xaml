@@ -14,41 +14,51 @@
         <CommandBinding Command="MediaCommands.Pause" CanExecute="Pause_CanExecute" Executed="Pause_Executed" />
         <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
     </Page.CommandBindings>
-    <Grid Background="White">
-            <Canvas MouseWheel="Grid_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
-                <Canvas.ContextMenu>
-                    <ContextMenu Name="cmMen">
-                        <Button Content="Open" Name="cmiOpen" 
-                              Click="Open_Executed"></Button>
-                        <Button Content="Play" Name="cmiPlay" 
-                              Click="Play_CanExecute"></Button>
-                        <Button Content="Pause" Name="cmPause" 
-                              Click="Pause_CanExecute"></Button>
-                        <Button Content="Stop" Name="cmStop" 
-                              Click="Stop_CanExecute"></Button>
-                    </ContextMenu>
-                </Canvas.ContextMenu>
+    <Grid Background="White" MouseWheel="Grid_MouseWheel" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="24"></RowDefinition>
+            <RowDefinition Height="24"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--<DockPanel>
+            <Button Content="Open" Name="cmiOpen" 
+                    Click="Open_Executed"></Button>
+            <Button Content="Play" Name="cmiPlay" 
+                    Click="Play_CanExecute"></Button>
+            <Button Content="Pause" Name="cmPause" 
+                    Click="Pause_CanExecute"></Button>
+            <Button Content="Stop" Name="cmStop" 
+                    Click="Stop_CanExecute"></Button>
+        </DockPanel>-->
 
-                <ToolBar  Canvas.ZIndex="1"  Grid.RowSpan="4" VerticalAlignment="top" Grid.Row="1">
-                    <Button Content="Open" Click="Open_Executed" IsEnabled="True" Background="CornflowerBlue" Height="25" Width="70">
-                    </Button>
-                    <Separator/>
-                    <Button Content="Play" Click="Play_CanExecute" IsEnabled="True" Background="CornflowerBlue" Height="25" Width="70">
-                    </Button>
-                    <Button Content="Pause" Click="Pause_CanExecute" IsEnabled="True" Background="YellowGreen" Height="25" Width="70">
-                    </Button>
-                    <Button Content="Stop" Click="Stop_CanExecute" IsEnabled="True" Background="BlueViolet" Height="25" Width="70">
-                    </Button>
-                </ToolBar>
-                <Viewbox Stretch="Uniform">
-                <MediaElement Canvas.Top="2" Width="680" Name="mePlayer" 
-                              Grid.Row="2" VerticalAlignment="Center" 
-                              LoadedBehavior="Manual" Stretch="Fill" Margin="0,0,0,24" />
-                </Viewbox>
-            </Canvas>
+        <Viewbox Stretch="Uniform" Grid.Row="0">
+            <MediaElement Canvas.Top="2" Name="mePlayer" 
+                              
+                            Grid.Row="2" VerticalAlignment="Stretch" 
+                            LoadedBehavior="Manual" Stretch="Fill" Margin="0,0,0,24" />
+        </Viewbox>
+
+        <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40*"/>
+                    <ColumnDefinition Width="40*"/>
+                    <ColumnDefinition Width="40*"/>
+                    <ColumnDefinition Width="40*"/>
+                </Grid.ColumnDefinitions>
+            <!--<ToolBar Grid.ColumnSpan="4">-->
+                <Button Margin="0,0,4,0" Grid.Column="0" Content="Open" Click="Open_Executed" IsEnabled="True" Background="Cornsilk">
+                </Button>
+            <Button Margin="0,0,2,0" Grid.Column="1" Content="Play" Click="Play_CanExecute" IsEnabled="True" Background="YellowGreen">
+                </Button>
+            <Button Margin="0,0,2,0" Grid.Column="2" Content="Pause" Click="Pause_CanExecute" IsEnabled="True"  Background="CornflowerBlue">
+                </Button>
+            <Button Margin="0,0,2,0"  Grid.Column="3" Content="Stop" Click="Stop_CanExecute" IsEnabled="True" Background="DarkCyan">
+                </Button>
+            <!--</ToolBar>-->
+        </Grid>
         <StatusBar HorizontalAlignment="Stretch"   
                            Canvas.Bottom="0" Canvas.ZIndex="3" 
-                           VerticalAlignment="Bottom" Grid.Row="3" 
+                           VerticalAlignment="Bottom" Grid.Row="2" 
                            >
                     <StatusBar.ItemsPanel>
                         <ItemsPanelTemplate>
