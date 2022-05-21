@@ -364,7 +364,7 @@ namespace MediaStreamer.WPF.Components
         }
         private void Pause_CanExecute(object sender, RoutedEventArgs e)
         {
-            mePlayer.Pause(); Program.PlayerStopped = true;
+            mePlayer.Pause(); Program.PlayerStopped = true; Program.mediaPlayerIsPlaying = false;
         }
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
