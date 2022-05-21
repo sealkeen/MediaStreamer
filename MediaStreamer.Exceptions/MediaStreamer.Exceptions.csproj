@@ -1,7 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.1; net40; uap10.0.19041</TargetFrameworks>
-  </PropertyGroup>
-
-</Project>
