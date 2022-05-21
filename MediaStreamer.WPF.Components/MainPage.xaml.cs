@@ -37,7 +37,26 @@ namespace MediaStreamer.WPF.Components
         private double volumeSliderValue = 0.025; 
         private bool userIsDraggingSlider = false;
         private bool canExecute = false;
-        public event Action OnConstructing;
+
+
+        public void StatusPage_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Program.mePlayer.Source == null && Selector.CompositionsPage.HasNextInListOrQueue())
+            {
+                Selector.CompositionsPage?.SwitchToNextSelected();
+                Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
+                Program.SetCurrentStatus("Space key pressed, playback started");
+                return;
+            }
+            if (Program.mediaPlayerIsPlaying)
+            {
+                Pause_CanExecute(this, new RoutedEventArgs());
+                Program.SetCurrentStatus("Space key pressed, playback paused");
+            } else {
+                Play_Executed(this, new RoutedEventArgs());
+                Program.SetCurrentStatus("Space key pressed, playback started");
+            }
+        }
 
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -455,6 +474,7 @@ namespace MediaStreamer.WPF.Components
                 Program.SetCurrentStatus(ex.Message);
             }
         }
+
 
         //public event RoutedEventHandler DataBaseClick;
         //private void btnDatabase_Click(object sender, RoutedEventArgs e)

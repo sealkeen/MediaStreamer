@@ -22,5 +22,10 @@ namespace MediaStreamer.WPF.Components
             InitializeComponent();
             windowFrame.Content = new MainPage();
         }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
     }
 }

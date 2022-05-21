@@ -91,5 +91,10 @@ namespace MediaStreamer.WPF.NetCore3_1
                 foreach(var page in Session.ChromiumPages.Values)
                     page?.ClosePageResources();
         }
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            Selector.MainPage.StatusPage_PreviewKeyDown(sender, e);
+        }
     }
 }

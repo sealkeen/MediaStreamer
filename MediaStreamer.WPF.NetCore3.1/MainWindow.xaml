@@ -12,6 +12,7 @@
             WindowStyle="None"
             ResizeMode="CanResizeWithGrip"
             MouseLeftButtonDown="Window_MouseLeftButtonDown"
+            PreviewKeyDown="Window_PreviewKeyDown"
             Closing="Window_Closing"
         >
     <!--<Window.Resources>
