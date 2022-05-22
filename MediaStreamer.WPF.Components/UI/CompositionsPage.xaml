@@ -13,10 +13,8 @@
     <!--MaxWidth="{Binding ElementName=pageControl,Path=ActualWidth}"-->
     <Grid VerticalAlignment="Stretch"  Background="White" x:Name="mainGrid" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="35" MinWidth="70" x:Name="firstColumn"/>
-            <ColumnDefinition Width="70" MinWidth="70" x:Name="secondColumn"/>
             <ColumnDefinition Width="220*" x:Name="thirdColumn" />
-            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="2" x:Name="fourthColumn"/>
             <ColumnDefinition Width="200*"  x:Name="fifthColumn"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -24,7 +22,7 @@
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <ListView VerticalAlignment="Stretch" Name="lstItems" Grid.Row="0" HorizontalAlignment="Stretch"
-                  ItemsSource="{Binding Compositions}" Grid.ColumnSpan="4"  Grid.Column="0"
+                  ItemsSource="{Binding Compositions}" Grid.Column="0"
                   MouseDoubleClick="lstItems_MouseDoubleClick"
                   GridViewColumnHeader.Click="ListView_OnColumnClick"
                   PreviewMouseLeftButtonDown="LstItems_PreviewMouseLeftButtonDown"
@@ -63,8 +61,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <GridSplitter Grid.RowSpan="1" Grid.Column ="3" Background="Gray" Width="4"
-                HorizontalAlignment="Right" VerticalAlignment="Stretch"
+        <GridSplitter Grid.Column ="1" Background="Gray" Grid.Row="0" 
+                      HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"
                       DragStarted="GridSplitter_DragStarted"
                       DragCompleted="GridSplitter_DragCompleted"
                       />
@@ -86,27 +84,28 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"  Orientation="Vertical" IsEnabled="False" Margin="0,0,0,0" >
-            <Label Name="lblArtistName" Content="Artist name"></Label>
-            <TextBox Name="txtArtistName" Text="Artist name" ></TextBox>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Orientation="Vertical" Margin="0,0,0,0">
-            <Label Name="lblAlbum" Content="Album"  IsEnabled="False" ></Label>
-            <TextBox Name="txtAlbumName" Text="Album" ></TextBox>
-        </StackPanel>
-        <Grid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3"  Margin="0,0,0,5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"  VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="60" />
+                <ColumnDefinition Width="35" MinWidth="70" x:Name="firstColumn"/>
+                <ColumnDefinition Width="70" MinWidth="70" x:Name="secondColumn"/>
                 <ColumnDefinition Width="*" MinWidth="75" />
                 <ColumnDefinition Width="*" MinWidth="84" />
                 <ColumnDefinition Width="*" MinWidth="65" />
             </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"  Orientation="Vertical" IsEnabled="False"  >
+                <Label Name="lblArtistName" Content="Artist name"></Label>
+                <TextBox Name="txtArtistName" Text="Artist name" ></TextBox>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Orientation="Vertical">
+                <Label Name="lblAlbum" Content="Album"  IsEnabled="False" ></Label>
+                <TextBox Name="txtAlbumName" Text="Album" ></TextBox>
+            </StackPanel>
             <!--<Button Grid.Column="0" IsEnabled="False" Visibility="Visible"  x:Name="buttonListen" Content="Add listen" 
                 Click="buttonListen_Click" Height="21" />-->
-            <Button Grid.Column="1" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
+            <Button Grid.Column="2" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
                Background="AliceBlue"
                     Click="buttonDelete_Click"/>
-            <Button Grid.Column="2" x:Name="buttonNew" Content="Add New Song"  Background="AliceBlue"
+            <Button Grid.Column="3" x:Name="buttonNew" Content="Add New Song"  Background="AliceBlue"
                 Click="buttonNew_Click" Height="21" />
             <Button Grid.Column="4" x:Name="buttonNewRange" Content="Add Range"  Background="AliceBlue"
                 Click="buttonNewRange_Click" Height="21"/>

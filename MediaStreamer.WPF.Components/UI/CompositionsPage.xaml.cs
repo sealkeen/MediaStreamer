@@ -662,11 +662,12 @@ namespace MediaStreamer.WPF.Components
         private void GridSplitter_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
             string debug = "";
-            debug = lstItems.ActualWidth.ToString();
-            //for (int i = 0; i < mainGrid.ColumnDefinitions.Count; i++)
-            //{
-            //    debug += $"{i}. " + mainGrid.ColumnDefinitions[i].Width.Value + " ";
-            //}
+            debug = "listWidth: " + lstItems.ActualWidth.ToString();
+            debug += " gridWidth: " + _oldGridWidth;
+            for (int i = 0; i < mainGrid.ColumnDefinitions.Count; i++)
+            {
+                debug += $" Col#{i}<" + mainGrid.ColumnDefinitions[i].ActualWidth + "> ";
+            }
             Program.SetCurrentStatus(debug);
 
             _oldLstItemsWidth = lstItems.ActualWidth;
@@ -677,19 +678,20 @@ namespace MediaStreamer.WPF.Components
 
         private void GridSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            double newGridLength = mainGrid.ActualWidth;
+            double newGridWidth = mainGrid.ActualWidth;
             double newLstItemsWidth = lstItems.ActualWidth;
-            if (newLstItemsWidth > _oldWindowWidth - 75)
+            if (newLstItemsWidth > _oldWindowWidth - 175)
             {
                 //mainGrid.Width = _oldGridWidth;
             }
 
             string debug = "";
-            //for (int i = 0; i < mainGrid.ColumnDefinitions.Count; i++)
-            //{
-            //    debug += $"{i}. " + mainGrid.ColumnDefinitions[i].Width.Value + " ";
-            //}
-            debug = lstItems.ActualWidth.ToString();
+            debug += "listWidth: " + lstItems.ActualWidth.ToString();
+            debug += " gridWidth: " + newGridWidth;
+            for (int i = 0; i < mainGrid.ColumnDefinitions.Count; i++)
+            {
+                debug += $" Col#{i}<" + mainGrid.ColumnDefinitions[i].ActualWidth + "> ";
+            }
             Program.SetCurrentStatus(debug);
             //double newRoamingGroupWidth = firstColumn.ActualWidth + secondColumn.ActualWidth + thirdColumn.ActualWidth;
             //if (newRoamingGroupWidth > (mainGrid.ActualWidth - 120))
