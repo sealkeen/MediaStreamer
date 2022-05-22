@@ -456,32 +456,32 @@ namespace MediaStreamer.WPF.Components
 
         protected void LstItems_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-                Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) 
-            )
-                return;
+            //if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
+            //    Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) 
+            //)
+            //    return;
 
-            if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
-                return;
+            //if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
+            //    return;
 
-            //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
-            if (e.ButtonState == MouseButtonState.Pressed)
-            {
-                if (e.Source != null)
-                {
-                    List<IComposition> myList = new List<IComposition>();
-                    foreach (IComposition Item in lstItems.SelectedItems)
-                    {
-                        myList.Add(Item);
-                    }
+            ////lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
+            //if (e.ButtonState == MouseButtonState.Pressed)
+            //{
+            //    if (e.Source != null)
+            //    {
+            //        List<IComposition> myList = new List<IComposition>();
+            //        foreach (IComposition Item in lstItems.SelectedItems)
+            //        {
+            //            myList.Add(Item);
+            //        }
 
 
-                    DataObject dataObject = new DataObject(myList);
-                    DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
-                }
-            }
-            //ApplyToSelectedItems(RenameCompositionFiles);
-            lstItems_MouseLeftButtonDown(sender, e);
+            //        DataObject dataObject = new DataObject(myList);
+            //        DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
+            //    }
+            //}
+            ////ApplyToSelectedItems(RenameCompositionFiles);
+            //lstItems_MouseLeftButtonDown(sender, e);
         }
 
         protected void ApplyToSelectedItems(Action<List<IComposition>> action)
@@ -627,7 +627,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                Program.SetCurrentStatus(ex.Message);
+                //Program.SetCurrentStatus(ex.Message);
             }
         }
 
@@ -732,7 +732,34 @@ namespace MediaStreamer.WPF.Components
 
         private void lstItems_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            //if (e.LeftButton == MouseButtonState.Pressed)
+            //{
+            //    if (e.Source != null)
+            //    {
+            //        List<IComposition> myList = new List<IComposition>();
+            //        foreach (IComposition Item in lstItems.SelectedItems)
+            //        {
+            //            myList.Add(Item);
+            //        }
+
+            //        DataObject dataObject = new DataObject(myList);
+            //        DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
+            //    }
+            //}
+        }
+
+        private void lstItems_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
+                Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
+            )
+                return;
+
+            if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
+                return;
+
+            //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
+            if (e.ButtonState == MouseButtonState.Pressed)
             {
                 if (e.Source != null)
                 {
@@ -742,22 +769,30 @@ namespace MediaStreamer.WPF.Components
                         myList.Add(Item);
                     }
 
+
                     DataObject dataObject = new DataObject(myList);
                     DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
                 }
             }
-        }
+            //ApplyToSelectedItems(RenameCompositionFiles);
+            lstItems_MouseLeftButtonDown(sender, e);
 
-        private void lstItems_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-                Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
-            )
-                return;
-            //if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
+
+
+
+
+            //if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
+            //    Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
+            //)
             //    return;
-            lstItems.SelectedItems.Clear();
-            lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
+            //if (lstItems.SelectedItem == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
+            //    return;
+            //lstItems.SelectedItems.Clear();
+            //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
+
+
+
+
             //if (e.ButtonState == MouseButtonState.Pressed)
             //{
             //    if (e.Source != null)
