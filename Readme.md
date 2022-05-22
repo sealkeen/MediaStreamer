@@ -6,7 +6,7 @@
 - Users data / Music Storage Database;
 - ASP.NET Core WebServer / WebService with links to the music files stored on a remote server.
 	
-<img src="MediaStreamer1140x690.png" width="690"/>
+<img src="Images/MediaStreamer950x690.png" width="950"/>
 
 ### Current versions support :
 - WPF .Net 4.0 builds for Windows;
