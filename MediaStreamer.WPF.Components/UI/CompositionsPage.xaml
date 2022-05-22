@@ -70,7 +70,9 @@
                       DragStarted="GridSplitter_DragStarted"
                       DragCompleted="GridSplitter_DragCompleted"
                       />
-        <ListView Grid.Column="4"  x:Name="lstQuery" ItemsSource="{Binding Queue}">
+        <ListView Grid.Column="4"  x:Name="lstQuery" ItemsSource="{Binding Queue}"
+                  AllowDrop="True" Drop="lstQuery_Drop"
+                  >
             <!--<ListView.ItemContainerStyle>
                 <Style TargetType="GridViewColumn">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

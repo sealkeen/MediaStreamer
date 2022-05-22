@@ -719,45 +719,65 @@ namespace MediaStreamer.WPF.Components
             //}
         }
 
-
+        private LinkedList<object> _selectedItems = new LinkedList<object>();
         protected void LstItems_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ;
+            if (lstItems.SelectedItems.Count <= 0)
+                return;
+
+            _selectedItems.Clear();
+            foreach (object i in lstItems.SelectedItems)
+                _selectedItems.Enqueue(i);
+
             var tsk = Task.Factory.StartNew(() =>
-                    lstItems_MouseLeftButtonDown(sender, e.ButtonState, e.Source)
+                    lstItems_MouseLeftButtonDown(sender, e.ButtonState, e.Source, e.OriginalSource, _selectedItems)
             );
         }
 
-        private void lstItems_MouseLeftButtonDown(object sender, MouseButtonState state, object source)
+        private void lstItems_MouseLeftButtonDown(object sender, 
+            MouseButtonState state, 
+            object source, 
+            object originalSource, 
+            IEnumerable SelectedItems)
         {
             Application.Current.Dispatcher.BeginInvoke(
                 new Action(delegate
                 {
+                    if (null == (((FrameworkElement)originalSource).DataContext as Composition))
+                        return;
+
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
                         Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
                     )
                     return;
-
-                    //if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
-                    //    return;
 
                     //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
                     if (state == MouseButtonState.Pressed)
                     {
                         if (source != null)
                         {
-                            List<IComposition> myList = new List<IComposition>();
-                            foreach (IComposition Item in lstItems.SelectedItems)
-                            {
-                                myList.Add(Item);
-                            }
-
-                            DataObject dataObject = new DataObject(myList);
+                            DataObject dataObject = new DataObject(SelectedItems);
                             DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
                         }
                     }
                 })
             );
+        }
+
+        private void lstQuery_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(LinkedList<object>)))
+            {
+                // Note that you can have more than one file.
+                LinkedList<object> comps = (LinkedList<object>)e.Data.GetData(typeof(LinkedList<object>));
+
+                // Assuming you have one file that you care about, pass it off to whatever
+                // handling code you have defined.
+                //HandleFileOpen(files[0]);
+                foreach(var c in comps)
+                    Session.CompositionsVM.CompositionsStore.Queue.AddLast(c as Composition);
+                ReList();
+            }
         }
     }
 }
