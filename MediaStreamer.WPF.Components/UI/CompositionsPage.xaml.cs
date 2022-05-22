@@ -42,6 +42,8 @@ namespace MediaStreamer.WPF.Components
         //public IList<IComposition> Compositions { get; set; }
         //public LinkedList<Composition> Queue { get; set; }
 
+        double _oldRoamingGroupWidth = 0.0;
+
         protected void ListView_OnColumnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -314,6 +316,7 @@ namespace MediaStreamer.WPF.Components
 
                 Program.AddToStatus(Program.ToString(Session.CompositionsVM.CompositionsStore.Queue));
                 Program.AddToStatus(" }.");
+                lstQuery.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
             }
             catch (Exception ex)
             {
@@ -324,6 +327,7 @@ namespace MediaStreamer.WPF.Components
         public void QueueSelected(bool queueOrPush = true)
         {
             QueueSelected(lstItems.SelectedItems, queueOrPush);
+            lstQuery.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
         public void PlayTarget(IComposition target)
@@ -650,6 +654,53 @@ namespace MediaStreamer.WPF.Components
                 var tsk = await Task.Factory.StartNew( () => Program.FileManipulator.DecomposeAudioFiles(lstFiles, Program.SetCurrentStatus) );
                 ReList();
             }
+        }
+
+        double _oldLstItemsWidth = 0.0;
+        double _oldGridWidth = 0.0;
+        double _oldWindowWidth = 0.0;
+        private void GridSplitter_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            string debug = "";
+            debug = lstItems.ActualWidth.ToString();
+            //for (int i = 0; i < mainGrid.ColumnDefinitions.Count; i++)
+            //{
+            //    debug += $"{i}. " + mainGrid.ColumnDefinitions[i].Width.Value + " ";
+            //}
+            Program.SetCurrentStatus(debug);
+
+            _oldLstItemsWidth = lstItems.ActualWidth;
+            _oldWindowWidth = pageControl.ActualWidth;
+            _oldGridWidth = mainGrid.ActualWidth;
+            //_oldRoamingGroupWidth = firstColumn.ActualWidth + secondColumn.ActualWidth + thirdColumn.ActualWidth;
+        }
+
+        private void GridSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            double newGridLength = mainGrid.ActualWidth;
+            double newLstItemsWidth = lstItems.ActualWidth;
+            if (newLstItemsWidth > _oldWindowWidth - 75)
+            {
+                //mainGrid.Width = _oldGridWidth;
+            }
+
+            string debug = "";
+            //for (int i = 0; i < mainGrid.ColumnDefinitions.Count; i++)
+            //{
+            //    debug += $"{i}. " + mainGrid.ColumnDefinitions[i].Width.Value + " ";
+            //}
+            debug = lstItems.ActualWidth.ToString();
+            Program.SetCurrentStatus(debug);
+            //double newRoamingGroupWidth = firstColumn.ActualWidth + secondColumn.ActualWidth + thirdColumn.ActualWidth;
+            //if (newRoamingGroupWidth > (mainGrid.ActualWidth - 120))
+            //{
+            //    double changedWidth = _oldRoamingGroupWidth - newRoamingGroupWidth;
+            //    if (changedWidth > 0)
+            //    {
+            //        //thirdColumn.
+            //        thirdColumn.Width = new GridLength(thirdColumn.ActualWidth - changedWidth, GridUnitType.Auto);
+            //    }
+            //}
         }
     }
 }

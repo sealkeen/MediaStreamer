@@ -7,6 +7,7 @@ using System.Text;
 using MediaStreamer.IO;
 using MediaStreamer.Domain;
 using MediaStreamer.RAMControl;
+using LinqExtensions;
 
 namespace MediaStreamer.RAMControl
 {
@@ -15,13 +16,13 @@ namespace MediaStreamer.RAMControl
         public CompositionStorage()
         {
             Compositions = new List<IComposition>();
-            Queue = new LinkedList<Composition>();
+            Queue = new ObservableLinkedList<Composition>();
         }
         //public static List<Composition> Compositions { get; set; }
         //public static LinkedList<Composition> Queue { get; set; }
 
         public IList<IComposition> Compositions { get; set; }
-        public LinkedList<Composition> Queue { get; set; }
+        public ObservableLinkedList<Composition> Queue { get; set; }
 
         public void ChangeCompositionTags(IList selectedItems)
         {

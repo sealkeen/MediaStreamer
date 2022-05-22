@@ -52,5 +52,33 @@ namespace LinqExtensions
             }
             return true;
         }
+
+        public static T Dequeue<T>(this ObservableLinkedList<T> list)
+        {
+            if (!list.Empty())
+            {
+                var item = list.First.Value;
+                list.RemoveFirst();
+                return item;
+            }
+            return default(T);
+        }
+
+        public static void Enqueue<T>(this ObservableLinkedList<T> list, T item)
+        {
+            list.AddLast(item);
+        }
+
+        public static void Push<T>(this ObservableLinkedList<T> list, T item)
+        {
+            list.AddFirst(item);
+        }
+
+        public static bool Empty<T>(this ObservableLinkedList<T> list)
+        {
+            if (list.Count == 0)//queue not empty
+                return true;
+            return false;
+        }
     }
 }

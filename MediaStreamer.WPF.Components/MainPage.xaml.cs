@@ -41,20 +41,25 @@ namespace MediaStreamer.WPF.Components
 
         public void StatusPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (Program.mePlayer.Source == null && Selector.CompositionsPage.HasNextInListOrQueue())
+            if (e.Key == Key.Space)
             {
-                Selector.CompositionsPage?.SwitchToNextSelected();
-                Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
-                Program.SetCurrentStatus("Space key pressed, playback started");
-                return;
-            }
-            if (Program.mediaPlayerIsPlaying)
-            {
-                Pause_CanExecute(this, new RoutedEventArgs());
-                Program.SetCurrentStatus("Space key pressed, playback paused");
-            } else {
-                Play_Executed(this, new RoutedEventArgs());
-                Program.SetCurrentStatus("Space key pressed, playback started");
+                if (Program.mePlayer.Source == null && Selector.CompositionsPage.HasNextInListOrQueue())
+                {
+                    Selector.CompositionsPage?.SwitchToNextSelected();
+                    Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
+                    Program.SetCurrentStatus("Space key pressed, playback started");
+                    return;
+                }
+                if (Program.mediaPlayerIsPlaying)
+                {
+                    Pause_CanExecute(this, new RoutedEventArgs());
+                    Program.SetCurrentStatus("Space key pressed, playback paused");
+                }
+                else
+                {
+                    Play_Executed(this, new RoutedEventArgs());
+                    Program.SetCurrentStatus("Space key pressed, playback started");
+                }
             }
         }
 
