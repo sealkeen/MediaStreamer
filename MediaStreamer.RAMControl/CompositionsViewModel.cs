@@ -9,7 +9,6 @@ namespace MediaStreamer.RAMControl
 {
     public class CompositionsViewModel : ICompositionsPage
     {
-        public bool lastDataLoadWasPartial = false;
         protected long _lastPartialArtistID = -1;
         protected long _lastPartialAlbumID = -1;
         protected bool _orderByDescending = false;
@@ -22,6 +21,17 @@ namespace MediaStreamer.RAMControl
             Session.CompositionsVM.CompositionsStore = new CompositionStorage();
         }
 
+        public bool LastDataLoadWasPartial()
+        {
+            return _lastPartialAlbumID != -1;
+        }
+
+        public void ResetPartialLoad()
+        {
+            _lastPartialArtistID = -1;
+            _lastPartialAlbumID = -1;
+        }
+
         public void SetLastAlbumAndArtistID(long albumID, long artistID)
         {
             _lastPartialAlbumID = albumID;
@@ -32,21 +42,18 @@ namespace MediaStreamer.RAMControl
         {
             SetLastAlbumAndArtistID(albumID, artistID);
             ListInitialized = false;
-            lastDataLoadWasPartial = true;
             await Task.Factory.StartNew(GetPartOfCompositions);
         }
         public async void PartialListCompositions()
         {
             ListInitialized = false;
-            lastDataLoadWasPartial = true;
             await Task.Factory.StartNew(GetPartOfCompositions);
         }
 
         public void GetPartOfCompositions()
         {
             CompositionsStore.Compositions = (from composition in Program.DBAccess.DB.GetICompositions()
-                                where composition.AlbumID == _lastPartialAlbumID &&
-                                composition.ArtistID == _lastPartialArtistID
+                                where composition.AlbumID == _lastPartialAlbumID
                                 select composition).ToList();
         }
 

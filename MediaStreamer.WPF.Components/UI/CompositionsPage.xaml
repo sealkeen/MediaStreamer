@@ -21,16 +21,19 @@
             <RowDefinition MinHeight="75"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
+        <!--<ScrollViewer>-->
         <ListView VerticalAlignment="Stretch" Name="lstItems" Grid.Row="0" HorizontalAlignment="Stretch"
                   ItemsSource="{Binding Compositions}" Grid.Column="0"
                   MouseDoubleClick="lstItems_MouseDoubleClick"
                   GridViewColumnHeader.Click="ListView_OnColumnClick"
                   PreviewMouseLeftButtonDown="LstItems_PreviewMouseLeftButtonDown"
+                  MouseLeftButtonDown="lstItems_MouseLeftButtonDown"
                   SelectionChanged="lstItems_SelectionChanged"
                   Drop="lstItems_Drop" AllowDrop="true"
                   Margin="0,0,0,50" Grid.RowSpan="2"
                   VirtualizingStackPanel.IsVirtualizing="False"
                   >
+                  <!--MouseMove="lstItems_MouseMove"-->
             <ListView.ContextMenu>
                 <ContextMenu x:Name="conMen">
                     <Button x:Name="cmiChangeComposition" Click="CmiChangeComposition_Click">Change Composition's Tags</Button>
@@ -61,6 +64,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <!--</ScrollViewer>-->
         <GridSplitter Grid.Column ="1" Background="Gray" Grid.Row="0" 
                       HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"
                       DragStarted="GridSplitter_DragStarted"
@@ -73,7 +77,7 @@
                 </Style>
             </ListView.ItemContainerStyle>-->
             <ListView.View>
-                <GridView x:Name="queryGridView">
+                    <GridView x:Name="queryGridView">
                     <GridViewColumn DisplayMemberBinding="{Binding Artist.ArtistName}" 
                                     Header="Artist" x:Name="qgvcArtistName"
                                     Width="Auto"
@@ -81,7 +85,7 @@
                     <GridViewColumn DisplayMemberBinding="{Binding CompositionName}" 
                                     Header="Composition" x:Name="qgvcCompositionName"
                                     ></GridViewColumn>
-                </GridView>
+                    </GridView>
             </ListView.View>
         </ListView>
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"  VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >

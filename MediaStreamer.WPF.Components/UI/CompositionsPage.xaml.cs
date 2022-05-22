@@ -78,9 +78,9 @@ namespace MediaStreamer.WPF.Components
             if (!Program.DBAccess.DB.GetAlbums().Where(a => a.AlbumID == albumID).Any())
                 return;
 
-            Session.CompositionsVM.CompositionsStore.Compositions = Program.DBAccess.DB.GetICompositions().Where(comp => comp.AlbumID == albumID).ToList();
+            Session.CompositionsVM.SetLastAlbumAndArtistID(albumID, -1);
+            Session.CompositionsVM.GetPartOfCompositions();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-            Session.CompositionsVM.lastDataLoadWasPartial = true;
         }
 
         public virtual List<IComposition> GetICompositions()
@@ -369,6 +369,8 @@ namespace MediaStreamer.WPF.Components
             {
                 return;
             }
+            if (lstItems.SelectedIndex < 0)
+                return;
 
             PlayTarget(Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex]);
         }
@@ -454,9 +456,32 @@ namespace MediaStreamer.WPF.Components
 
         protected void LstItems_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
-            //    return;
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
+                Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) 
+            )
+                return;
+
+            if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
+                return;
+
+            //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                if (e.Source != null)
+                {
+                    List<IComposition> myList = new List<IComposition>();
+                    foreach (IComposition Item in lstItems.SelectedItems)
+                    {
+                        myList.Add(Item);
+                    }
+
+
+                    DataObject dataObject = new DataObject(myList);
+                    DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
+                }
+            }
             //ApplyToSelectedItems(RenameCompositionFiles);
+            lstItems_MouseLeftButtonDown(sender, e);
         }
 
         protected void ApplyToSelectedItems(Action<List<IComposition>> action)
@@ -701,6 +726,51 @@ namespace MediaStreamer.WPF.Components
             //    {
             //        //thirdColumn.
             //        thirdColumn.Width = new GridLength(thirdColumn.ActualWidth - changedWidth, GridUnitType.Auto);
+            //    }
+            //}
+        }
+
+        private void lstItems_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (e.Source != null)
+                {
+                    List<IComposition> myList = new List<IComposition>();
+                    foreach (IComposition Item in lstItems.SelectedItems)
+                    {
+                        myList.Add(Item);
+                    }
+
+                    DataObject dataObject = new DataObject(myList);
+                    DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void lstItems_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
+                Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
+            )
+                return;
+            //if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
+            //    return;
+            lstItems.SelectedItems.Clear();
+            lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
+            //if (e.ButtonState == MouseButtonState.Pressed)
+            //{
+            //    if (e.Source != null)
+            //    {
+            //        List<IComposition> myList = new List<IComposition>();
+            //        foreach (IComposition Item in lstItems.SelectedItems)
+            //        {
+            //            myList.Add(Item);
+            //        }
+
+
+            //        DataObject dataObject = new DataObject(myList);
+            //        DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
             //    }
             //}
         }

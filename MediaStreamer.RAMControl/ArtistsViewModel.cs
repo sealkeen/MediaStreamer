@@ -7,6 +7,7 @@ namespace MediaStreamer.RAMControl
 {
     public class ArtistsViewModel
     {
+
         public List<Artist> Artists { get; set; }
 
         public ArtistsViewModel()

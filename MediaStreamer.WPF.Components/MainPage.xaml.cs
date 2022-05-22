@@ -123,14 +123,14 @@ namespace MediaStreamer.WPF.Components
             mainFrame.Content = Selector.LoadingPage;
             if (Selector.CompositionsPage == null)
                 Selector.CompositionsPage = new CompositionsPage();
-            if (Session.CompositionsVM.lastDataLoadWasPartial || !Selector.CompositionsPage.ListInitialized)
+            if (Session.CompositionsVM.LastDataLoadWasPartial() || !Selector.CompositionsPage.ListInitialized)
             {
 #if !NET40
                 await Selector.CompositionsPage.ListAsync();
 #else
                 Selector.CompositionsPage.ListAsync().Wait();
 #endif
-                Session.CompositionsVM.lastDataLoadWasPartial = false;
+                Session.CompositionsVM.ResetPartialLoad();
             }
             Dispatcher.BeginInvoke(new Action(() => SetContentPageCompositions())).Wait();
             mainFrame.UpdateLayout();

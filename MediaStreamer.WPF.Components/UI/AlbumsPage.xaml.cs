@@ -20,7 +20,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.AlbumsVM = new AlbumsViewModel();
             InitializeComponent();
-            ListAlbums();
+            List();
             DataContext = Session.AlbumsVM;
         }
 
@@ -50,7 +50,7 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        public void ListAlbums()
+        public override void List()
         {
             Session.AlbumsVM.Albums = GetAlbums();
             lastDataLoadWasPartial = false;
@@ -92,7 +92,7 @@ namespace MediaStreamer.WPF.Components
                 {
                     Program.DBAccess?.DeleteAlbum(Session.AlbumsVM.Albums[index.Value]);
                 }
-                ListAlbums();
+                List();
             }
             catch (Exception ex)
             {

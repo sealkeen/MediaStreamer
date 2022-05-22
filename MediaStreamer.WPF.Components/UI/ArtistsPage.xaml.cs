@@ -18,7 +18,7 @@ namespace MediaStreamer.WPF.Components
         {
             Session.ArtistsVM = new ArtistsViewModel();
             InitializeComponent();
-            ListArtists();
+            List();
             DataContext = Session.ArtistsVM;
         }
         public ArtistsPage(string genreName)
@@ -35,7 +35,7 @@ namespace MediaStreamer.WPF.Components
             ListByUserAndID(userID, artistID);
             DataContext = Session.ArtistsVM;
         }
-        public void ListArtists()
+        public override void List()
         {
             try
             {
