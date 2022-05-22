@@ -27,13 +27,13 @@
                   MouseDoubleClick="lstItems_MouseDoubleClick"
                   GridViewColumnHeader.Click="ListView_OnColumnClick"
                   PreviewMouseLeftButtonDown="LstItems_PreviewMouseLeftButtonDown"
-                  MouseLeftButtonDown="lstItems_MouseLeftButtonDown"
                   SelectionChanged="lstItems_SelectionChanged"
                   Drop="lstItems_Drop" AllowDrop="true"
                   Margin="0,0,0,50" Grid.RowSpan="2"
                   VirtualizingStackPanel.IsVirtualizing="False"
                   >
-                  <!--MouseMove="lstItems_MouseMove"-->
+                  <!--MouseMove="lstItems_MouseMove"
+                  MouseLeftButtonDown="lstItems_MouseLeftButtonDown"-->
             <ListView.ContextMenu>
                 <ContextMenu x:Name="conMen">
                     <Button x:Name="cmiChangeComposition" Click="CmiChangeComposition_Click">Change Composition's Tags</Button>

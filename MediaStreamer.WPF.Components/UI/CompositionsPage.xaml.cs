@@ -11,6 +11,7 @@ using MediaStreamer.Domain;
 using MediaStreamer.IO;
 using LinqExtensions;
 using MediaStreamer.RAMControl;
+using System.Threading;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -454,36 +455,6 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        protected void LstItems_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-            //    Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) 
-            //)
-            //    return;
-
-            //if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
-            //    return;
-
-            ////lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
-            //if (e.ButtonState == MouseButtonState.Pressed)
-            //{
-            //    if (e.Source != null)
-            //    {
-            //        List<IComposition> myList = new List<IComposition>();
-            //        foreach (IComposition Item in lstItems.SelectedItems)
-            //        {
-            //            myList.Add(Item);
-            //        }
-
-
-            //        DataObject dataObject = new DataObject(myList);
-            //        DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
-            //    }
-            //}
-            ////ApplyToSelectedItems(RenameCompositionFiles);
-            //lstItems_MouseLeftButtonDown(sender, e);
-        }
-
         protected void ApplyToSelectedItems(Action<List<IComposition>> action)
         {
             try
@@ -748,66 +719,45 @@ namespace MediaStreamer.WPF.Components
             //}
         }
 
-        private void lstItems_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+
+        protected void LstItems_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-                Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
-            )
-                return;
+            ;
+            var tsk = Task.Factory.StartNew(() =>
+                    lstItems_MouseLeftButtonDown(sender, e.ButtonState, e.Source)
+            );
+        }
 
-            if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
-                return;
-
-            //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
-            if (e.ButtonState == MouseButtonState.Pressed)
-            {
-                if (e.Source != null)
+        private void lstItems_MouseLeftButtonDown(object sender, MouseButtonState state, object source)
+        {
+            Application.Current.Dispatcher.BeginInvoke(
+                new Action(delegate
                 {
-                    List<IComposition> myList = new List<IComposition>();
-                    foreach (IComposition Item in lstItems.SelectedItems)
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
+                        Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
+                    )
+                    return;
+
+                    //if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
+                    //    return;
+
+                    //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
+                    if (state == MouseButtonState.Pressed)
                     {
-                        myList.Add(Item);
+                        if (source != null)
+                        {
+                            List<IComposition> myList = new List<IComposition>();
+                            foreach (IComposition Item in lstItems.SelectedItems)
+                            {
+                                myList.Add(Item);
+                            }
+
+                            DataObject dataObject = new DataObject(myList);
+                            DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
+                        }
                     }
-
-
-                    DataObject dataObject = new DataObject(myList);
-                    DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
-                }
-            }
-            //ApplyToSelectedItems(RenameCompositionFiles);
-            lstItems_MouseLeftButtonDown(sender, e);
-
-
-
-
-
-            //if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-            //    Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
-            //)
-            //    return;
-            //if (lstItems.SelectedItem == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
-            //    return;
-            //lstItems.SelectedItems.Clear();
-            //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
-
-
-
-
-            //if (e.ButtonState == MouseButtonState.Pressed)
-            //{
-            //    if (e.Source != null)
-            //    {
-            //        List<IComposition> myList = new List<IComposition>();
-            //        foreach (IComposition Item in lstItems.SelectedItems)
-            //        {
-            //            myList.Add(Item);
-            //        }
-
-
-            //        DataObject dataObject = new DataObject(myList);
-            //        DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
-            //    }
-            //}
+                })
+            );
         }
     }
 }
