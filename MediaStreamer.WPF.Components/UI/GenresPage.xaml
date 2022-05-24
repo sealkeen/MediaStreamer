@@ -12,12 +12,12 @@
 
     <Grid>
         <ListView Name="lstItems" ItemsSource="{Binding Genres}" MouseDoubleClick="ListView_MouseDoubleClick">
-            <ListView.ItemContainerStyle>
+            <!--<ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Height" Value="32" />
                     <Setter Property="FontSize" Value="12"></Setter>
                 </Style>
-            </ListView.ItemContainerStyle>
+            </ListView.ItemContainerStyle>-->
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding GenreName}" 

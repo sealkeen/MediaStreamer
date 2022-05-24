@@ -1869,7 +1869,7 @@
         </Setter>
     </Style>
 
-    <!-- StatusBar -->
+     <!--StatusBar--> 
     <Style TargetType="{x:Type StatusBar}">
         <Setter Property="Foreground" Value="{StaticResource ControlForegroundWhite}"/>
         <Setter Property="Background" Value="{StaticResource ControlBackgroundNormal}"/>
@@ -1892,7 +1892,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="{x:Type StatusBarItem}">
+    <!--<Style TargetType="{x:Type StatusBarItem}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type StatusBarItem}">
@@ -1911,7 +1911,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
     <!-- Expander -->
     <Style TargetType="{x:Type ToggleButton}" x:Key="ExpanderDownHeaderStyle">

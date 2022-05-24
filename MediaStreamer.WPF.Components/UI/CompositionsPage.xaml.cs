@@ -363,16 +363,21 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        protected void lstItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        public void lstItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //if ((Program.mePlayer != null) && (Program.mePlayer.Source != null)) {
             if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
             {
                 return;
             }
+
+            PlaySelectedTarget();
+        }
+
+        public void PlaySelectedTarget()
+        {
             if (lstItems.SelectedIndex < 0)
                 return;
-
             PlayTarget(Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex]);
         }
 
@@ -778,6 +783,26 @@ namespace MediaStreamer.WPF.Components
                     Session.CompositionsVM.CompositionsStore.Queue.AddLast(c as Composition);
                 ReList();
             }
+        }
+
+        private void queOpenLocation_Click(object sender, RoutedEventArgs e)
+        {
+            int currentIndex = lstQuery.SelectedIndex/* + i*/;
+            if (currentIndex != -1)
+            {
+                IComposition currentComp = lstQuery.SelectedItem as Composition;
+                if (currentComp.FilePath.FileExists())
+                {
+                    currentComp.FilePath.ShowFileInExplorer();
+                }
+            }
+        }
+
+        public bool ListViewOwnsFocus()
+        {
+            if (lstItems.IsKeyboardFocusWithin || lstQuery.IsKeyboardFocusWithin)
+                return true;
+            return false;
         }
     }
 }

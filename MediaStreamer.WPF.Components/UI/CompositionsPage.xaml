@@ -11,7 +11,7 @@
       Title="Compositions" 
                 >
     <!--MaxWidth="{Binding ElementName=pageControl,Path=ActualWidth}"-->
-    <Grid VerticalAlignment="Stretch"  Background="White" x:Name="mainGrid" >
+    <Grid VerticalAlignment="Stretch"  x:Name="mainGrid" ><!--Background="White"-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220*" x:Name="thirdColumn" />
             <ColumnDefinition Width="2" x:Name="fourthColumn"/>
@@ -65,15 +65,28 @@
             </ListView.View>
         </ListView>
         <!--</ScrollViewer>-->
-        <GridSplitter Grid.Column ="1" Background="Gray" Grid.Row="0" 
+        <GridSplitter Grid.Column ="1" Grid.Row="0" 
                       HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"
                       DragStarted="GridSplitter_DragStarted"
                       DragCompleted="GridSplitter_DragCompleted"
-                      />
+                      /> <!--Background="AliceBlue"-->
         <ListView Grid.Column="4"  x:Name="lstQuery" ItemsSource="{Binding Queue}"
                   AllowDrop="True" Drop="lstQuery_Drop"
                   >
-            <!--<ListView.ItemContainerStyle>
+            <ListView.ContextMenu>
+            <ContextMenu x:Name="queMen">
+                <Button x:Name="queChangeComposition" Click="CmiChangeComposition_Click">Change Composition's Tags</Button>
+                <Button x:Name="quePlaySeveral" Click="CmiPlaySeveral_Click">Play Several Songs</Button>
+                <Button x:Name="queOpenInWinamp" Click="cmiOpenInWinamp_Click">Open in Winamp</Button> />
+                <Button x:Name="queRename" Click="CmiRename_Click">Rename to Standard</Button>
+                <Button x:Name="queDelete" Click="buttonDelete_Click">Delete from Database</Button> />
+                <Button x:Name="queQueue" Click="cmiEnQueue_Click">EnQueue Selected</Button>
+                <Button x:Name="quePush" Click="cmiPush_Click">Push Selected</Button>
+                <Button x:Name="queOpenLocation" Click="queOpenLocation_Click">Open File Location</Button>
+                <Button x:Name="queUpdate" Click="cmiUpdate_Click">Update list</Button>
+                </ContextMenu>
+            </ListView.ContextMenu>
+                    <!--<ListView.ItemContainerStyle>
                 <Style TargetType="GridViewColumn">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>
@@ -98,23 +111,23 @@
                 <ColumnDefinition Width="*" MinWidth="84" />
                 <ColumnDefinition Width="*" MinWidth="65" />
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"  Orientation="Vertical" IsEnabled="False"  >
-                <Label Name="lblArtistName" Content="Artist name"></Label>
-                <TextBox Name="txtArtistName" Text="Artist name" ></TextBox>
-            </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Orientation="Vertical">
-                <Label Name="lblAlbum" Content="Album"  IsEnabled="False" ></Label>
-                <TextBox Name="txtAlbumName" Text="Album" ></TextBox>
-            </StackPanel>
-            <!--<Button Grid.Column="0" IsEnabled="False" Visibility="Visible"  x:Name="buttonListen" Content="Add listen" 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="21"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Name="lblArtistName" Content="Artist name"></Label>
+            <TextBox  Height="28" Grid.Row="1" Grid.Column="0" Name="txtArtistName" Text="Artist name" ></TextBox>
+            <Label Grid.Row="0" Grid.Column="1" Name="lblAlbum" Content="Album"  IsEnabled="False" ></Label>
+            <TextBox Height="28" Grid.Row="1" Grid.Column="1" Name="txtAlbumName" Text="Album" ></TextBox>
+                <!--<Button Grid.Column="0" IsEnabled="False" Visibility="Visible"  x:Name="buttonListen" Content="Add listen" 
                 Click="buttonListen_Click" Height="21" />-->
-            <Button Grid.Column="2" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
-               Background="AliceBlue"
-                    Click="buttonDelete_Click"/>
-            <Button Grid.Column="3" x:Name="buttonNew" Content="Add New Song"  Background="AliceBlue"
-                Click="buttonNew_Click" Height="21" />
-            <Button Grid.Column="4" x:Name="buttonNewRange" Content="Add Range"  Background="AliceBlue"
-                Click="buttonNewRange_Click" Height="21"/>
+            <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Bottom" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
+               
+                    Click="buttonDelete_Click"/> <!--Background="AliceBlue"-->
+            <Button Grid.Row="1" Grid.Column="3" VerticalAlignment="Bottom" x:Name="buttonNew" Content="Add New Song"
+                Click="buttonNew_Click" Height="21" /><!--Background="AliceBlue"-->
+            <Button Grid.Row="1" Grid.Column="4" VerticalAlignment="Bottom" x:Name="buttonNewRange" Content="Add Range"
+                Click="buttonNewRange_Click" Height="21"/><!--Background="AliceBlue"-->
         </Grid>
     </Grid>
 </VM:FirstFMPage>

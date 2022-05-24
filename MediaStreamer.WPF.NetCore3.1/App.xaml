@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:MediaStreamer.WPF.NetCore3_1"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/MediaStreamer.WPF.Components;component/Resources/Core.xaml"/>
+                <ResourceDictionary Source="/MediaStreamer.WPF.Components;component/Resources/WindowTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

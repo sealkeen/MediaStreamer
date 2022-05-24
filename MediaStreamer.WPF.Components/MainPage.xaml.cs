@@ -34,32 +34,42 @@ namespace MediaStreamer.WPF.Components
             Program.txtStatus = this.txtStatus;
         }
 
-        private double volumeSliderValue = 0.025; 
+        private double volumeSliderValue = 0.025;
+        private double volumeKeyValue = 0.0125;
         private bool userIsDraggingSlider = false;
         private bool canExecute = false;
 
 
         public void StatusPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Space)
+            switch (e.Key) {
+                case (Key.Space) : HandleSpacePressed(); break;
+                case (Key.Up): if(!Selector.CompositionsPage.ListViewOwnsFocus()) VolumeUp("Up Arrow", volumeKeyValue); break;
+                case (Key.Down): if(!Selector.CompositionsPage.ListViewOwnsFocus()) VolumeDown("Down Arrow", volumeKeyValue); break;
+                case (Key.Enter): 
+                    if(Selector.CompositionsPage.lstItems.SelectedIndex >= 0)
+                        Selector.CompositionsPage.PlaySelectedTarget(); break;
+            }
+        }
+
+        private void HandleSpacePressed()
+        {
+            if (Program.mePlayer.Source == null && Selector.CompositionsPage.HasNextInListOrQueue())
             {
-                if (Program.mePlayer.Source == null && Selector.CompositionsPage.HasNextInListOrQueue())
-                {
-                    Selector.CompositionsPage?.SwitchToNextSelected();
-                    Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
-                    Program.SetCurrentStatus("Space key pressed, playback started");
-                    return;
-                }
-                if (Program.mediaPlayerIsPlaying)
-                {
-                    Pause_CanExecute(this, new RoutedEventArgs());
-                    Program.SetCurrentStatus("Space key pressed, playback paused");
-                }
-                else
-                {
-                    Play_Executed(this, new RoutedEventArgs());
-                    Program.SetCurrentStatus("Space key pressed, playback started");
-                }
+                Selector.CompositionsPage?.SwitchToNextSelected();
+                Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
+                Program.SetCurrentStatus("Space key pressed, playback started");
+                return;
+            }
+            if (Program.mediaPlayerIsPlaying)
+            {
+                Pause_CanExecute(this, new RoutedEventArgs());
+                Program.SetCurrentStatus("Space key pressed, playback paused");
+            }
+            else
+            {
+                Play_Executed(this, new RoutedEventArgs());
+                Program.SetCurrentStatus("Space key pressed, playback started");
             }
         }
 
@@ -432,7 +442,36 @@ namespace MediaStreamer.WPF.Components
 
         private void Header_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            mePlayer.Volume += (e.Delta > 0) ? volumeSliderValue : -volumeSliderValue;
+            if (e.Delta > 0)
+            {
+                VolumeUp("Mouse Wheel");
+            }
+            else
+            {
+                VolumeDown("Mouse Wheel");
+            }
+        }
+
+        private void VolumeDown(string key, double amount = 0.0)
+        {
+            if (amount == 0.0)
+            {
+                mePlayer.Volume -= volumeSliderValue;
+            }
+            else
+                mePlayer.Volume -= amount;
+            Program.SetCurrentStatus($"{key}: volume down.");
+        }
+
+        private void VolumeUp(string key, double amount = 0.0)
+        {
+            if (amount == 0.0)
+            {
+                mePlayer.Volume += volumeSliderValue;
+            }
+            else
+                mePlayer.Volume += amount;
+            Program.SetCurrentStatus($"{key}: volume up.");
         }
 
         private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)

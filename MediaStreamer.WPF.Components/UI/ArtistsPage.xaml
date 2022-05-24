@@ -14,12 +14,12 @@
                   PreviewMouseLeftButtonDown="lstItems_PreviewMouseLeftButtonDown"
                   GridViewColumnHeader.Click="lstItems_ColumnClick"
                   MouseDoubleClick="lstItems_MouseDoubleClick">
-            <ListView.ItemContainerStyle>
+            <!--<ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Height" Value="32" />
                     <Setter Property="FontSize" Value="12"></Setter>
                 </Style>
-            </ListView.ItemContainerStyle>
+            </ListView.ItemContainerStyle>-->
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding ArtistName}" 
