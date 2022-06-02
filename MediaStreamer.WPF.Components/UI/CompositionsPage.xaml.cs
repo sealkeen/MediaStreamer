@@ -22,8 +22,10 @@ namespace MediaStreamer.WPF.Components
     {
         public CompositionsPage()
         {
+            //cmd mode play from cmd parameter file
             if (Program.startupFromCommandLine)
-                ;
+                Program.mePlayer.Source = new Uri(Program.currentComposition.FilePath);
+
             ListInitialized = false;
             Selector.MainPage.SetFrameContent( Selector.LoadingPage ); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
@@ -34,6 +36,9 @@ namespace MediaStreamer.WPF.Components
             DataContext = Session.CompositionsVM.CompositionsStore;
             //tsk.Wait();
             Selector.MainPage.SetFrameContent(this);
+
+            //cmd mode disable
+            Program.startupFromCommandLine = false;
         }
 
         public CompositionsPage(long ArtistID, long albumID)
