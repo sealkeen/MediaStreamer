@@ -53,10 +53,13 @@ namespace MediaStreamer.WPF.Components
         }
         public override void ListByUserAndID(long userID, long ArtistID)
         {
-            Session.ArtistsVM.Artists = (from art in Program.DBAccess.DB.GetArtists()
-                       join listComp in Program.DBAccess.DB.GetListenedCompositions()
-                       on art.ArtistID equals listComp.ArtistID
-                       select art).ToList();
+            Session.ArtistsVM.Artists = (
+                from art in Program.DBAccess.DB.GetArtists()
+                    join comps in Program.DBAccess.DB.GetCompositions()
+                        on art.ArtistID equals comps.ArtistID
+                    join listComp in Program.DBAccess.DB.GetListenedCompositions()
+                        on comps.CompositionID equals listComp.CompositionID 
+                select art).ToList();
 
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }

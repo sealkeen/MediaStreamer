@@ -39,6 +39,20 @@ namespace MediaStreamer.WPF.Components
         private bool userIsDraggingSlider = false;
         private bool canExecute = false;
 
+        /// <summary> Load Page Event </summary>
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //if(Program.DBAccess.LoadingTask != null)
+            //    await Program.DBAccess.LoadingTask;
+
+            buttonCompositions_Click(buttonCompositions, new RoutedEventArgs());
+
+            if (!Program.startupFromCommandLine)
+            {
+                Selector.CompositionsPage.QueueSelected(Program.OnOpen());
+                Program.mePlayer.Position = Program.NewPosition;
+            }
+        }
 
         public void StatusPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -295,13 +309,6 @@ namespace MediaStreamer.WPF.Components
             userPagesStackPanel.IsEnabled = false;
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //if(Program.DBAccess.LoadingTask != null)
-            //    await Program.DBAccess.LoadingTask;
-
-            buttonCompositions_Click(buttonCompositions, new RoutedEventArgs());
-        }
 
         private void buttonUserCompositions_Click(object sender, RoutedEventArgs e)
         {

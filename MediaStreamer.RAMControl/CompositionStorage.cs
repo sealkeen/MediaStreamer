@@ -16,7 +16,9 @@ namespace MediaStreamer.RAMControl
         public CompositionStorage()
         {
             Compositions = new List<IComposition>();
-            Queue = new ObservableLinkedList<Composition>();
+
+            if(Queue == null)
+                Queue = new ObservableLinkedList<Composition>();
         }
         //public static List<Composition> Compositions { get; set; }
         //public static LinkedList<Composition> Queue { get; set; }

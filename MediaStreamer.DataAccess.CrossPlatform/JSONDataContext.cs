@@ -24,29 +24,29 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             Compositions = new List<Composition>();
             ArtistGenres = new List<ArtistGenre>();
             AlbumGenres = new List<AlbumGenre>();
-            GroupMembers = new List<GroupMember>();
+            ListenedCompositions = new List<ListenedComposition>();
         }
 
-        public virtual List<Administrator> Administrators { get; set; }
         public virtual List<Album> Albums { get; set; }
         public virtual List<AlbumGenre> AlbumGenres { get; set; }
         public virtual List<Artist> Artists { get; set; }
         public virtual List<ArtistGenre> ArtistGenres { get; set; }
         public virtual List<Composition> Compositions { get; set; }
-        public virtual List<CompositionVideo> CompositionVideos { get; set; }
-        public virtual List<Genre> Genres { get; set; }
-        public virtual List<GroupMember> GroupMembers { get; set; }
-        public virtual List<GroupRole> GroupRoles { get; set; }
-        public virtual List<ListenedAlbum> ListenedAlbums { get; set; }
-        public virtual List<ListenedArtist> ListenedArtists { get; set; }
-        public virtual List<ListenedComposition> ListenedCompositions { get; set; }
-        public virtual List<ListenedGenre> ListenedGenres { get; set; }
+        public virtual List<Administrator> Administrators { get; set; }
         public virtual List<Moderator> Moderators { get; set; }
-        public virtual List<Musician> Musicians { get; set; }
-        public virtual List<MusicianRole> MusicianRoles { get; set; }
-        public virtual List<Picture> Pictures { get; set; }
         public virtual List<User> Users { get; set; }
-        public virtual List<Video> Videos { get; set; }
+        //public virtual List<CompositionVideo> CompositionVideos { get; set; }
+        public virtual List<Genre> Genres { get; set; }
+        public virtual List<ListenedComposition> ListenedCompositions { get; set; }
+        //public virtual List<ListenedAlbum> ListenedAlbums { get; set; }
+        //public virtual List<ListenedArtist> ListenedArtists { get; set; }
+        //public virtual List<ListenedGenre> ListenedGenres { get; set; }
+        //public virtual List<GroupMember> GroupMembers { get; set; }
+        //public virtual List<GroupRole> GroupRoles { get; set; }
+        //public virtual List<Musician> Musicians { get; set; }
+        //public virtual List<MusicianRole> MusicianRoles { get; set; }
+        //public virtual List<Picture> Pictures { get; set; }
+        //public virtual List<Video> Videos { get; set; }
 
         public string FolderName { get; set; } = "Compositions";
         
@@ -64,7 +64,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (root != null)
                 itemsCollection = root.FindPairByKey("Albums".ToJString()).GetPairedValue();
             else
-                itemsCollection = new JObject(root);
+                itemsCollection = new JArray(root);
 
             JObject jAlbum = new JObject(itemsCollection);
 
@@ -96,7 +96,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (root != null)
                 itemsCollection = root.FindPairByKey("AlbumGenres".ToJString()).GetPairedValue();
             else
-                itemsCollection = new JObject(root);
+                itemsCollection = new JArray(root);
             JObject jAlbum = new JObject(itemsCollection);
 
             List<JKeyValuePair> list = new List<JKeyValuePair>();
@@ -148,7 +148,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (root != null)
                 itemsCollection = root.FindPairByKey("ArtistGenres".ToJString()).GetPairedValue();
             else
-                itemsCollection = new JObject(root);
+                itemsCollection = new JArray(root);
 
             JObject jAG = new JObject(itemsCollection);
 
@@ -174,7 +174,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (root != null)
                 itemsCollection = root.FindPairByKey("Compositions".ToJString()).GetPairedValue();
             else
-                itemsCollection = new JObject(root);
+                itemsCollection = new JArray(root);
 
             JObject jComposition = new JObject(itemsCollection);
 
@@ -211,7 +211,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (root != null)
                 itemsCollection = root.FindPairByKey("Genres".ToJString()).GetPairedValue();
             else
-                itemsCollection = new JObject(root);
+                itemsCollection = new JArray(root);
 
             JObject jAG = new JObject(itemsCollection);
 
@@ -250,7 +250,27 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(ListenedComposition listenedComposition)
         {
-            //throw new NotImplementedException();
+            string listenedDB = Path.Combine(FolderName, "ListenedCompositions.json");
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ListenedCompositions.json");
+
+            JItem itemsCollection = null;
+            if (root != null)
+                itemsCollection = root.FindPairByKey("ListenedCompositions".ToJString()).GetPairedValue();
+            else
+                itemsCollection = new JArray(root);
+
+            JObject jLS = new JObject(itemsCollection);
+
+            List<JKeyValuePair> list = new List<JKeyValuePair>();
+            list.Add(new JKeyValuePair(Key.ListenDate.ToString(), listenedComposition.ListenDate.ToString(), jLS));
+            list.Add(new JKeyValuePair(Key.CompositionID.ToString(), listenedComposition.CompositionID.ToString(), jLS));
+            list.Add(new JKeyValuePair(Key.UserID.ToString(), listenedComposition.UserID.ToString(), jLS));
+            list.Add(new JKeyValuePair(Key.StoppedAt.ToString(), listenedComposition.StoppedAt.ToString(), jLS));
+
+            jLS.AddPairs(list);
+            itemsCollection.Add(jLS);
+            root.ToFile(listenedDB);
         }
 
         public void Add(ListenedGenre listenedGenre)
@@ -330,6 +350,18 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             EnsureCreated();
         }
 
+        public bool ClearTable(string tableName)
+        {
+            string certainTable = Path.Combine(FolderName, tableName + ".json");
+            try {
+                File.Delete(certainTable);
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
+
         public void DisableLazyLoading()
         {
             //throw new NotImplementedException();
@@ -348,7 +380,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             Compositions = GetCompositions().ToList();
             ArtistGenres = GetArtistGenres().ToList();
             AlbumGenres = GetAlbumGenres().ToList();
-            GroupMembers = GetGroupMembers().ToList();
+            ListenedCompositions = GetListenedCompositions().ToList();
+            //GroupMembers = GetGroupMembers().ToList();
         }
 
         public IQueryable<Administrator> GetAdministrators()
@@ -596,7 +629,35 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<ListenedComposition> GetListenedCompositions()
         {
-            return new List<ListenedComposition>().AsQueryable();
+            var jCompositions = Table.LoadInMemory(FolderName, "ListenedCompositions.json");
+
+            ListenedCompositions = new List<ListenedComposition>();
+            foreach (var jComposition in jCompositions)
+            {
+                ListenedComposition received = new ListenedComposition();
+                var fields = jComposition.DescendantPairs();
+                foreach (var kv in fields)
+                {
+                    switch (kv.Key.ToString().Trim('\"'))
+                    {
+                        case Key.ListenDate:
+                            Table.SetProperty(received, Key.ListenDate, DateTime.Parse(kv.Value.AsUnquoted()));
+                            break;
+                        case Key.CompositionID:
+                            Table.SetProperty(received, Key.CompositionID, kv.GetIntegerValueOrReturnNull().Value);
+                            break;
+                        case Key.UserID:
+                            Table.SetProperty(received, Key.UserID, kv.GetIntegerValueOrReturnNull().Value);
+                            break;
+                        case Key.StoppedAt:
+                            Table.SetProperty(received, Key.StoppedAt, double.Parse(kv.Value.AsUnquoted()));
+                            break;
+                    }
+                }
+                ListenedCompositions.Add(received);
+            }
+
+            return ListenedCompositions.AsQueryable();
         }
 
         public IQueryable<ListenedGenre> GetListenedGenres()
@@ -647,7 +708,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void UpdateAndSaveChanges<TEntity>(TEntity entity) where TEntity : class
         {
-            //throw new NotImplementedException();
+            if (entity is ListenedComposition)
+            {
+                //ListenedCompositions.
+            }
         }
     }
 }

@@ -49,9 +49,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DataAccess.Cr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.RAMControl", "..\MediaStreamer.RAMControl\MediaStreamer.RAMControl.csproj", "{2DAD561D-0E91-41AA-BB13-051F5D97A411}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAM.CSCourse2016.JSONParser.Library", "C:\Users\Sealkeen\Documents\VCSharp\EPAM\SealkeenJSON\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj", "{45C5FDD7-0607-4420-B7BE-D903F6A8D339}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.WPF.WebBrowser", "..\MediaStreamer.WPF.WebBrowser\MediaStreamer.WPF.WebBrowser.csproj", "{64765942-D9D4-498E-8E0B-B248B532E733}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPAM.CSCourse2016.JSONParser.Library", "..\..\JSON-Parsing-Compiler\EPAM.CSCourse2016.JSONParser.Core\EPAM.CSCourse2016.JSONParser.Library.csproj", "{FA770725-7674-43FA-A47D-AFEAC6023159}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -241,14 +241,6 @@ Global
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Release|x86.ActiveCfg = Release|Any CPU
 		{2DAD561D-0E91-41AA-BB13-051F5D97A411}.Release|x86.Build.0 = Release|Any CPU
-		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Debug|x86.Build.0 = Debug|Any CPU
-		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Release|x86.ActiveCfg = Release|Any CPU
-		{45C5FDD7-0607-4420-B7BE-D903F6A8D339}.Release|x86.Build.0 = Release|Any CPU
 		{64765942-D9D4-498E-8E0B-B248B532E733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{64765942-D9D4-498E-8E0B-B248B532E733}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64765942-D9D4-498E-8E0B-B248B532E733}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -257,6 +249,14 @@ Global
 		{64765942-D9D4-498E-8E0B-B248B532E733}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64765942-D9D4-498E-8E0B-B248B532E733}.Release|x86.ActiveCfg = Release|Any CPU
 		{64765942-D9D4-498E-8E0B-B248B532E733}.Release|x86.Build.0 = Release|Any CPU
+		{FA770725-7674-43FA-A47D-AFEAC6023159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA770725-7674-43FA-A47D-AFEAC6023159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA770725-7674-43FA-A47D-AFEAC6023159}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FA770725-7674-43FA-A47D-AFEAC6023159}.Debug|x86.Build.0 = Debug|Any CPU
+		{FA770725-7674-43FA-A47D-AFEAC6023159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA770725-7674-43FA-A47D-AFEAC6023159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA770725-7674-43FA-A47D-AFEAC6023159}.Release|x86.ActiveCfg = Release|Any CPU
+		{FA770725-7674-43FA-A47D-AFEAC6023159}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

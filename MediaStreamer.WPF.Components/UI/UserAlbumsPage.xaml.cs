@@ -35,8 +35,10 @@ namespace MediaStreamer.WPF.Components
             try
             {
                 Albums = (from alb in Program.DBAccess.DB.GetListenedAlbums()
-                           join listComp in Program.DBAccess.DB.GetListenedCompositions()
-                           on alb.AlbumID equals listComp.AlbumID
+                          join comps in Program.DBAccess.DB.GetCompositions()
+                            on alb.ArtistID equals comps.ArtistID
+                          join listComp in Program.DBAccess.DB.GetListenedCompositions()
+                              on comps.CompositionID equals listComp.CompositionID
                            where (listComp.UserID == userID)
                            select alb).Distinct().ToList();
                 lastDataLoadWasPartial = true;

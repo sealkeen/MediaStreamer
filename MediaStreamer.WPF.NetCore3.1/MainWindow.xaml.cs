@@ -18,9 +18,6 @@ namespace MediaStreamer.WPF.NetCore3_1
         //TODO: WPFNet40 / Core3.1 – Merge into single project WPF's
         public MainWindow()
         {
-            //MediaStreamer.DMEntitiesContext.UseSQLServer = true;
-            //Program.DBAccess.LoadingTask = task;
-
             InitializeComponent();
 
             var task = Task.Factory.StartNew(() =>
@@ -90,6 +87,7 @@ namespace MediaStreamer.WPF.NetCore3_1
             if(Session.ChromiumPages != null)
                 foreach(var page in Session.ChromiumPages.Values)
                     page?.ClosePageResources();
+            Program.OnClosing();
         }
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

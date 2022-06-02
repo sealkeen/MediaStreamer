@@ -21,5 +21,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public const string FilePath = "FilePath";
         public const string Lyrics = "Lyrics";
         public const string About = "About";
+
+        //ListenedComposition
+        public const string ListenDate = "ListenDate";
+        public const string StoppedAt = "StoppedAt";
+        
+        public const string UserID = "UserID";
     }
 }

@@ -6,6 +6,7 @@ using MediaStreamer.IO;
 using System.Collections;
 using System.Collections.Generic;
 using LinqExtensions;
+using System.Linq;
 
 namespace MediaStreamer.RAMControl
 {
@@ -23,6 +24,37 @@ namespace MediaStreamer.RAMControl
         public static IComposition currentComposition;
         public static MediaStreamer.IO.FileManipulator FileManipulator;
         public static bool PlayerStopped = false;
+        public static TimeSpan NewPosition;
+        public static bool startupFromCommandLine = false;
+
+        #region AutoPlay Closing / Opening
+        public static void OnClosing()
+        {
+            double position = mePlayer.Position.TotalMilliseconds;
+            var ts = TimeSpan.FromMilliseconds(position);
+
+            var comp = currentComposition;
+            ListenedComposition lC = new ListenedComposition();
+            lC.CompositionID = comp.CompositionID;
+            lC.UserID = SessionInformation.CurrentUser == null ? 0 : SessionInformation.CurrentUser.UserID;
+            lC.StoppedAt = position;
+            lC.ListenDate = DateTime.Now;
+
+            DBAccess.ClearListenedCompositions();
+            DBAccess.DB.Add(lC);
+        }
+
+        public static IList OnOpen()
+        {
+            var query = DBAccess.DB.GetListenedCompositions();
+            if (query.Count() == 0)
+                return new List<Composition>();
+            var lcomp = DBAccess.DB.GetListenedCompositions().First();
+            var comp = DBAccess.DB.GetCompositions().Where(c => c.CompositionID == lcomp.CompositionID).ToList();
+            NewPosition = TimeSpan.FromMilliseconds(lcomp.StoppedAt);
+            return comp;
+        }
+        #endregion
 
         public static void HandleException(Exception ex)
         {

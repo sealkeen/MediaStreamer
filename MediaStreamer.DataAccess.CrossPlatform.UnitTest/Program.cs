@@ -16,7 +16,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
         public static void GetCompositions()
         {
             JSONDataContext context = new JSONDataContext();
-            var comps = context.GetCompositions();
+            //var comps = context.GetCompositions();
+            context.ClearTable("ListenedCompositions");
+            ListenedComposition ls = new ListenedComposition() { ListenDate = DateTime.Now, CompositionID = 23, UserID = 0};
+            context.Add(ls);
+            var comps = context.GetListenedCompositions();
         }
 
         // ok / not ok (not all cases checked)

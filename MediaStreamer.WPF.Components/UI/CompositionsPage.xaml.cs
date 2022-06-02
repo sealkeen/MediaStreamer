@@ -26,11 +26,14 @@ namespace MediaStreamer.WPF.Components
             Selector.MainPage.SetFrameContent( Selector.LoadingPage ); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
 
-            Session.CompositionsVM = new CompositionsViewModel();
+            if(Session.CompositionsVM == null)
+                Session.CompositionsVM = new CompositionsViewModel();
+
             DataContext = Session.CompositionsVM.CompositionsStore;
             //tsk.Wait();
             Selector.MainPage.SetFrameContent(this);
         }
+
         public CompositionsPage(long ArtistID, long albumID)
         {
             Session.CompositionsVM.CompositionsStore.Compositions = new List<IComposition>();
@@ -302,6 +305,8 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
+                if (selectedItems == null || selectedItems.Count == 0)
+                    return;
                 foreach (ICompositionInstance composition in selectedItems)
                 {
                     EnqueueOrPush(Session.CompositionsVM.CompositionsStore.Queue.Enqueue, 
@@ -349,13 +354,13 @@ namespace MediaStreamer.WPF.Components
 
                 Program.currentComposition = target;
 
-                if (SessionInformation.CurrentUser != null)
+                if (SessionInformation.CurrentUser == null)
                 {
-                    long? id = Program.currentComposition?.CompositionID;
-
-                    if (target != null)
-                        Program.DBAccess?.AddNewListenedComposition(target.GetInstance(), SessionInformation.CurrentUser);
+                    SessionInformation.CurrentUser = new User() { UserID = 0 };
                 }
+                Program.DBAccess?.ClearListenedCompositions();
+                Program.DBAccess?.AddNewListenedComposition(target.GetInstance(), SessionInformation.CurrentUser);
+                
             }
             catch (Exception ex)
             {
@@ -379,6 +384,8 @@ namespace MediaStreamer.WPF.Components
             if (lstItems.SelectedIndex < 0)
                 return;
             PlayTarget(Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex]);
+            Program.currentComposition = Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex];
+            
         }
 
         //TODO: Remove TagEditing import from WPF.Components
