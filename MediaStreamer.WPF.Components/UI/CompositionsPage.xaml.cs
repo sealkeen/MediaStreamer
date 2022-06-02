@@ -22,6 +22,8 @@ namespace MediaStreamer.WPF.Components
     {
         public CompositionsPage()
         {
+            if (Program.startupFromCommandLine)
+                ;
             ListInitialized = false;
             Selector.MainPage.SetFrameContent( Selector.LoadingPage ); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
@@ -42,11 +44,6 @@ namespace MediaStreamer.WPF.Components
             Session.CompositionsVM.SetLastAlbumAndArtistID(ArtistID, albumID);
             DataContext = Session.CompositionsVM;
         }
-
-        //public IList<IComposition> Compositions { get; set; }
-        //public LinkedList<Composition> Queue { get; set; }
-
-        double _oldRoamingGroupWidth = 0.0;
 
         protected void ListView_OnColumnClick(object sender, RoutedEventArgs e)
         {

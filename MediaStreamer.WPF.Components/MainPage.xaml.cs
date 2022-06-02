@@ -22,7 +22,8 @@ namespace MediaStreamer.WPF.Components
         public MainPage()
         {
             InitializeComponent();
-            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            if(Program.FileManipulator == null)
+                Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             Selector.MainPage = this;
             Session.MainPage = this;
 

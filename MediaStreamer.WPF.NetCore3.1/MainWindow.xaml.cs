@@ -19,12 +19,14 @@ namespace MediaStreamer.WPF.NetCore3_1
         public MainWindow()
         {
             InitializeComponent();
+            if (Program.DBAccess == null)
+            {
+                var task = Task.Factory.StartNew(() =>
+                Program.DBAccess = new DBRepository()
+                { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() });
 
-            var task = Task.Factory.StartNew(() =>
-            Program.DBAccess = new DBRepository()
-            { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() });
-
-            task.Wait();
+                task.Wait();
+            }
             Program.DBAccess.DB.EnsureCreated();
             this.windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
 

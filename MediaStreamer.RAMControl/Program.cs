@@ -30,6 +30,8 @@ namespace MediaStreamer.RAMControl
         #region AutoPlay Closing / Opening
         public static void OnClosing()
         {
+            if (currentComposition == null)
+                return;
             double position = mePlayer.Position.TotalMilliseconds;
             var ts = TimeSpan.FromMilliseconds(position);
 
