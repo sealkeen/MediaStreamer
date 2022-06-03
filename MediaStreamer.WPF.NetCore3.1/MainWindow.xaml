@@ -50,6 +50,8 @@
                 <MenuItem Header="Security" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>-->
                 <MenuItem x:Name="btnDatabase" Click="btnDatabase_Click" Header="Database" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
                 <MenuItem x:Name="btnBrowser" Click="btnBrowser_Click" Header="Browser" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnCMD" Header="CMD arguments" Click="btnCMD_Click" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnAbout" Header="About" Click="btnAbout_Click" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
             </Menu>
             <Border HorizontalAlignment="Right" DockPanel.Dock="Right" Padding="5 0 5 0">
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
@@ -65,6 +67,8 @@
                 Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
             
             x:Name="windowFrame" 
-            Content="Frame"/><!--Background="AliceBlue"-->
+            Content="Frame">
+        </Frame>
+        <!--Background="AliceBlue"-->
     </Grid>
 </Window>

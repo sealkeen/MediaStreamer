@@ -12,8 +12,15 @@
   <ItemGroup>
     <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
+    <ProjectReference Include="..\MediaStreamer.Logging\MediaStreamer.Logging.csproj" />
     <ProjectReference Include="..\MediaStreamer.WPF.Components\MediaStreamer.WPF.Components.csproj" />
     <ProjectReference Include="..\MediaStreamer.WPF.WebBrowser\MediaStreamer.WPF.WebBrowser.csproj" />
+    <ProjectReference Include="..\Win32DotNetWorkarounds\Win32DotNetWorkarounds.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="MediaStreamer.WPF.NetCore3_1.BuildDateTime">
+        <_Parameter1>$([System.DateTime]::Now.ToString("s"))</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

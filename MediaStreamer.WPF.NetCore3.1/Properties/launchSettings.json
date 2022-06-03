@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "MediaStreamer.WPF.NetCore3.1": {
+      "commandName": "Project"
+    }
+  }
+}

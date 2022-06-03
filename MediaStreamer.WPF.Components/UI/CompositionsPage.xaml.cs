@@ -12,6 +12,7 @@ using MediaStreamer.IO;
 using LinqExtensions;
 using MediaStreamer.RAMControl;
 using System.Threading;
+using MediaStreamer.Logging;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -22,16 +23,32 @@ namespace MediaStreamer.WPF.Components
     {
         public CompositionsPage()
         {
-            //cmd mode play from cmd parameter file
-            if (Program.startupFromCommandLine)
-                Program.mePlayer.Source = new Uri(Program.currentComposition.FilePath);
+            try
+            {
+                $"The new position is : {Program.NewPosition}".LogStatically();
+                $"Creating CompositionsPage(), Program.startupFromCommandLine = {Program.startupFromCommandLine}".LogStatically();
+                ($"Current composition is not nuLL = {Program.currentComposition != null}" + Environment.NewLine +
+                    $"Current composition path is not nuLL = {Program.currentComposition?.FilePath != null}").LogStatically();
+                //cmd mode play from cmd parameter file
+                if (Program.startupFromCommandLine)
+                {
+                    Program.mePlayer.Source = new Uri(Program.currentComposition.FilePath);
+                    $"Setting Program.mePlayer.Source = {Program.currentComposition.FilePath}, File valid = {File.Exists(Program.currentComposition.FilePath)}".LogStatically();
+                }
+            }
+            catch (Exception ex) 
+            { 
+                Program.SetCurrentStatus("CompositionsPage(): " + ex.Message); 
+            }
+
+            if (Session.CompositionsVM == null)
+                Session.CompositionsVM = new CompositionsViewModel();
 
             ListInitialized = false;
             Selector.MainPage.SetFrameContent( Selector.LoadingPage ); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
 
-            if(Session.CompositionsVM == null)
-                Session.CompositionsVM = new CompositionsViewModel();
+            $"Setting valid DataContext = {Session.CompositionsVM.CompositionsStore != null}".LogStatically();
 
             DataContext = Session.CompositionsVM.CompositionsStore;
             //tsk.Wait();
@@ -39,6 +56,8 @@ namespace MediaStreamer.WPF.Components
 
             //cmd mode disable
             Program.startupFromCommandLine = false;
+
+            $"The new position is : {Program.NewPosition}".LogStatically();
         }
 
         public CompositionsPage(long ArtistID, long albumID)
@@ -75,7 +94,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                Program.SetCurrentStatus(ex.Message, true);
+                Program.SetCurrentStatus("CompositionsPage.ListView_OnColumnClick :" + ex.Message, true);
             }
         }
 
@@ -98,7 +117,7 @@ namespace MediaStreamer.WPF.Components
                 ListInitialized = true;
                 return result;
             } catch (Exception ex) {
-                Program.SetCurrentStatus(ex.Message);
+                Program.SetCurrentStatus("GetICompositions: " + ex.Message);
                 return new List<IComposition>();
             }
         }
@@ -149,8 +168,8 @@ namespace MediaStreamer.WPF.Components
                 Session.CompositionsVM.CompositionsStore.Compositions = new List<IComposition>();
                 try {
                     Session.CompositionsVM.CompositionsStore.Compositions = GetICompositions();
-                } catch { 
-
+                } catch (Exception ex) {
+                    Program.SetCurrentStatus("ListAsync: " + ex.Message);
                 }
             }
         }
@@ -213,7 +232,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                Program.SetCurrentStatus(ex.Message, true);
+                Program.SetCurrentStatus("GetCurrentComposition(): " + ex.Message, true);
                 return null;
             }
         }
@@ -230,7 +249,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                Program.SetCurrentStatus(ex.Message, true);
+                Program.SetCurrentStatus("GetPreviousComposition(): " + ex.Message, true);
                 return null;
             }
         }
@@ -250,7 +269,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                Program.SetCurrentStatus(ex.Message, true);
+                Program.SetCurrentStatus("GetNextComposition(): " + ex.Message, true);
                 return null;
             }
         }

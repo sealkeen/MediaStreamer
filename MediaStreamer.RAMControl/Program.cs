@@ -100,32 +100,44 @@ namespace MediaStreamer.RAMControl
         [MTAThread]
         public static void SetTxtStatusContents(string status)
         {
-            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            if (Session.MainPage != null && Session.MainPage.ListInitialized && status != null)
             {
-                Session.MainPage.SetStatus(status);
-            }));
+                Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    Session.MainPage.SetStatus(status);
+                }));
+            }
         }
         [MTAThread]
         public static void AddToStatus(string addition)
         {
-            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            if (Session.MainPage != null && Session.MainPage.ListInitialized && addition != null)
             {
-                Session.MainPage.AddToStatus(addition);
-            }));
+                Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    Session.MainPage.AddToStatus(addition);
+                }));
+            }
         }
 
         [MTAThread]
         public static void SetCurrentAction(string action)
         {
-            Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+            if (Session.MainPage != null && Session.MainPage.ListInitialized && action != null)
             {
-                Session.MainPage.SetAction(action);
-            }));
+                Session.MainPage.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    Session.MainPage.SetAction(action);
+                }));
+            }
         }
         [MTAThread]
         public static void SetCurrentStatus(string status)
         {
-            SetTxtStatusContents(status);
+            if (Session.MainPage != null && Session.MainPage.ListInitialized && status != null)
+            {
+                SetTxtStatusContents(status);
+            }
         }
 
         public static string ToString(IEnumerable comps)
@@ -139,11 +151,6 @@ namespace MediaStreamer.RAMControl
             result = result.TrimEnd(new char[] { ',', ' ' });
             result += ".";
             return result;
-        }
-
-        public void Merge(LinkedList<string> list)
-        {
-
         }
 
         public static string ReturnEmptyIfZero(int value) => value == 0 ? "" : " [" + value.ToString() + "]";

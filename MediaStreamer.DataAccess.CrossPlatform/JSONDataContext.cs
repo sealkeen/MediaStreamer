@@ -697,7 +697,29 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void RemoveEntity<T>(T o) where T : class
         {
-            //throw new NotImplementedException();
+            var tp = o.GetType();
+            if (tp == typeof(Composition))
+            {
+                string CompositionsDB = Path.Combine(FolderName, "Compositions.json");
+
+                var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
+                JItem itemsCollection = null;
+                if (root != null)
+                    itemsCollection = root.FindPairByKey("Compositions".ToJString()).GetPairedValue();
+                else
+                    itemsCollection = new JArray(root);
+
+                List<JKeyValuePair> lst = new List<JKeyValuePair>();
+                lst.Add(new JKeyValuePair(Key.CompositionID.ToJString(), new JSingleValue((o as Composition).CompositionID.ToString())));
+
+                var pair = itemsCollection.HasThesePairsRecursive(lst);
+                if (pair != null)
+                {
+                    pair.Parent.Parent.Items.Remove(pair.Parent);
+
+                    root.ToFile(CompositionsDB);
+                }
+            }
         }
 
         public int SaveChanges()

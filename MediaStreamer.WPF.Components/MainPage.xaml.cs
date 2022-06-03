@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
 using MediaStreamer.RAMControl;
 using MediaStreamer.Domain;
+using MediaStreamer.Logging;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -22,17 +23,23 @@ namespace MediaStreamer.WPF.Components
         public MainPage()
         {
             InitializeComponent();
+
+            $"The new position is : {Program.NewPosition}".LogStatically();
+            "Creating MainPage()".LogStatically();
             if(Program.FileManipulator == null)
                 Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+
             Selector.MainPage = this;
             Session.MainPage = this;
 
+            "Creating Dispatcher Timer".LogStatically();
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += timer_Tick;
             timer.Start();
             Program.mePlayer = this.mePlayer;
-            Program.txtStatus = this.txtStatus;
+            Program.txtStatus = this.txtStatus; 
+            ListInitialized = true;
         }
 
         private double volumeSliderValue = 0.025;
@@ -52,6 +59,8 @@ namespace MediaStreamer.WPF.Components
             {
                 Selector.CompositionsPage.QueueSelected(Program.OnOpen());
                 Program.mePlayer.Position = Program.NewPosition;
+            } else {
+                Program.NewPosition = TimeSpan.FromMilliseconds(0.0);
             }
         }
 
@@ -116,7 +125,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                Program.SetCurrentStatus(ex.Message);
+                Program.SetCurrentStatus("PlayNextIfExists: " + ex.Message);
             }
         }
 
@@ -506,7 +515,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                Program.SetCurrentStatus(ex.Message);
+                Program.SetCurrentStatus("MainPage.btnNext_Click" + ex.Message);
             }
         }
 
@@ -523,7 +532,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                Program.SetCurrentStatus(ex.Message);
+                Program.SetCurrentStatus("btnPrevious_Click" + ex.Message);
             }
         }
 
