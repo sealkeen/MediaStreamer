@@ -63,7 +63,8 @@
                                 <ContentPresenter></ContentPresenter>
                             </AdornerDecorator>
                         </Border>
-                        <Grid x:Name="TitleGrid" MouseLeftButtonDown="title_MouseMouseLeftButtonDown">
+                        <Grid x:Name="TitleGrid" >
+                            <!--MouseLeftButtonDown="title_MouseMouseLeftButtonDown"-->
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>

@@ -82,17 +82,6 @@ namespace FtpClient
             catch { }
         }
 
-        private void title_MouseMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                Window win = (Window)((FrameworkElement)sender).TemplatedParent;
-                if (flipWindow)
-                    win.DragMove();
-            }
-            catch { }
-        }
-
         #endregion
 
         private void timeline_MouseMove(object sender, MouseEventArgs e)
