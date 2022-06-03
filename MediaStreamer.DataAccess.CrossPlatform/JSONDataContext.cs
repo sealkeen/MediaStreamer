@@ -17,7 +17,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 _log = log;
             else
                 _log = Console.WriteLine;
-            FolderName = Path.Combine(Environment.CurrentDirectory, "Compositions");
+            //FolderName = Path.Combine(Environment.CurrentDirectory, "Compositions");
+            FolderName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MediaStreamer.WPF.NetCore3_1");
             Genres = new List<Genre>();
             Artists = new List<Artist>();
             Albums = new List<Album>();

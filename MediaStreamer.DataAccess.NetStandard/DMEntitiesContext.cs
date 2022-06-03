@@ -14,7 +14,7 @@ namespace MediaStreamer
         public static bool UseSQLServer = false;
         public string DBPath { get; set; } = "";
         public static string Filename { get; set; }
-        public static string LocalSource { get; set; } = @"C:/Users/Sealkeen/Documents/ГУАП Done (v)/7 Базы данных(1)/09.06.2021-2.db3";
+        public static string LocalSource { get; set; } = @"O:/DB/09.06.2021-2.db3";
 
         public DMEntitiesContext()
         {
@@ -395,7 +395,7 @@ namespace MediaStreamer
 
             modelBuilder.Entity<ListenedComposition>(entity =>
             {
-                entity.HasKey(e => new { e.ListenDate, e.UserID, e.ArtistID, e.GroupFormationDate, e.AlbumID, e.CompositionID });
+                entity.HasKey(e => new { e.ListenDate, e.UserID, e.CompositionID });
 
                 entity.ToTable("ListenedComposition");
 
@@ -403,33 +403,15 @@ namespace MediaStreamer
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
 
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
-                entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
-
-                entity.Property(e => e.AlbumID).HasColumnName("AlbumID");
 
                 entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
 
-                entity.HasOne(d => d.Album)
-                    .WithMany(p => p.ListenedCompositions)
-                    .HasForeignKey(d => d.AlbumID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Artist)
-                    .WithMany(p => p.ListenedCompositions)
-                    .HasForeignKey(d => d.ArtistID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.Composition)
                     .WithMany(p => p.ListenedCompositions)
                     .HasForeignKey(d => d.CompositionID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
-                entity.HasOne(d => d.GroupMember)
-                    .WithMany(p => p.ListenedCompositions)
-                    .HasForeignKey(d => d.GroupFormationDate)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ListenedCompositions)
@@ -621,6 +603,35 @@ namespace MediaStreamer
         public void DisableLazyLoading()
         {
             this.ChangeTracker.LazyLoadingEnabled = false;
+        }
+
+        public bool ClearTable(string tableName)
+        {
+            switch (tableName)
+            {
+                case nameof(Administrators): Administrators.RemoveRange(Administrators); break;
+                case nameof(Albums): Albums.RemoveRange(Albums); break;
+                case nameof(AlbumGenres): AlbumGenres.RemoveRange(AlbumGenres); break;
+                case nameof(Artists): Artists.RemoveRange(Artists); break;
+                case nameof(ArtistGenres): ArtistGenres.RemoveRange(ArtistGenres); break;
+                case nameof(Compositions): Compositions.RemoveRange(Compositions); break;
+                case nameof(CompositionVideos): CompositionVideos.RemoveRange(CompositionVideos); break;
+                case nameof(Genres): Genres.RemoveRange(Genres); break;
+                case nameof(GroupMembers): GroupMembers.RemoveRange(GroupMembers); break;
+                case nameof(GroupRoles): GroupRoles.RemoveRange(GroupRoles); break;
+                case nameof(ListenedAlbums): ListenedAlbums.RemoveRange(ListenedAlbums); break;
+                case nameof(ListenedArtists): ListenedArtists.RemoveRange(ListenedArtists); break;
+                case nameof(ListenedCompositions): ListenedCompositions.RemoveRange(ListenedCompositions); break;
+                case nameof(ListenedGenres): ListenedGenres.RemoveRange(ListenedGenres); break;
+                case nameof(Moderators): Moderators.RemoveRange(Moderators); break;
+                case nameof(Musicians): Musicians.RemoveRange(Musicians); break;
+                case nameof(MusicianRoles): MusicianRoles.RemoveRange(MusicianRoles); break;
+                case nameof(Pictures): Pictures.RemoveRange(Pictures); break;
+                case nameof(Users): Users.RemoveRange(Users); break;
+                case nameof(Videos): Videos.RemoveRange(Videos); break;
+            }
+            SaveChanges();
+            return false;
         }
     }
 }
