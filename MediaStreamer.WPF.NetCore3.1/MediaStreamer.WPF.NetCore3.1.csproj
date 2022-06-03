@@ -14,7 +14,6 @@
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
     <ProjectReference Include="..\MediaStreamer.Logging\MediaStreamer.Logging.csproj" />
     <ProjectReference Include="..\MediaStreamer.WPF.Components\MediaStreamer.WPF.Components.csproj" />
-    <ProjectReference Include="..\MediaStreamer.WPF.WebBrowser\MediaStreamer.WPF.WebBrowser.csproj" />
     <ProjectReference Include="..\Win32DotNetWorkarounds\Win32DotNetWorkarounds.csproj" />
   </ItemGroup>
   <ItemGroup>

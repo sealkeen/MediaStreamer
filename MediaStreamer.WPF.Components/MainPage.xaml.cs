@@ -52,16 +52,23 @@ namespace MediaStreamer.WPF.Components
         {
             //if(Program.DBAccess.LoadingTask != null)
             //    await Program.DBAccess.LoadingTask;
-
+            
             buttonCompositions_Click(buttonCompositions, new RoutedEventArgs());
 
             if (!Program.startupFromCommandLine)
             {
-                Selector.CompositionsPage.QueueSelected(Program.OnOpen());
+                var savedQuery = Program.OnOpen();
+                Selector.CompositionsPage.QueueSelected(savedQuery);
                 Program.mePlayer.Position = Program.NewPosition;
+                if (savedQuery != null && savedQuery.Count > 0)
+                {
+                    Program.currentComposition = savedQuery[0] as IComposition;
+                    Selector.CompositionsPage.TryToSelectItem(Program.currentComposition);
+                }
             } else {
                 Program.NewPosition = TimeSpan.FromMilliseconds(0.0);
             }
+
         }
 
         public void StatusPage_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -154,7 +161,7 @@ namespace MediaStreamer.WPF.Components
         [MTAThread]
         public override async Task ListAsync()
         {
-            mainFrame.Content = Selector.LoadingPage;
+            mainFrame.Content = (Selector.LoadingPage == null) ? Selector.LoadingPage = new LoadingPage() : Selector.LoadingPage;
             if (Selector.CompositionsPage == null)
                 Selector.CompositionsPage = new CompositionsPage();
             if (Session.CompositionsVM.LastDataLoadWasPartial() || !Selector.CompositionsPage.ListInitialized)

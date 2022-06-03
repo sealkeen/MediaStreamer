@@ -46,6 +46,11 @@
         <GradientStop Color="#FF686868" Offset="0.864" />
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="ControlBorderBrush2" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF254868" Offset="0.204" />
+        <GradientStop Color="#FF686868" Offset="0.864" />
+    </LinearGradientBrush>
+    
     <LinearGradientBrush x:Key="ControlActiveBorderBrush" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#FF1D83BE" Offset="0.204" />
         <GradientStop Color="#FF1ECDA7" Offset="0.864" />
@@ -4546,16 +4551,16 @@
                             <DoubleAnimation Storyboard.TargetName="Rect" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.3" To="0"/>
                         </Storyboard>
                     </ControlTemplate.Resources>
-                    <Grid>
-                        <Rectangle x:Name="Rect" RadiusX="2" RadiusY="2" Width="24" Height="24" Fill="{StaticResource ControlLightBackground}"
+                    <Grid >
+                        <Rectangle x:Name="Rect" RadiusX="2" RadiusY="2" Width="Auto" Height="Auto" Fill="{StaticResource ControlLightBackground}"
                                    Opacity="0"/>
-                        <Path x:Name="Arrow" Margin="0,0,1,0" Fill="{StaticResource ControlForeground}" HorizontalAlignment="Center" 
+                        <Path x:Name="Arrow" Margin="0,0,0,0" Fill="{StaticResource ControlForeground}" HorizontalAlignment="Stretch" 
                               VerticalAlignment="Center" Data="M 0 8 L 7 15 L 7 10 L 16 10 L 16 6 L 7 6 L 7 1 Z" StrokeLineJoin="Round"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Command" Value="{x:Static NavigationCommands.BrowseForward}">
                             <Setter TargetName="Arrow" Property="Data" Value="M 16 8 L 9 1 L 9 10 L 0 10 L 0 6 L 9 6 L 9 15 Z"/>
-                            <Setter TargetName="Arrow" Property="Margin" Value="1,0,0,0"/>
+                            <Setter TargetName="Arrow" Property="Margin" Value="-2,0,0,0"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Trigger.EnterActions>
@@ -4578,7 +4583,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="FrameMenu" TargetType="{x:Type Menu}">
+    <Style x:Key="FrameMenu" TargetType="{x:Type Menu}" >
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
         <Setter Property="IsMainMenu" Value="False"/>
@@ -4612,9 +4617,9 @@
                                 <StackPanel IsItemsHost="True" Margin="2" KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle"/>
                             </Border>
                         </Popup>
-                        <Grid x:Name="Panel" Width="24" Background="Transparent" HorizontalAlignment="Right" >
+                        <Grid x:Name="Panel" Width="24" Background="{StaticResource ControlBackgroundNormal}" HorizontalAlignment="Right" >
                             <Border Name="Bg"  Background="{StaticResource ControlLightBackground}" CornerRadius="2" Opacity="0"/>
-                            <Path x:Name="Arrow" SnapsToDevicePixels="False" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,2,4,0"
+                            <Path x:Name="Arrow" SnapsToDevicePixels="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="16,11,0,0"
                                   Fill="{StaticResource ControlForeground}" StrokeLineJoin="Round" Data="M 0 0 L 4 4 L 8 0 Z"/>
                         </Grid>
                     </Grid>
@@ -4727,14 +4732,18 @@
                     <Border Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="2">
                         <DockPanel>
-                            <Grid x:Name="grid" DockPanel.Dock="Top" Height="28" Background="{StaticResource ControlBackgroundNormal}">
+                            <Grid x:Name="grid" Width="9" DockPanel.Dock="Right" Background="{StaticResource ControlBackgroundNormal}">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="16"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="9"/>
                                 </Grid.ColumnDefinitions>
-                                <Menu Name="NavMenu" Grid.Column="2" Height="16" Margin="1,0,0,0" VerticalAlignment="Center" 
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="24"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button Style="{StaticResource FrameButtonStyle}" Command="NavigationCommands.BrowseBack" Margin="0,0,0,0" Grid.Row="1"/>
+                                <Button Style="{StaticResource FrameButtonStyle}" Command="NavigationCommands.BrowseForward" Margin="-5,0,0,0" Grid.Row="2"/>
+                                <Menu Name="NavMenu" Grid.Row="0" 
                                       Style="{StaticResource FrameMenu}">
                                     <MenuItem Style="{StaticResource FrameHeaderMenuItem}" ItemContainerStyle="{StaticResource FrameSubmenuItem}"
                                               IsSubmenuOpen="{Binding Path=(MenuItem.IsSubmenuOpen),Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
@@ -4748,10 +4757,8 @@
                                         </MenuItem.ItemsSource>
                                     </MenuItem>
                                 </Menu>
-                                <Button Style="{StaticResource FrameButtonStyle}" Command="NavigationCommands.BrowseBack" Margin="2,0,0,0" Grid.Column="0"/>
-                                <Button Style="{StaticResource FrameButtonStyle}" Command="NavigationCommands.BrowseForward" Margin="2,0,0,0" Grid.Column="1"/>
                             </Grid>
-                            <Grid>
+                            <Grid Grid.Column="1">
                                 <Border Background="{TemplateBinding Background}"/>
                                 <ContentPresenter x:Name="PART_FrameCP"/>
                             </Grid>
@@ -4800,7 +4807,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="Command" Value="{x:Static NavigationCommands.BrowseForward}">
                             <Setter TargetName="Arrow" Property="Data" Value="M 16 8 L 9 1 L 9 10 L 0 10 L 0 6 L 9 6 L 9 15 Z"/>
-                            <Setter TargetName="Arrow" Property="Margin" Value="1,0,0,0"/>
+                            <Setter TargetName="Arrow" Property="Margin" Value="-4,0,0,0"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Trigger.EnterActions>
@@ -4979,7 +4986,8 @@
                                     <ColumnDefinition Width="16"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Menu Name="NavMenu" Grid.Column="2" Height="16" Margin="1,0,0,0" VerticalAlignment="Center" 
+                                <Menu Name="NavMenu" Grid.Column="2" Height="Auto" Margin="1,0,0,0" VerticalAlignment="Center" 
+                                      
                                       Style="{StaticResource FrameMenu}">
                                     <MenuItem Style="{StaticResource FrameHeaderMenuItem}" ItemContainerStyle="{StaticResource FrameSubmenuItem}"
                                               IsSubmenuOpen="{Binding Path=(MenuItem.IsSubmenuOpen),Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}">
@@ -4994,7 +5002,7 @@
                                     </MenuItem>
                                 </Menu>
                                 <Button Style="{StaticResource FrameButtonStyle}" Command="NavigationCommands.BrowseBack" Margin="2,0,0,0" Grid.Column="0"/>
-                                <Button Style="{StaticResource FrameButtonStyle}" Command="NavigationCommands.BrowseForward" Margin="2,0,0,0" Grid.Column="1"/>
+                                <Button Style="{StaticResource FrameButtonStyle}" Command="NavigationCommands.BrowseForward" Margin="2,0,0,0" Grid.Column="1" />
                             </Grid>
                             <Grid>
                                 <Border Background="{TemplateBinding Background}"/>

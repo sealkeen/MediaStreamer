@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaStreamer.WPF.NetCore3_1"
+        xmlns:UC="clr-namespace:MediaStreamer.WPF.Components;assembly=MediaStreamer.WPF.Components"
         mc:Ignorable="d"
         Title="MediaStreamer (WindowsDesktop.NetCore3.1)"
             Height="450" Width="800"
@@ -60,15 +61,14 @@
                 </StackPanel>
             </Border>
         </DockPanel>
-        <Frame
+        <UC:UserFrame
             Grid.Row="1"
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-            
             x:Name="windowFrame" 
             Content="Frame">
-        </Frame>
+        </UC:UserFrame>
         <!--Background="AliceBlue"-->
     </Grid>
 </Window>

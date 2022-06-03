@@ -25,15 +25,15 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                $"The new position is : {Program.NewPosition}".LogStatically();
-                $"Creating CompositionsPage(), Program.startupFromCommandLine = {Program.startupFromCommandLine}".LogStatically();
-                ($"Current composition is not nuLL = {Program.currentComposition != null}" + Environment.NewLine +
-                    $"Current composition path is not nuLL = {Program.currentComposition?.FilePath != null}").LogStatically();
+                //$"The new position is : {Program.NewPosition}".LogStatically();
+                //$"Creating CompositionsPage(), Program.startupFromCommandLine = {Program.startupFromCommandLine}".LogStatically();
+                //($"Current composition is not nuLL = {Program.currentComposition != null}" + Environment.NewLine +
+                //    $"Current composition path is not nuLL = {Program.currentComposition?.FilePath != null}").LogStatically();
                 //cmd mode play from cmd parameter file
                 if (Program.startupFromCommandLine)
                 {
                     Program.mePlayer.Source = new Uri(Program.currentComposition.FilePath);
-                    $"Setting Program.mePlayer.Source = {Program.currentComposition.FilePath}, File valid = {File.Exists(Program.currentComposition.FilePath)}".LogStatically();
+                    //$"Setting Program.mePlayer.Source = {Program.currentComposition.FilePath}, File valid = {File.Exists//(Program.currentComposition.FilePath)}".LogStatically();
                 }
             }
             catch (Exception ex) 
@@ -48,7 +48,7 @@ namespace MediaStreamer.WPF.Components
             Selector.MainPage.SetFrameContent( Selector.LoadingPage ); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
 
-            $"Setting valid DataContext = {Session.CompositionsVM.CompositionsStore != null}".LogStatically();
+            //$"Setting valid DataContext = {Session.CompositionsVM.CompositionsStore != null}".LogStatically();
 
             DataContext = Session.CompositionsVM.CompositionsStore;
             //tsk.Wait();
@@ -57,7 +57,7 @@ namespace MediaStreamer.WPF.Components
             //cmd mode disable
             Program.startupFromCommandLine = false;
 
-            $"The new position is : {Program.NewPosition}".LogStatically();
+            //$"The new position is : {Program.NewPosition}".LogStatically();
         }
 
         public CompositionsPage(long ArtistID, long albumID)
@@ -381,7 +381,10 @@ namespace MediaStreamer.WPF.Components
                 }
                 Program.DBAccess?.ClearListenedCompositions();
                 Program.DBAccess?.AddNewListenedComposition(target.GetInstance(), SessionInformation.CurrentUser);
-                
+                if (lstItems.SelectedIndex < 0 || lstItems.SelectedItem.GetHashCode() != target.GetHashCode())
+                {
+                    TryToSelectItem(target);
+                }
             }
             catch (Exception ex)
             {
@@ -773,28 +776,33 @@ namespace MediaStreamer.WPF.Components
             object originalSource, 
             IEnumerable SelectedItems)
         {
-            Application.Current.Dispatcher.BeginInvoke(
-                new Action(delegate
-                {
-                    if (null == (((FrameworkElement)originalSource).DataContext as Composition))
-                        return;
+            try
+            {
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(delegate
+                    {
+                        if (null == (((FrameworkElement)originalSource).DataContext as Composition))
+                            return;
 
-                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
+                        if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
                         Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
-                    )
-                    return;
+                        )
+                            return;
 
                     //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
                     if (state == MouseButtonState.Pressed)
-                    {
-                        if (source != null)
                         {
-                            DataObject dataObject = new DataObject(SelectedItems);
-                            DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
+                            if (source != null)
+                            {
+                                DataObject dataObject = new DataObject(SelectedItems);
+                                DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
+                            }
                         }
-                    }
-                })
-            );
+                    })
+                );
+            } catch(Exception ex){
+                MediaStreamer.Logging.SimpleLogger.LogStatically("lstItems_MouseLeftButtonDown :" + ex.Message);
+            }
         }
 
         private void lstQuery_Drop(object sender, DragEventArgs e)
@@ -831,6 +839,24 @@ namespace MediaStreamer.WPF.Components
             if (lstItems.IsKeyboardFocusWithin || lstQuery.IsKeyboardFocusWithin)
                 return true;
             return false;
+        }
+
+        public void TryToSelectItem(IComposition comp)
+        {
+            try
+            {
+                if (comp == null)
+                    return;
+                var found = Session.CompositionsVM.CompositionsStore.Compositions.Where(c => c.CompositionID == comp.CompositionID);
+                if (found.Count() > 0)
+                {
+                    lstItems.SelectedItem = found.First();
+                }
+            }
+            catch (Exception ex)
+            {
+                MediaStreamer.Logging.SimpleLogger.LogStatically("TryToSelectItem :" + ex.Message);
+            }
         }
     }
 }

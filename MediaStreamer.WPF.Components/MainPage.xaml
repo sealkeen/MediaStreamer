@@ -9,7 +9,6 @@
       VerticalAlignment="Stretch"
         Title="First FM Course Project"
         MinWidth="480" MinHeight="440" Loaded="Window_Loaded"
-               
       >
     <Page.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />

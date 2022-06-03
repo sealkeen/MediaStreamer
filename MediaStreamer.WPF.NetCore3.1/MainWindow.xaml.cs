@@ -103,18 +103,18 @@ namespace MediaStreamer.WPF.NetCore3_1
 
         private void btnBrowser_Click(object sender, RoutedEventArgs e)
         {
-            this.Dispatcher.BeginInvoke(new Action
-                (
-                    delegate
-                    {
-                        var page = new MediaStreamer.WPF.Components.Web.ChromiumPage();
-                        if (Session.ChromiumPages == null)
-                            Session.ChromiumPages = new Dictionary<int, FirstFMPage>();
-                        Session.ChromiumPages.Add(page.PageID, page);
-                        Selector.MainPage.mainFrame.Content = Session.ChromiumPages[page.PageID];
-                    }
-                )
-            ).Wait();
+            //this.Dispatcher.BeginInvoke(new Action
+            //    (
+            //        delegate
+            //        {
+            //            var page = new MediaStreamer.WPF.Components.Web.ChromiumPage();
+            //            if (Session.ChromiumPages == null)
+            //                Session.ChromiumPages = new Dictionary<int, FirstFMPage>();
+            //            Session.ChromiumPages.Add(page.PageID, page);
+            //            Selector.MainPage.mainFrame.Content = Session.ChromiumPages[page.PageID];
+            //        }
+            //    )
+            //).Wait();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
