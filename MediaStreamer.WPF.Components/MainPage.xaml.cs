@@ -66,9 +66,11 @@ namespace MediaStreamer.WPF.Components
                     Selector.CompositionsPage.TryToSelectItem(Program.currentComposition);
                 }
             } else {
-                Program.NewPosition = TimeSpan.FromMilliseconds(0.0);
+                Program.SetPlayerPositionToZero();
+                Selector.CompositionsPage?.SwitchToNextSelected();
+                Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
+                Program.startupFromCommandLine = false;
             }
-
         }
 
         public void StatusPage_PreviewKeyDown(object sender, KeyEventArgs e)

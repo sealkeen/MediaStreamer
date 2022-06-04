@@ -58,6 +58,12 @@ namespace MediaStreamer.RAMControl
         }
         #endregion
 
+        public static void SetPlayerPositionToZero()
+        {
+            NewPosition = TimeSpan.FromMilliseconds(0.0);
+            mePlayer.Position = TimeSpan.FromMilliseconds(0.0);
+        }
+
         public static void HandleException(Exception ex)
         {
             SetCurrentStatus("Error to double click add composition");

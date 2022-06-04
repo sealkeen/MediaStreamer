@@ -1,5 +1,6 @@
 ﻿
 using MediaStreamer.Domain;
+using MediaStreamer.IO;
 using MediaStreamer.Logging;
 using MediaStreamer.RAMControl;
 using MediaStreamer.WPF.Components;
@@ -71,12 +72,14 @@ namespace MediaStreamer.WPF.NetCore3_1
 
         private async void btnDatabase_Click(object sender, RoutedEventArgs e)
         {
-            MediaStreamer.IO.FileManipulator fM = new IO.FileManipulator(Program.DBAccess);
-            var fullpath = await fM.GetOpenedDatabasePathAsync();
+            //MediaStreamer.IO.FileManipulator fM = new IO.FileManipulator(Program.DBAccess);
+            //var fullpath = await fM.GetOpenedDatabasePathAsync();
             try
             {
+                Program.DBAccess.DB.GetContainingFolderPath().ShowFileInExplorer();
                 //Program.DBAccess = new DBRepository() { DB = new MediaStreamer.DMEntities(fullpath) };
-                Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+                //Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+
             } catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
             }

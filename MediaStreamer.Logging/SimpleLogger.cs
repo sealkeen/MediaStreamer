@@ -5,6 +5,8 @@ namespace MediaStreamer.Logging
 {
     public static class SimpleLogger
     {
+        public static string filepath = 
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MediaStreamer.WPF.NetCore3_1", "Logs", "log.txt");
         /// <summary>
         /// Logs to the Environment's currentDirectory slash log.txt
         /// </summary>
@@ -13,7 +15,6 @@ namespace MediaStreamer.Logging
         {
             try
             {
-                var filepath = Path.Combine(Environment.CurrentDirectory, "log.txt");
                 //overwrite
                 StreamWriter sw = new StreamWriter(filepath, true);
                 sw.WriteLine($"[{DateTime.Now}] " + message);

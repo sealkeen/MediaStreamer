@@ -25,15 +25,17 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                //$"The new position is : {Program.NewPosition}".LogStatically();
-                //$"Creating CompositionsPage(), Program.startupFromCommandLine = {Program.startupFromCommandLine}".LogStatically();
-                //($"Current composition is not nuLL = {Program.currentComposition != null}" + Environment.NewLine +
-                //    $"Current composition path is not nuLL = {Program.currentComposition?.FilePath != null}").LogStatically();
+                $"The new position is : {Program.NewPosition}".LogStatically();
+                $"Creating CompositionsPage(), Program.startupFromCommandLine = {Program.startupFromCommandLine}".LogStatically();
+                ($"Current composition is not nuLL = {Program.currentComposition != null}" + Environment.NewLine +
+                    $"Current composition path is not nuLL = {Program.currentComposition?.FilePath != null}").LogStatically();
                 //cmd mode play from cmd parameter file
                 if (Program.startupFromCommandLine)
                 {
+                    Program.SetPlayerPositionToZero();
                     Program.mePlayer.Source = new Uri(Program.currentComposition.FilePath);
-                    //$"Setting Program.mePlayer.Source = {Program.currentComposition.FilePath}, File valid = {File.Exists//(Program.currentComposition.FilePath)}".LogStatically();
+                    ($"Setting Program.mePlayer.Source = {Program.currentComposition.FilePath}, " +
+                        $"File valid = {File.Exists(Program.currentComposition.FilePath)}").LogStatically();
                 }
             }
             catch (Exception ex) 
@@ -48,16 +50,14 @@ namespace MediaStreamer.WPF.Components
             Selector.MainPage.SetFrameContent( Selector.LoadingPage ); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
 
-            //$"Setting valid DataContext = {Session.CompositionsVM.CompositionsStore != null}".LogStatically();
+            $"Setting valid DataContext = {Session.CompositionsVM.CompositionsStore != null}".LogStatically();
 
             DataContext = Session.CompositionsVM.CompositionsStore;
             //tsk.Wait();
             Selector.MainPage.SetFrameContent(this);
 
-            //cmd mode disable
-            Program.startupFromCommandLine = false;
 
-            //$"The new position is : {Program.NewPosition}".LogStatically();
+            $"The new position is : {Program.NewPosition}".LogStatically();
         }
 
         public CompositionsPage(long ArtistID, long albumID)

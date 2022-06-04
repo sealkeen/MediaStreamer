@@ -50,7 +50,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         //public virtual List<Video> Videos { get; set; }
 
         public string FolderName { get; set; } = "Compositions";
-        
+        public string GetContainingFolderPath() => FolderName; 
+
         public void Add(Administrator administrator)
         {
             throw new NotImplementedException();
