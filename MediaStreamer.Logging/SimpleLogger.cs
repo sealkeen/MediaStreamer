@@ -1,6 +1,7 @@
 ﻿using StringExtensions;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace MediaStreamer.Logging
 {
@@ -21,7 +22,7 @@ namespace MediaStreamer.Logging
                 StreamWriter sw = new StreamWriter(filepath, true);
                 sw.WriteLine($"[{DateTime.Now}] " + message);
                 Console.WriteLine($"[{DateTime.Now}] " + message);
-                sw.Close();
+                CreateLogRecord(message); sw.Close();
             }
             catch (Exception ex) {
                 try {
@@ -30,6 +31,23 @@ namespace MediaStreamer.Logging
                     Console.WriteLine($"[{DateTime.Now}] Logger error: " + exInner.Message);
                 }
                 Console.WriteLine($"[{DateTime.Now}] Logger error: " + ex.Message);
+            }
+        }
+
+        private static void CreateLogRecord(string message)
+        {
+            try {
+#if !NET40
+            Task.Factory.StartNew(new Action(
+                delegate
+                {
+                    LogRecord lR = new LogRecord(DateTime.Now, message);
+                    LogData.LogList.Add(lR);
+                }
+            ));
+#endif          
+            } catch(Exception ex) {
+                
             }
         }
     }

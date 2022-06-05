@@ -53,7 +53,14 @@
                             </Setter>
                         </Style>
                     </ControlTemplate.Resources>
-                    <Grid x:Name="LayoutRoot" Background="#181818">
+                    <Grid x:Name="LayoutRoot" >
+                        <Grid.Background>
+                            <!--<SolidColorBrush Opacity="0.8" Color="White"/>-->
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#00081210" Offset="0"/>
+                                <GradientStop Color="#09999999" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Grid.Background>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="32"/>
                             <RowDefinition />

@@ -112,6 +112,7 @@ namespace MediaStreamer.RAMControl
                 {
                     Session.MainPage.SetStatus(status);
                 }));
+
             }
         }
         [MTAThread]
@@ -191,7 +192,10 @@ namespace MediaStreamer.RAMControl
         {
             txtStatus.Text = status;
             if (error)
+            {
+                MediaStreamer.Logging.SimpleLogger.LogStatically(status);
                 Debug.WriteLine(status);
+            }
         }
     } // public class Program
 }  // namespace MediaStreamer.RAMControl

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using StringExtensions;
 using System.Windows;
 using MediaStreamer.DataAccess.NetStandard;
+using MediaStreamer.WPF.Components.UI;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {
@@ -197,6 +198,11 @@ namespace MediaStreamer.WPF.NetCore3_1
         private void btnSQLiteNavigate_Click(object sender, RoutedEventArgs e)
         {
             MediaStreamer.DataAccess.NetStandard.PathResolver.GetStandardDatabasePath().ExplorePath();
+        }
+
+        private void btnLogs_Click(object sender, RoutedEventArgs e)
+        {
+            Session.MainPage.SetFrameContent(LoggerPage.GetInstance());
         }
     }
 }
