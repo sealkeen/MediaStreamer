@@ -14,12 +14,12 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class UserAlbumsPage : FirstFMPage
     {
-        public List<ListenedAlbum> Albums { get; set; }
+        public List<Album> Albums { get; set; }
         public UserAlbumsPage()
         {
             try
             {
-                Albums = new List<ListenedAlbum>();
+                Albums = new List<Album>();
                 InitializeComponent();
                 PartialListAlbums(SessionInformation.CurrentUser.UserID);
                 DataContext = this;
@@ -34,7 +34,7 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                Albums = (from alb in Program.DBAccess.DB.GetListenedAlbums()
+                Albums = (from alb in Program.DBAccess.DB.GetAlbums()
                           join comps in Program.DBAccess.DB.GetCompositions()
                             on alb.ArtistID equals comps.ArtistID
                           join listComp in Program.DBAccess.DB.GetListenedCompositions()
@@ -50,49 +50,19 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        public ListenedAlbum NewListenedAlbum(
-            Album album,
-            User user, long? countOfPlays = null)
-        {
-            try
-            {
-                var lA = new ListenedAlbum();
-                lA.Album = album;
-                lA.AlbumID = album.AlbumID;
-                lA.Artist = album.Artist;
-                lA.ArtistID = album.ArtistID.Value;
-                lA.CountOfPlays = countOfPlays;
-                lA.GroupFormationDate = album.GroupFormationDate.Value;
-                lA.GroupMember = album.GroupMember;
-                lA.ListenDate = null;
-                lA.User = user;
-                lA.UserID = user.UserID;
-
-                Program.DBAccess.DB.Add(lA);
-
-                return lA;
-
-            }
-            catch (Exception ex)
-            {
-                Program.SetCurrentStatus($"ButtonLogLickException : {ex.Message}");
-                return null;
-            }
-        }
-
         private void lstItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                var name = this.Albums[lstItems.SelectedIndex].Album.AlbumName;
+                var name = this.Albums[lstItems.SelectedIndex].AlbumName;
                 var artistID = this.Albums[lstItems.SelectedIndex].ArtistID;
                 var albumID = this.Albums[lstItems.SelectedIndex].AlbumID;
 
                 if (Selector.CompositionsPage == null)
-                    Selector.CompositionsPage = new CompositionsPage(artistID, albumID);
+                    Selector.CompositionsPage = new CompositionsPage(artistID.Value, albumID);
                 else
                 {
-                    Session.CompositionsVM.SetLastAlbumAndArtistID(albumID, artistID);
+                    Session.CompositionsVM.SetLastAlbumAndArtistID(albumID, artistID.Value);
                     Session.CompositionsVM.PartialListCompositions();
                 }
                 Selector.MainPage.SetFrameContent( Selector.CompositionsPage );

@@ -49,7 +49,19 @@
                 <!--<MenuItem Header="File" IsCheckable="true" FontSize="12"> </MenuItem>
                 <MenuItem Header="Settings" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>
                 <MenuItem Header="Security" IsCheckable="true" Foreground="White" FontSize="12"> </MenuItem>-->
-                <MenuItem x:Name="btnDatabase" Click="btnDatabase_Click" Header="Database" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnDatabase" Header="Database" FontSize="12">
+                    <MenuItem x:Name="btnSQLServer" Header="SQL Server">
+                        <MenuItem Click="btnSQLServer_Click" Header="Load data."/>
+                    </MenuItem>
+                    <MenuItem x:Name="btnSQLJson" Header="JSON">
+                        <MenuItem Click="btnSQLJson_Click" Header="Load data."/>
+                        <MenuItem x:Name="btnSQLJsonNavigate" Header="Open data folder." Click="btnSQLJsonNavigate_Click"/>
+                    </MenuItem>
+                    <MenuItem x:Name="btnSQLite" Header="SQLite" >
+                        <MenuItem Click="btnSQLite_Click" Header="Load data."/>
+                        <MenuItem x:Name="btnSQLiteNavigate" Header="Open data folder." Click="btnSQLiteNavigate_Click"/>
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem x:Name="btnBrowser" Click="btnBrowser_Click" Header="Browser" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
                 <MenuItem x:Name="btnCMD" Header="CMD arguments" Click="btnCMD_Click" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
                 <MenuItem x:Name="btnAbout" Header="About" Click="btnAbout_Click" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>

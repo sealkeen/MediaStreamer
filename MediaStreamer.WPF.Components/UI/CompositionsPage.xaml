@@ -74,16 +74,16 @@
                   AllowDrop="True" Drop="lstQuery_Drop"
                   >
             <ListView.ContextMenu>
-            <ContextMenu x:Name="queMen">
-                <Button x:Name="queChangeComposition" Click="CmiChangeComposition_Click">Change Composition's Tags</Button>
-                <Button x:Name="quePlaySeveral" Click="CmiPlaySeveral_Click">Play Several Songs</Button>
-                <Button x:Name="queOpenInWinamp" Click="cmiOpenInWinamp_Click">Open in Winamp</Button> />
-                <Button x:Name="queRename" Click="CmiRename_Click">Rename to Standard</Button>
-                <Button x:Name="queDelete" Click="buttonDelete_Click">Delete from Database</Button> />
-                <Button x:Name="queQueue" Click="cmiEnQueue_Click">EnQueue Selected</Button>
-                <Button x:Name="quePush" Click="cmiPush_Click">Push Selected</Button>
-                <Button x:Name="queOpenLocation" Click="queOpenLocation_Click">Open File Location</Button>
-                <Button x:Name="queUpdate" Click="cmiUpdate_Click">Update list</Button>
+                <ContextMenu x:Name="queMen">
+                    <Button x:Name="queChangeComposition" Click="CmiChangeComposition_Click">Change Composition's Tags</Button>
+                    <Button x:Name="quePlaySeveral" Click="CmiPlaySeveral_Click">Play Several Songs</Button>
+                    <Button x:Name="queOpenInWinamp" Click="cmiOpenInWinamp_Click">Open in Winamp</Button> />
+                    <Button x:Name="queRename" Click="CmiRename_Click">Rename to Standard</Button>
+                    <Button x:Name="queDelete" Click="buttonDelete_Click">Delete from Database</Button> />
+                    <Button x:Name="queQueue" Click="cmiEnQueue_Click">EnQueue Selected</Button>
+                    <Button x:Name="quePush" Click="cmiPush_Click">Push Selected</Button>
+                    <Button x:Name="queOpenLocation" Click="queOpenLocation_Click">Open File Location</Button>
+                    <Button x:Name="queUpdate" Click="cmiUpdate_Click">Update list</Button>
                 </ContextMenu>
             </ListView.ContextMenu>
                     <!--<ListView.ItemContainerStyle>

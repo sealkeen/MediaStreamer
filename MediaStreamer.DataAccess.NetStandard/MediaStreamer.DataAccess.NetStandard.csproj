@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
-    <RootNamespace>DMEntitiesDataLibraryCore3._0</RootNamespace>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks><!--netstandard2.1-->
+	  <RootNamespace>MediaStreamer.DataAccess.NetStandard</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">

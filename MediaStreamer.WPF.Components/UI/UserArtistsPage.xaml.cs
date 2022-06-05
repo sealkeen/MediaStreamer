@@ -12,7 +12,7 @@ namespace MediaStreamer.WPF.Components
     public partial class UserArtistsPage : FirstFMPage
     {
         public bool lastDataLoadWasPartial = false;
-        public List<ListenedArtist> Artists { get; set; }
+        public List<Artist> Artists { get; set; }
         public UserArtistsPage()
         {
             //Artists = new List<Artist>();
@@ -23,7 +23,7 @@ namespace MediaStreamer.WPF.Components
 
         private void lstItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var name = this.Artists[lstItems.SelectedIndex].Artist.ArtistName;
+            var name = this.Artists[lstItems.SelectedIndex].ArtistName;
             var artistID = this.Artists[lstItems.SelectedIndex].ArtistID;
 
             if (Selector.AlbumsPage == null)
@@ -37,11 +37,14 @@ namespace MediaStreamer.WPF.Components
 
         public void ListArtists()
         {
-            Artists  = (from lArt
-                       in Program.DBAccess.DB.GetListenedArtists()
-                       where (lArt.UserID == SessionInformation.CurrentUser.UserID)
+            Artists  = (
+                from lc in Program.DBAccess.DB.GetListenedCompositions()
+                join c in Program.DBAccess.DB.GetCompositions()
+                          on lc.CompositionID equals c.CompositionID
+                join lArt in Program.DBAccess.DB.GetArtists()
+                          on c.ArtistID equals lArt.ArtistID
+                where (lc.UserID == SessionInformation.CurrentUser.UserID)
                        select lArt).Distinct().ToList();
-
 
             lstItems.GetBindingExpression(
                 System.Windows.Controls.ListView.ItemsSourceProperty
@@ -51,7 +54,15 @@ namespace MediaStreamer.WPF.Components
         public void PartialListArtists(long ArtistID)
         {
 
-            Artists = Program.DBAccess.DB.GetListenedArtists().Where(art => art.ArtistID == ArtistID).ToList();
+            Artists = (
+                from lc   in Program.DBAccess.DB.GetListenedCompositions()
+                join c    in Program.DBAccess.DB.GetCompositions()
+                          on lc.CompositionID equals c.CompositionID
+                join lArt in Program.DBAccess.DB.GetArtists()
+                          on c.ArtistID equals lArt.ArtistID
+                where (lc.UserID == SessionInformation.CurrentUser.UserID)
+                select lArt).Where(art => art.ArtistID == ArtistID).ToList();
+
             lastDataLoadWasPartial = true;
 
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();

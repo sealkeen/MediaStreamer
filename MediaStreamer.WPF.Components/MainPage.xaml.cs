@@ -203,17 +203,6 @@ namespace MediaStreamer.WPF.Components
             SetStatus("All artist genres listing");
         }
 
-        private void buttonGroupMembers_Click(object sender, RoutedEventArgs e)
-        {
-            mainFrame.Content = Selector.LoadingPage;
-            if (Selector.MembersPage == null)
-                Selector.MembersPage = new GroupMembersPage();
-            else
-                Selector.MembersPage.List();
-            mainFrame.Content = Selector.MembersPage;
-            mainFrame.UpdateLayout();
-            SetStatus("All group members by band listing");
-        }
 
         private void buttonArtists_Click(object sender, RoutedEventArgs e)
         {

@@ -27,5 +27,18 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public const string StoppedAt = "StoppedAt";
         
         public const string UserID = "UserID";
+
+        //PlayerState
+        public const string StateID = "StateID";
+        public const string StateTime = "StateTime";
+        public const string VolumeLevel = "VolumeLevel";
+        public static long Parse(string str)
+        {
+            long lg;
+            bool ok = long.TryParse(str, out lg);
+            if (!ok)
+                throw new InvalidCastException($"<{str}> cannot be cast to type long.");
+            return lg;
+        }
     }
 }

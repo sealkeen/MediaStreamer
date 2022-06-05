@@ -18,7 +18,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             else
                 _log = Console.WriteLine;
             //FolderName = Path.Combine(Environment.CurrentDirectory, "Compositions");
-            FolderName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MediaStreamer.WPF.NetCore3_1");
+            FolderName = PathResolver.GetStandardDatabasePath();
             Genres = new List<Genre>();
             Artists = new List<Artist>();
             Albums = new List<Album>();
@@ -39,13 +39,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         //public virtual List<CompositionVideo> CompositionVideos { get; set; }
         public virtual List<Genre> Genres { get; set; }
         public virtual List<ListenedComposition> ListenedCompositions { get; set; }
-        //public virtual List<ListenedAlbum> ListenedAlbums { get; set; }
-        //public virtual List<ListenedArtist> ListenedArtists { get; set; }
-        //public virtual List<ListenedGenre> ListenedGenres { get; set; }
-        //public virtual List<GroupMember> GroupMembers { get; set; }
-        //public virtual List<GroupRole> GroupRoles { get; set; }
-        //public virtual List<Musician> Musicians { get; set; }
-        //public virtual List<MusicianRole> MusicianRoles { get; set; }
+        public virtual List<PlayerState> PlayerStates { get; set; }
         //public virtual List<Picture> Pictures { get; set; }
         //public virtual List<Video> Videos { get; set; }
 
@@ -72,6 +66,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             List<JKeyValuePair> list = new List<JKeyValuePair>( );
 
+            //Properties
             list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(album.AlbumID).ToSingleValue(), jAlbum));
             list.Add(new JKeyValuePair(Key.AlbumName, DataBase.Coalesce(album.AlbumName), jAlbum));
             list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(album.ArtistID).ToSingleValue(), jAlbum));
@@ -81,7 +76,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             list.Add(new JKeyValuePair(Key.Label, DataBase.Coalesce(album.Label), jAlbum));
 
             // Already Exists, return 
-            if (root.HasThesePairsRecursive(list) != null)
+            if (Albums.Where(
+                    c =>
+                    c.AlbumName == album.AlbumName &&
+                    c.ArtistID == album.ArtistID).Count() != 0)
                 return;
 
             jAlbum.AddPairs(list);
@@ -101,12 +99,16 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 itemsCollection = new JArray(root);
             JObject jAlbum = new JObject(itemsCollection);
 
+            //Properties
             List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(albumGenre.ArtistID).ToSingleValue(), jAlbum));
             list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(albumGenre.AlbumID).ToSingleValue(), jAlbum));
+            list.Add(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(albumGenre.GenreID).ToSingleValue(), jAlbum));
 
             // Already Exists, return 
-            if (root.HasThesePairsRecursive(list) != null)
+            if (AlbumGenres.Where(
+                    c =>
+                    c.AlbumID == albumGenre.AlbumID &&
+                    c.GenreID == albumGenre.GenreID).Count() != 0)
                 return;
 
             jAlbum.AddPairs(list);
@@ -128,12 +130,14 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             JObject jArtist = new JObject(itemsCollection);
 
+            //Properties
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(artist.ArtistID).ToSingleValue(), jArtist));
             list.Add(new JKeyValuePair(Key.ArtistName, DataBase.Coalesce(artist.ArtistName), jArtist));
 
             // Already Exists, return 
-            if (root.HasThesePairsRecursive(list) != null)
+            if (Artists.Where(
+                    c => c.ArtistName == artist.ArtistName).Count() != 0)
                 return;
 
             jArtist.AddPairs(list); 
@@ -154,12 +158,16 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             JObject jAG = new JObject(itemsCollection);
 
+            //Properties
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(artistGenre.ArtistID).ToSingleValue(), jAG));
             list.Add(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(artistGenre.GenreID).ToSingleValue(), jAG));
 
             // Already Exists, return 
-            if (root.HasThesePairsRecursive(list) != null)
+            if (ArtistGenres.Where(
+                    c => c.ArtistID == artistGenre.ArtistID &&
+                    c.GenreID == artistGenre.GenreID 
+                    ).Count() != 0)
                 return;
 
             jAG.AddPairs(list);
@@ -180,18 +188,22 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             JObject jComposition = new JObject(itemsCollection);
 
+            //Properties
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.CompositionID.ToJString(), DataBase.Coalesce(composition.CompositionID).ToSingleValue(), jComposition));
             list.Add(new JKeyValuePair(Key.CompositionName, DataBase.Coalesce(composition.CompositionName), jComposition));
             list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(composition.ArtistID).ToSingleValue(), jComposition));
-            list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(composition.ArtistID).ToSingleValue(), jComposition));
+            list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(composition.AlbumID).ToSingleValue(), jComposition));
             list.Add(new JKeyValuePair(Key.Duration.ToJString(), DataBase.Coalesce(composition.Duration).ToSingleValue(), jComposition));
             list.Add(new JKeyValuePair(Key.FilePath, DataBase.Coalesce(composition.FilePath), jComposition));
             list.Add(new JKeyValuePair(Key.Lyrics, DataBase.Coalesce(composition.Lyrics), jComposition));
             list.Add(new JKeyValuePair(Key.About, DataBase.Coalesce(composition.About), jComposition));
 
             // Already Exists, return 
-            if (root.HasThesePairsRecursive(list) != null)
+            if (Compositions.Where(
+                    c =>
+                    c.CompositionName == composition.CompositionName &&
+                    c.FilePath == composition.FilePath).Count() != 0)
                 return;
 
             jComposition.AddPairs(list);
@@ -217,37 +229,19 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             JObject jAG = new JObject(itemsCollection);
 
+            //Properties
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(genre.GenreID).ToSingleValue(), jAG));
             list.Add(new JKeyValuePair(Key.GenreName, DataBase.Coalesce(genre.GenreName), jAG));
 
             // Already Exists, return 
-            if (root.HasThesePairsRecursive(list) != null)
+            if (Genres.Where(
+                    c => c.GenreName == genre.GenreName).Count() != 0)
                 return;
 
             jAG.AddPairs(list);
             itemsCollection.Add(jAG);
             root.ToFile(genresDB);
-        }
-
-        public void Add(GroupMember groupMember)
-        {
-            //throw new NotImplementedException();
-        }
-
-        public void Add(GroupRole groupRole)
-        {
-            //throw new NotImplementedException();
-        }
-
-        public void Add(ListenedAlbum listenedAlbum)
-        {
-            //throw new NotImplementedException();
-        }
-
-        public void Add(ListenedArtist listenedArtist)
-        {
-            //throw new NotImplementedException();
         }
 
         public void Add(ListenedComposition listenedComposition)
@@ -264,6 +258,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             JObject jLS = new JObject(itemsCollection);
 
+            //Properties
             List<JKeyValuePair> list = new List<JKeyValuePair>();
             list.Add(new JKeyValuePair(Key.ListenDate.ToString(), listenedComposition.ListenDate.ToString(), jLS));
             list.Add(new JKeyValuePair(Key.CompositionID.ToString(), listenedComposition.CompositionID.ToString(), jLS));
@@ -275,9 +270,29 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             root.ToFile(listenedDB);
         }
 
-        public void Add(ListenedGenre listenedGenre)
+        public void Add(PlayerState playerState)
         {
-            //throw new NotImplementedException();
+            string listenedDB = Path.Combine(FolderName, "PlayerStates.json");
+
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "PlayerStates.json");
+
+            JItem itemsCollection = null;
+            if (root != null)
+                itemsCollection = root.FindPairByKey("PlayerStates".ToJString()).GetPairedValue();
+            else
+                itemsCollection = new JArray(root);
+
+            JObject jLS = new JObject(itemsCollection);
+
+            //Properties
+            List<JKeyValuePair> list = new List<JKeyValuePair>();
+            list.Add(new JKeyValuePair(Key.StateID.ToString(), playerState.StateID.ToString(), jLS));
+            list.Add(new JKeyValuePair(Key.StateTime.ToString(), playerState.StateTime.ToString(), jLS));
+            list.Add(new JKeyValuePair(Key.VolumeLevel.ToString(), playerState.VolumeLevel.ToString(), jLS));
+
+            jLS.AddPairs(list);
+            itemsCollection.Add(jLS);
+            root.ToFile(listenedDB);
         }
 
         public void Add(Moderator moderator)
@@ -285,15 +300,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             //throw new NotImplementedException();
         }
 
-        public void Add(Musician musician)
-        {
-            //throw new NotImplementedException();
-        }
-
-        public void Add(MusicianRole musicianRole)
-        {
-            //throw new NotImplementedException();
-        }
 
         public void Add(Picture picture)
         {
@@ -383,7 +389,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             ArtistGenres = GetArtistGenres().ToList();
             AlbumGenres = GetAlbumGenres().ToList();
             ListenedCompositions = GetListenedCompositions().ToList();
-            //GroupMembers = GetGroupMembers().ToList();
         }
 
         public IQueryable<Administrator> GetAdministrators()
@@ -406,9 +411,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     {
                         case Key.AlbumID:
                             Table.SetProperty(received, Key.AlbumID, kv.GetIntegerValueOrReturnNull().Value);
-                            break;
-                        case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, kv.GetIntegerValueOrReturnNull().Value);
                             break;
                         case Key.GenreID:
                             Table.SetProperty(received, Key.GenreID, kv.GetIntegerValueOrReturnNull().Value);
@@ -435,7 +437,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.AlbumID:
-                            Table.SetProperty(received, Key.AlbumID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.AlbumID, Key.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.AlbumName:
                             Table.SetProperty(received, Key.AlbumName, kv.GetPairedValue().AsUnquoted());
@@ -480,7 +482,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.ArtistID, Key.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreID:
                             Table.SetProperty(received, Key.GenreID, kv.GetIntegerValueOrReturnNull().Value);
@@ -506,7 +508,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.ArtistID, Key.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.ArtistName:
                             Table.SetProperty(received, Key.ArtistName, kv.GetPairedValue().AsUnquoted());
@@ -533,7 +535,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.CompositionID:
-                            Table.SetProperty(received, Key.CompositionID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.CompositionID, Key.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.CompositionName:
                             Table.SetProperty(received, Key.CompositionName, kv.GetPairedValue().AsUnquoted());
@@ -591,7 +593,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.GenreID, Key.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreName:
                             Table.SetProperty(received, Key.GenreName, kv.GetPairedValue().AsUnquoted());
@@ -604,29 +606,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             return Genres.AsQueryable();
         }
 
-        public IQueryable<GroupMember> GetGroupMembers()
-        {
-            return new List<GroupMember>().AsQueryable();
-        }
-
-        public IQueryable<GroupRole> GetGroupRoles()
-        {
-            return new List<GroupRole>().AsQueryable();
-        }
-
         public IQueryable<IComposition> GetICompositions()
         {
             return GetCompositions().AsQueryable();//.Include(c => c.Artist); 
-        }
-
-        public IQueryable<ListenedAlbum> GetListenedAlbums()
-        {
-            return new List<ListenedAlbum>().AsQueryable();
-        }
-
-        public IQueryable<ListenedArtist> GetListenedArtists()
-        {
-            return new List<ListenedArtist>().AsQueryable();
         }
 
         public IQueryable<ListenedComposition> GetListenedCompositions()
@@ -646,7 +628,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             Table.SetProperty(received, Key.ListenDate, DateTime.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.CompositionID:
-                            Table.SetProperty(received, Key.CompositionID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.CompositionID, Key.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.UserID:
                             Table.SetProperty(received, Key.UserID, kv.GetIntegerValueOrReturnNull().Value);
@@ -662,24 +644,40 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             return ListenedCompositions.AsQueryable();
         }
 
-        public IQueryable<ListenedGenre> GetListenedGenres()
+        public IQueryable<PlayerState> GetPlayerStates()
         {
-            return new List<ListenedGenre>().AsQueryable();
+            var jCompositions = Table.LoadInMemory(FolderName, "PlayerStates.json");
+
+            PlayerStates = new List<PlayerState>();
+            foreach (var jComposition in jCompositions)
+            {
+                PlayerState received = new PlayerState();
+                var fields = jComposition.DescendantPairs();
+                foreach (var kv in fields)
+                {
+                    switch (kv.Key.ToString().Trim('\"'))
+                    {
+                        case Key.StateID:
+                            Table.SetProperty(received, Key.StateID, Key.Parse(kv.Value.AsUnquoted()));
+                            break;
+                        case Key.StateTime:
+                            Table.SetProperty(received, Key.StateTime, DateTime.Parse(kv.Value.AsUnquoted()));
+                            break;
+                        case Key.VolumeLevel:
+                            Table.SetProperty(received, Key.VolumeLevel, double.Parse(kv.Value.AsUnquoted()));
+                            break;
+                    }
+                }
+                PlayerStates.Add(received);
+            }
+
+            return PlayerStates.AsQueryable();
         }
+
 
         public IQueryable<Moderator> GetModerators()
         {
             return new List<Moderator>().AsQueryable();
-        }
-
-        public IQueryable<MusicianRole> GetMusicianRoles()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<Musician> GetMusicians()
-        {
-            throw new NotImplementedException();
         }
 
         public IQueryable<Picture> GetPictures()

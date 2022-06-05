@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 //using MediaStreamer.IO;
 
 
-namespace MediaStreamer
+namespace MediaStreamer.DataAccess.NetStandard
 {
     public partial class DMEntitiesContext : DbContext, IDMDBContext
     {
@@ -53,19 +53,17 @@ namespace MediaStreamer
             {
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
-                    if (UseSQLServer) {
+                    //if (UseSQLServer) {
                         //optionsBuilder.UseSqlServer("Name=CompositionsConnection");
-                        optionsBuilder.UseSqlServer("server=localhost\\SQLExpress;user=sys_admin;password=hr9p23yf8342QI;database=compositionsdb");
-                    }
-                    else
-                        //optionsBuilder.UseSqlite($"DataSource =http://docs.google.com/uc?export=open&id=1TqCBUjhXeglQogUaIGaegu7TUf4-iiXA");
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkID=723263.
-                        optionsBuilder.UseSqlite(@$"DataSource={Filename}");
+                        optionsBuilder.UseSqlServer(@"Server=.\SQLExpress;initial catalog=CompositionsDB;user id=sys_admin;password=s0m3P4ssw0rdT3xt;MultipleActiveResultSets=True;");
+                    //}
+                    //else
+                    //    optionsBuilder.UseSqlite(@$"DataSource={Filename}");
                 }
-                else
-                {
-                    optionsBuilder.UseSqlite($"DataSource={Filename}");
-                }
+                //else
+                //{
+                //    optionsBuilder.UseSqlite($"DataSource={Filename}");
+                //}
             }
         }
 
@@ -77,18 +75,12 @@ namespace MediaStreamer
         public virtual DbSet<Composition> Compositions { get; set; }
         public virtual DbSet<CompositionVideo> CompositionVideos { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<GroupMember> GroupMembers { get; set; }
-        public virtual DbSet<GroupRole> GroupRoles { get; set; }
-        public virtual DbSet<ListenedAlbum> ListenedAlbums { get; set; }
-        public virtual DbSet<ListenedArtist> ListenedArtists { get; set; }
         public virtual DbSet<ListenedComposition> ListenedCompositions { get; set; }
-        public virtual DbSet<ListenedGenre> ListenedGenres { get; set; }
         public virtual DbSet<Moderator> Moderators { get; set; }
-        public virtual DbSet<Musician> Musicians { get; set; }
-        public virtual DbSet<MusicianRole> MusicianRoles { get; set; }
         public virtual DbSet<Picture> Pictures { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
+        public virtual DbSet<PlayerState> PlayerStates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -104,13 +96,6 @@ namespace MediaStreamer
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
 
-                entity.HasOne(d => d.Moderator)
-                    .WithMany(p => p.Administrators)
-                    .HasForeignKey(d => d.ModeratorID);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Administrators)
-                    .HasForeignKey(d => d.UserID);
             });
 
             modelBuilder.Entity<Album>(entity =>
@@ -125,7 +110,6 @@ namespace MediaStreamer
 
                 entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
 
-                entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
 
                 entity.HasOne(d => d.Artist)
                     .WithMany(p => p.Albums)
@@ -134,26 +118,15 @@ namespace MediaStreamer
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Albums)
                     .HasForeignKey(d => d.GenreID);
-
-
-                entity.HasOne(d => d.GroupMember)
-                    .WithMany(p => p.Albums)
-                    .HasForeignKey(d => d.GroupFormationDate);
             });
 
             modelBuilder.Entity<AlbumGenre>(entity =>
             {
-                entity.HasKey(e => new { e.GenreID, e.ArtistID, e.GroupFormationDate, e.AlbumID });
+                entity.HasKey(e => new { e.AlbumID, e.GenreID });
 
                 entity.ToTable("AlbumGenre");
 
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
-                entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
-
                 entity.Property(e => e.AlbumID).HasColumnName("AlbumID");
-
-                entity.Property(e => e.DateOfApplication).HasColumnType("DATE");
 
                 entity.HasOne(d => d.Album)
                     .WithMany(p => p.AlbumGenres)
@@ -163,11 +136,6 @@ namespace MediaStreamer
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.AlbumGenres)
                     .HasForeignKey(d => d.GenreID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.GroupMember)
-                    .WithMany(p => p.AlbumGenres)
-                    .HasForeignKey(d => d.GroupFormationDate)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
@@ -189,8 +157,6 @@ namespace MediaStreamer
                 entity.ToTable("ArtistGenre");
 
                 entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
-                entity.Property(e => e.DateOfApplication).HasColumnType("DATE");
 
                 entity.HasOne(d => d.Artist)
                     .WithMany(p => p.ArtistGenres)
@@ -217,8 +183,6 @@ namespace MediaStreamer
 
                 entity.Property(e => e.CompositionName).IsRequired();
 
-                //entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
-
                 entity.HasOne(d => d.Album)
                     .WithMany(p => p.Compositions)
                     .HasForeignKey(d => d.AlbumID);
@@ -227,44 +191,24 @@ namespace MediaStreamer
                     .WithMany(p => p.Compositions)
                     .HasForeignKey(d => d.ArtistID);
 
-                //entity.HasOne(d => d.GroupMember)
-                //    .WithMany(p => p.Compositions)
-                //    .HasForeignKey(d => d.GroupFormationDate);
             });
 
             modelBuilder.Entity<CompositionVideo>(entity =>
             {
-                entity.HasKey(e => new { e.VideoID, e.ArtistID, e.AlbumID, e.CompositionID });
+                entity.HasKey(e => new { e.VideoID, e.CompositionID });
 
                 entity.ToTable("CompositionVideo");
 
                 entity.Property(e => e.VideoID).HasColumnName("VideoID");
 
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
-                entity.Property(e => e.AlbumID).HasColumnName("AlbumID");
 
                 entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
-
-                entity.HasOne(d => d.Album)
-                    .WithMany(p => p.CompositionVideos)
-                    .HasForeignKey(d => d.AlbumID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Artist)
-                    .WithMany(p => p.CompositionVideos)
-                    .HasForeignKey(d => d.ArtistID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.Composition)
                     .WithMany(p => p.CompositionVideos)
                     .HasForeignKey(d => d.CompositionID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
-                entity.HasOne(d => d.Video)
-                    .WithMany(p => p.CompositionVideos)
-                    .HasForeignKey(d => d.VideoID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             if (UseSQLServer)
@@ -285,114 +229,6 @@ namespace MediaStreamer
                 });
             }
 
-            modelBuilder.Entity<GroupMember>(entity =>
-            {
-                entity.HasKey(e => e.GroupFormationDate);
-
-                entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
-
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
-                entity.HasOne(d => d.Artist)
-                    .WithMany(p => p.GroupMembers)
-                    .HasForeignKey(d => d.ArtistID);
-            });
-
-            modelBuilder.Entity<GroupRole>(entity =>
-            {
-                entity.HasKey(e => new { e.MusicianID, e.ArtistID, e.GroupFormationDate, e.MusicianRoleName });
-
-                entity.ToTable("GroupRole");
-
-                entity.Property(e => e.MusicianID).HasColumnName("MusicianID");
-
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
-                entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
-
-                entity.Property(e => e.GroupJoinDate).HasColumnType("DATETIME");
-
-                entity.HasOne(d => d.Artist)
-                    .WithMany(p => p.GroupRoles)
-                    .HasForeignKey(d => d.ArtistID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.GroupMember)
-                    .WithMany(p => p.GroupRoles)
-                    .HasForeignKey(d => d.GroupFormationDate)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Musician)
-                    .WithMany(p => p.GroupRoles)
-                    .HasForeignKey(d => d.MusicianID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.MusicianRole)
-                    .WithMany(p => p.GroupRoles)
-                    .HasForeignKey(d => d.MusicianRoleName)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
-            modelBuilder.Entity<ListenedAlbum>(entity =>
-            {
-                entity.HasKey(e => new { e.UserID, e.ArtistID, e.GroupFormationDate, e.AlbumID });
-
-                entity.ToTable("ListenedAlbum");
-
-                entity.Property(e => e.UserID).HasColumnName("UserID");
-
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
-                entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
-
-                entity.Property(e => e.AlbumID).HasColumnName("AlbumID");
-
-                entity.Property(e => e.ListenDate).HasColumnType("DATETIME");
-
-                entity.HasOne(d => d.Album)
-                    .WithMany(p => p.ListenedAlbums)
-                    .HasForeignKey(d => d.AlbumID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Artist)
-                    .WithMany(p => p.ListenedAlbums)
-                    .HasForeignKey(d => d.ArtistID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.GroupMember)
-                    .WithMany(p => p.ListenedAlbums)
-                    .HasForeignKey(d => d.GroupFormationDate)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.ListenedAlbums)
-                    .HasForeignKey(d => d.UserID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
-            modelBuilder.Entity<ListenedArtist>(entity =>
-            {
-                entity.HasKey(e => new { e.UserID, e.ArtistID });
-
-                entity.ToTable("ListenedArtist");
-
-                entity.Property(e => e.UserID).HasColumnName("UserID");
-
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
-                entity.Property(e => e.ListenDate).HasColumnType("DATETIME");
-
-                entity.HasOne(d => d.Artist)
-                    .WithMany(p => p.ListenedArtists)
-                    .HasForeignKey(d => d.ArtistID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.ListenedArtists)
-                    .HasForeignKey(d => d.UserID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
             modelBuilder.Entity<ListenedComposition>(entity =>
             {
                 entity.HasKey(e => new { e.ListenDate, e.UserID, e.CompositionID });
@@ -402,7 +238,6 @@ namespace MediaStreamer
                 entity.Property(e => e.ListenDate).HasColumnType("DATETIME");
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
-
 
                 entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
 
@@ -419,27 +254,6 @@ namespace MediaStreamer
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
-            modelBuilder.Entity<ListenedGenre>(entity =>
-            {
-                entity.HasKey(e => new { e.UserID, e.GenreID });
-
-                entity.ToTable("ListenedGenre");
-
-                entity.Property(e => e.UserID).HasColumnName("UserID");
-
-                entity.Property(e => e.GenreID).HasColumnType("Text");
-
-                entity.HasOne(d => d.Genre)
-                    .WithMany(p => p.ListenedGenres)
-                    .HasForeignKey(d => d.GenreID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.ListenedGenres)
-                    .HasForeignKey(d => d.UserID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
             modelBuilder.Entity<Moderator>(entity =>
             {
                 entity.ToTable("Moderator");
@@ -449,26 +263,6 @@ namespace MediaStreamer
                     .HasColumnName("ModeratorID");
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Moderators)
-                    .HasForeignKey(d => d.UserID);
-            });
-
-            modelBuilder.Entity<Musician>(entity =>
-            {
-                entity.ToTable("Musician");
-
-                entity.Property(e => e.MusicianID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MusicianID");
-            });
-
-            modelBuilder.Entity<MusicianRole>(entity =>
-            {
-                entity.HasKey(e => e.MusicianRoleName);
-
-                entity.ToTable("MusicianRole");
             });
 
             modelBuilder.Entity<Picture>(entity =>
@@ -504,10 +298,6 @@ namespace MediaStreamer
 
                 entity.Property(e => e.Email).IsRequired();
 
-                entity.Property(e => e.LastListenEntitiesUpdate).HasColumnType("DATETIME");
-
-                entity.Property(e => e.LastListenedCompositionChange).HasColumnType("DATETIME");
-
                 entity.Property(e => e.Password).IsRequired();
 
                 entity.Property(e => e.UserName).IsRequired();
@@ -532,6 +322,19 @@ namespace MediaStreamer
                 entity.Property(e => e.XResolution).HasColumnName("XResolution");
 
                 entity.Property(e => e.YResolution).HasColumnName("YResolution");
+            });
+
+            modelBuilder.Entity<PlayerState>(entity =>
+            {
+                entity.HasKey(e => e.StateID);
+
+                entity.Property(e => e.StateTime)
+                .IsRequired()
+                .HasColumnType("DATETIME");
+
+                entity.Property(e => e.VolumeLevel)
+                .IsRequired()
+                .HasColumnType("NUMERIC");
             });
 
             OnModelCreatingPartial(modelBuilder);
@@ -569,24 +372,10 @@ namespace MediaStreamer
         void IDMDBContext.Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
         public IQueryable<Genre> GetGenres() { return Genres; }
         void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
-        public IQueryable<GroupMember> GetGroupMembers() { return GroupMembers; }
-        void IDMDBContext.Add(GroupMember groupMember) => GroupMembers.Add(groupMember);
-        public IQueryable<GroupRole> GetGroupRoles() { return GroupRoles; }
-        void IDMDBContext.Add(GroupRole groupRole) => GroupRoles.Add(groupRole);
-        public IQueryable<ListenedAlbum> GetListenedAlbums() { return ListenedAlbums; }
-        void IDMDBContext.Add(ListenedAlbum listenedAlbum) => ListenedAlbums.Add(listenedAlbum);
-        public IQueryable<ListenedArtist> GetListenedArtists() { return ListenedArtists; }
-        void IDMDBContext.Add(ListenedArtist listenedArtist) => ListenedArtists.Add(listenedArtist);
         public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions; }
         void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
-        public IQueryable<ListenedGenre> GetListenedGenres() { return ListenedGenres; }
-        void IDMDBContext.Add(ListenedGenre listenedGenre) => ListenedGenres.Add(listenedGenre);
         public IQueryable<Moderator> GetModerators() { return Moderators; }
         void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);
-        public IQueryable<Musician> GetMusicians() { return Musicians; }
-        void IDMDBContext.Add(Musician musician) => Musicians.Add(musician);
-        public IQueryable<MusicianRole> GetMusicianRoles() { return MusicianRoles; }
-        void IDMDBContext.Add(MusicianRole musicianRole) => MusicianRoles.Add(musicianRole);
         public IQueryable<Picture> GetPictures() { return Pictures; }
         void IDMDBContext.Add(Picture picture) => Pictures.Add(picture);
         public IQueryable<User> GetUsers() { return Users; }
@@ -609,29 +398,28 @@ namespace MediaStreamer
         {
             switch (tableName)
             {
-                case nameof(Administrators): Administrators.RemoveRange(Administrators); break;
-                case nameof(Albums): Albums.RemoveRange(Albums); break;
-                case nameof(AlbumGenres): AlbumGenres.RemoveRange(AlbumGenres); break;
-                case nameof(Artists): Artists.RemoveRange(Artists); break;
-                case nameof(ArtistGenres): ArtistGenres.RemoveRange(ArtistGenres); break;
-                case nameof(Compositions): Compositions.RemoveRange(Compositions); break;
-                case nameof(CompositionVideos): CompositionVideos.RemoveRange(CompositionVideos); break;
-                case nameof(Genres): Genres.RemoveRange(Genres); break;
-                case nameof(GroupMembers): GroupMembers.RemoveRange(GroupMembers); break;
-                case nameof(GroupRoles): GroupRoles.RemoveRange(GroupRoles); break;
-                case nameof(ListenedAlbums): ListenedAlbums.RemoveRange(ListenedAlbums); break;
-                case nameof(ListenedArtists): ListenedArtists.RemoveRange(ListenedArtists); break;
-                case nameof(ListenedCompositions): ListenedCompositions.RemoveRange(ListenedCompositions); break;
-                case nameof(ListenedGenres): ListenedGenres.RemoveRange(ListenedGenres); break;
-                case nameof(Moderators): Moderators.RemoveRange(Moderators); break;
-                case nameof(Musicians): Musicians.RemoveRange(Musicians); break;
-                case nameof(MusicianRoles): MusicianRoles.RemoveRange(MusicianRoles); break;
-                case nameof(Pictures): Pictures.RemoveRange(Pictures); break;
-                case nameof(Users): Users.RemoveRange(Users); break;
-                case nameof(Videos): Videos.RemoveRange(Videos); break;
+                case nameof(Administrators): if(Administrators.Count() >0 ) Administrators.RemoveRange(Administrators); break;
+                case nameof(Albums): if (Albums.Count() > 0) Albums.RemoveRange(Albums); break;
+                case nameof(AlbumGenres): if (AlbumGenres.Count() > 0) AlbumGenres.RemoveRange(AlbumGenres); break;
+                case nameof(Artists): if (Artists.Count() > 0) Artists.RemoveRange(Artists); break;
+                case nameof(ArtistGenres): if (ArtistGenres.Count() > 0) ArtistGenres.RemoveRange(ArtistGenres); break;
+                case nameof(Compositions): if (Compositions.Count() > 0) Compositions.RemoveRange(Compositions); break;
+                case nameof(CompositionVideos): if (CompositionVideos.Count() > 0) CompositionVideos.RemoveRange(CompositionVideos); break;
+                case nameof(Genres): if (Genres.Count() > 0) Genres.RemoveRange(Genres); break;
+                case nameof(ListenedCompositions): if (ListenedCompositions.Count() > 0) ListenedCompositions.RemoveRange(ListenedCompositions); break;
+                case nameof(Moderators): if (Moderators.Count() > 0) Moderators.RemoveRange(Moderators); break;
+                case nameof(Pictures): if (Pictures.Count() > 0) Pictures.RemoveRange(Pictures); break;
+                case nameof(Users): if (Users.Count() > 0) Users.RemoveRange(Users); break;
+                case nameof(Videos): if (Videos.Count() > 0) Videos.RemoveRange(Videos); break;
+                case nameof(PlayerStates): if (PlayerStates.Count() > 0) PlayerStates.RemoveRange(PlayerStates); break;
             }
             SaveChanges();
             return false;
+        }
+
+        public string GetContainingFolderPath()
+        {
+            return Filename;
         }
     }
 }

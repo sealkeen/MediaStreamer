@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 //using Xamarin.Forms;
 using System.Windows;
+using MediaStreamer.DataAccess.NetStandard;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {
@@ -39,7 +40,6 @@ namespace MediaStreamer.WPF.NetCore3_1
 
             this.windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
 
-            this.btnDatabase.Click += this.btnDatabase_Click;
             //Session.MainPage.DataBaseClick += this.btnDatabase_Click;
             //Session.MainPage.btnClose.Click += this.btnClose_Click;
             //Session.MainPage.btnMinimize.Click += this.btnMinimize_Click;
@@ -67,21 +67,6 @@ namespace MediaStreamer.WPF.NetCore3_1
             catch (Exception ex)
             {
                 Program.SetCurrentStatus("ResolveCMDParamFilePaths() error: " + ex.Message);
-            }
-        }
-
-        private async void btnDatabase_Click(object sender, RoutedEventArgs e)
-        {
-            //MediaStreamer.IO.FileManipulator fM = new IO.FileManipulator(Program.DBAccess);
-            //var fullpath = await fM.GetOpenedDatabasePathAsync();
-            try
-            {
-                Program.DBAccess.DB.GetContainingFolderPath().ShowFileInExplorer();
-                //Program.DBAccess = new DBRepository() { DB = new MediaStreamer.DMEntities(fullpath) };
-                //Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
-
-            } catch (Exception ex) {
-                Program.SetCurrentStatus(ex.Message);
             }
         }
 
@@ -160,6 +145,58 @@ namespace MediaStreamer.WPF.NetCore3_1
             cmd += Environment.NewLine + Environment.NewLine + "Startup from command line: " + Environment.NewLine + Program.startupFromCommandLine;
 
             MessageBox.Show(cmd);
+        }
+
+        private async void btnSQLServer_Click(object sender, RoutedEventArgs e)
+        {
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage);
+            DMEntitiesContext.UseSQLServer = true;
+            var tsk = Task.Factory.StartNew(new Action( delegate {
+                Program.DBAccess = new DBRepository() { DB = new DMEntitiesContext() };
+                Program.DBAccess.DB.EnsureCreated();
+            })
+            );
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            await tsk;
+            Selector.CompositionsPage = new CompositionsPage();
+        }
+
+        private async void btnSQLJson_Click(object sender, RoutedEventArgs e)
+        {
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage);
+            var tsk = Task.Factory.StartNew( () =>
+                Program.DBAccess = new DBRepository() { DB = 
+                    new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() 
+                }
+            );
+
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            await tsk;
+            Selector.MainPage.SetFrameContent(Selector.CompositionsPage ?? (Selector.CompositionsPage = new CompositionsPage()));
+            Selector.CompositionsPage = new CompositionsPage();
+        }
+
+        private async void btnSQLite_Click(object sender, RoutedEventArgs e)
+        {
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage);
+            var tsk = Task.Factory.StartNew(new Action(delegate {
+                Program.DBAccess = new DBRepository() { DB = new DMEntities() };
+                Program.DBAccess.DB.EnsureCreated();
+            })
+            );
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            await tsk;
+            Selector.CompositionsPage = new CompositionsPage();
+        }
+
+        private void btnSQLJsonNavigate_Click(object sender, RoutedEventArgs e)
+        {
+            MediaStreamer.DataAccess.CrossPlatform.PathResolver.GetStandardDatabasePath().ExplorePath();
+        }
+
+        private void btnSQLiteNavigate_Click(object sender, RoutedEventArgs e)
+        {
+            MediaStreamer.DataAccess.NetStandard.PathResolver.GetStandardDatabasePath().ExplorePath();
         }
     }
 }

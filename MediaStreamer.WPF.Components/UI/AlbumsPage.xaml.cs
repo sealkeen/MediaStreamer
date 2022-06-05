@@ -26,14 +26,14 @@ namespace MediaStreamer.WPF.Components
 
         public AlbumsPage(long ArtistID)
         {
-            Session.AlbumsVM = new AlbumsViewModel();
+            Session.AlbumsVM = new AlbumsViewModel(ArtistID);
             InitializeComponent();
             ListByID(ArtistID);
             DataContext = Session.AlbumsVM;
         }
         public AlbumsPage(string genreName)
         {
-            Session.AlbumsVM = new AlbumsViewModel();
+            Session.AlbumsVM = new AlbumsViewModel(genreName);
             InitializeComponent();
             ListByTitle(genreName);
             DataContext = Session.AlbumsVM;

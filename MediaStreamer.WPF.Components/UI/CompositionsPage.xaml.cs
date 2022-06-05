@@ -103,7 +103,7 @@ namespace MediaStreamer.WPF.Components
             if (!Program.DBAccess.DB.GetAlbums().Where(a => a.AlbumID == albumID).Any())
                 return;
 
-            Session.CompositionsVM.SetLastAlbumAndArtistID(albumID, -1);
+            Session.CompositionsVM.PartialListCompositions(albumID);
             Session.CompositionsVM.GetPartOfCompositions();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
@@ -656,7 +656,7 @@ namespace MediaStreamer.WPF.Components
                 IComposition currentComp = Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex];
                 if (currentComp.FilePath.FileExists())
                 {
-                    currentComp.FilePath.ShowFileInExplorer();
+                    currentComp.FilePath.SelectInExplorer();
                 }
             }
         }
@@ -683,7 +683,11 @@ namespace MediaStreamer.WPF.Components
                 //HandleFileOpen(files[0]);
 
                 List<string> lstFiles = new List<string>(files);
-                var tsk = await Task.Factory.StartNew( () => Program.FileManipulator.DecomposeAudioFiles(lstFiles, Program.SetCurrentStatus) );
+                //var tsk = await 
+                //Task.Factory.StartNew( () =>
+                Program.FileManipulator.DecomposeAudioFiles(lstFiles, Program.SetCurrentStatus) 
+                //    )
+                ;
                 ReList();
             }
         }
@@ -819,6 +823,8 @@ namespace MediaStreamer.WPF.Components
                     Session.CompositionsVM.CompositionsStore.Queue.AddLast(c as Composition);
                 ReList();
             }
+            if(e.Data.GetDataPresent(DataFormats.FileDrop));
+                lstItems_Drop(sender, e);
         }
 
         private void queOpenLocation_Click(object sender, RoutedEventArgs e)
@@ -829,7 +835,7 @@ namespace MediaStreamer.WPF.Components
                 IComposition currentComp = lstQuery.SelectedItem as Composition;
                 if (currentComp.FilePath.FileExists())
                 {
-                    currentComp.FilePath.ShowFileInExplorer();
+                    currentComp.FilePath.SelectInExplorer();
                 }
             }
         }

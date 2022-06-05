@@ -11,7 +11,6 @@ namespace MediaStreamer.WPF.Components
         public static AlbumsPage AlbumsPage { get; set; }
         public static ArtistsPage ArtistsPage { get; set; }
         public static ArtistGenresPage AGenresPage { get; set; }
-        public static GroupMembersPage MembersPage { get; set; }
         public static GenresPage GenresPage { get; set; }
         public static SignUpPage SignUpPage { get; set; }
         public static UserCompositionsPage ListenedCompositionsPage { get; set; }
