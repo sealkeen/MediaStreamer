@@ -8,7 +8,7 @@
       mc:Ignorable="d"
       d:DesignHeight="360" d:DesignWidth="480"
       Title="LoadingPage">
-    <Grid Background="White">
+    <Grid ><!--Background="White"-->
         <Label FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center">Loading is in progress...</Label>
     </Grid>
 </VM:FirstFMPage>

@@ -99,6 +99,8 @@ namespace MediaStreamer.TagEditing
         public static string TryGetArtistNameFromFile(TagLib.File tfile, Action<string> errorAction)
         {
             try {
+                if(tfile.Tag.Performers == null || tfile.Tag.Performers.Length <= 0)
+                    return "Unknown";
                 return tfile.Tag.Performers[0];
             } catch (Exception ex) {
                 errorAction?.Invoke(ex.Message);
@@ -107,7 +109,10 @@ namespace MediaStreamer.TagEditing
         }
         public static string TryGetGenreFromFile(TagLib.File tfile, Action<string> errorAction)
         {
-            try {
+            try
+            {
+                if (tfile.Tag.Genres == null || tfile.Tag.Genres.Length <= 0)
+                    return "Unknown";
                 return tfile.Tag.Genres.First();
             } catch (Exception ex) {
                 errorAction?.Invoke(ex.Message);
@@ -118,6 +123,8 @@ namespace MediaStreamer.TagEditing
         public static string TryGetTitleFromFile(TagLib.File tfile, Action<string> errorAction = null)
         {
             try {
+                if (tfile.Tag.Title == null || tfile.Tag.Title.Length <= 0)
+                    return "Unknown";
                 return tfile.Tag.Title;
             } catch (Exception ex) {
                 errorAction?.Invoke(ex.Message);
@@ -126,16 +133,22 @@ namespace MediaStreamer.TagEditing
         }
         public static string TryGetAlbumFromFile(TagLib.File tfile, Action<string> errorAction = null)
         {
-            try {
+            try
+            {
+                if (tfile.Tag.Album == null || tfile.Tag.Album.Length <= 0)
+                    return "unknown";
                 return tfile.Tag.Album;
             } catch (Exception ex) {
                 errorAction?.Invoke(ex.Message);
-                return "Unknown";
+                return "unknown";
             }
         }
         public static long? TryGetYearFromFile(TagLib.File tfile, Action<string> errorAction = null)
         {
-            try {
+            try
+            {
+                if (tfile.Tag.Year == 0)
+                    return null;
                 return tfile.Tag.Year;
             } catch (Exception ex) {
                 errorAction?.Invoke(ex.Message);
@@ -146,6 +159,8 @@ namespace MediaStreamer.TagEditing
         public static TimeSpan TryGetDurationFromFile(TagLib.File tfile, Action<string> errorAction = null)
         {
             try {
+                if (tfile.Properties.Duration == TimeSpan.FromMinutes(0))
+                    return TimeSpan.MinValue;
                 return tfile.Properties.Duration;
             } catch (Exception ex) {
                 errorAction?.Invoke(ex.Message);

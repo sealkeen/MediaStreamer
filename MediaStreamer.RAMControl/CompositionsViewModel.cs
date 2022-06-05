@@ -38,11 +38,15 @@ namespace MediaStreamer.RAMControl
             _lastPartialArtistID = artistID;
         }
 
-        public async void PartialListCompositions(long albumID, long artistID = -1)
+        public async Task PartialListCompositions(long albumID, long artistID = -1)
         {
             SetLastAlbumAndArtistID(albumID, artistID);
             ListInitialized = false;
+#if !NET40
             await Task.Factory.StartNew(GetPartOfCompositions);
+#else
+            GetPartOfCompositions();
+#endif
         }
         public async void PartialListCompositions()
         {

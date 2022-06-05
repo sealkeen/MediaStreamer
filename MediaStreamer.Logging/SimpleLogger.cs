@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StringExtensions;
+using System;
 using System.IO;
 
 namespace MediaStreamer.Logging
@@ -16,12 +17,18 @@ namespace MediaStreamer.Logging
             try
             {
                 //overwrite
+
                 StreamWriter sw = new StreamWriter(filepath, true);
                 sw.WriteLine($"[{DateTime.Now}] " + message);
                 Console.WriteLine($"[{DateTime.Now}] " + message);
                 sw.Close();
             }
             catch (Exception ex) {
+                try {
+                    Directory.CreateDirectory(filepath.GetDirectoryOf());
+                } catch (Exception exInner) {
+                    Console.WriteLine($"[{DateTime.Now}] Logger error: " + exInner.Message);
+                }
                 Console.WriteLine($"[{DateTime.Now}] Logger error: " + ex.Message);
             }
         }

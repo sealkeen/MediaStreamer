@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MediaStreamer.Domain;
-using MediaStreamer.IO;
+using StringExtensions;
 using LinqExtensions;
 using MediaStreamer.RAMControl;
 using System.Threading;
@@ -98,13 +98,16 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        public override void ListByID(long albumID)
+        public async override void ListByID(long albumID)
         {
-            if (!Program.DBAccess.DB.GetAlbums().Where(a => a.AlbumID == albumID).Any())
+            if (!Program.DBAccess.DB.GetCompositions().Where(a => a.AlbumID == albumID).Any())
                 return;
-
+#if !NET40
+            await Session.CompositionsVM.PartialListCompositions(albumID);
+#else
             Session.CompositionsVM.PartialListCompositions(albumID);
-            Session.CompositionsVM.GetPartOfCompositions();
+#endif
+            //Session.CompositionsVM.GetPartOfCompositions();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 

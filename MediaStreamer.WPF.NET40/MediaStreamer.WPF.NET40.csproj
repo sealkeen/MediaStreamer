@@ -147,6 +147,10 @@
       <Project>{92aa9ff7-3187-4aa8-b3d4-cf2604d32b72}</Project>
       <Name>LinqExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj">
+      <Project>{f4469d6c-4105-4525-bbb1-3430966888a6}</Project>
+      <Name>MediaStreamer.DataAccess.CrossPlatform</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MediaStreamer.DataAccess.Net40\MediaStreamer.DataAccess.Net40.csproj">
       <Project>{55eba084-29f7-4dcd-9d0c-67fa7e16a020}</Project>
       <Name>MediaStreamer.DataAccess.Net40</Name>

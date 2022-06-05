@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Controls;
 using MediaStreamer.Domain;
-using MediaStreamer.IO;
+using StringExtensions;
 using System.Collections;
 using System.Collections.Generic;
 using LinqExtensions;

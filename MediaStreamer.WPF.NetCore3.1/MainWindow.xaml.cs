@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-//using Xamarin.Forms;
+using StringExtensions;
 using System.Windows;
 using MediaStreamer.DataAccess.NetStandard;
 
@@ -170,8 +170,8 @@ namespace MediaStreamer.WPF.NetCore3_1
                 }
             );
 
-            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             await tsk;
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             Selector.MainPage.SetFrameContent(Selector.CompositionsPage ?? (Selector.CompositionsPage = new CompositionsPage()));
             Selector.CompositionsPage = new CompositionsPage();
         }
@@ -184,8 +184,8 @@ namespace MediaStreamer.WPF.NetCore3_1
                 Program.DBAccess.DB.EnsureCreated();
             })
             );
-            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             await tsk;
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             Selector.CompositionsPage = new CompositionsPage();
         }
 

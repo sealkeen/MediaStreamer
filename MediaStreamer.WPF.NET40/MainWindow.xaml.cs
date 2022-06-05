@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MediaStreamer.DataAccess.Net40;//.SQLite;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Net40
 {
@@ -28,7 +29,7 @@ namespace MediaStreamer.WPF.Net40
             InitializeComponent();
             try
             {
-                MediaStreamer.WPF.Components.Program.DBAccess = new DBRepository { DB = new DMEntities() };
+                Program.DBAccess = new DBRepository { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() };
 
                 this.windowFrame.Content = new MainPage();
                 //this.DataBaseClick += this.btnDatabase_Click;
