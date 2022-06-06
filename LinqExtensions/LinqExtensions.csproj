@@ -3,4 +3,7 @@
     <TargetFrameworks>netstandard2.1; net40; netcoreapp3.1</TargetFrameworks>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ObjectModelExtensions\ObjectModelExtensions.csproj" />
+  </ItemGroup>
 </Project>

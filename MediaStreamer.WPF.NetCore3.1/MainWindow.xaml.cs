@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using StringExtensions;
 using System.Windows;
 using MediaStreamer.DataAccess.NetStandard;
-using MediaStreamer.WPF.Components.UI;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {

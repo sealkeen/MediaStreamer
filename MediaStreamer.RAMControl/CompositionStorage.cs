@@ -7,7 +7,7 @@ using System.Text;
 using MediaStreamer.IO;
 using MediaStreamer.Domain;
 using MediaStreamer.RAMControl;
-using LinqExtensions;
+using ObjectModelExtensions;
 
 namespace MediaStreamer.RAMControl
 {

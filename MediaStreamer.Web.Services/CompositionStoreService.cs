@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediaStreamer.Domain;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using MediaStreamer.DataAccess.NetStandard;
 
 namespace MediaStreamer.WebApplication.Services
 {
@@ -15,6 +16,7 @@ namespace MediaStreamer.WebApplication.Services
         public CompositionStoreService(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
+            
             OnStart();
         }
 
@@ -25,9 +27,9 @@ namespace MediaStreamer.WebApplication.Services
             var tsk = Task.Run(() =>
             //FileManipulator = new FileManipulator
             //(iDBAccess: 
-            DBRepository = new DBRepository() { DB = ServiceProvider.GetRequiredService<DMEntitiesContext>() })
-            //)
-            ;
+                DBRepository = new DBRepository() { DB = new DMEntitiesContext() }//ServiceProvider.GetRequiredService<DMEntitiesContext>() })
+            );
+
             //SetStatusText("Database has just been loaded.");
             //tsk.Wait();
             while (!tsk.IsCompleted)

@@ -1,4 +1,5 @@
 ﻿using LinqExtensions;
+using ObjectModelExtensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +9,6 @@ namespace MediaStreamer.Logging
 {
     public class LogData
     {
-        public static ObservableCollection<LogRecord> LogList { get; set; } = new ObservableCollection<LogRecord>();
+        public static ConcurrentObservableCollection<LogRecord> LogList { get; set; } = new ConcurrentObservableCollection<LogRecord>();
     }
 }

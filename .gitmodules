@@ -10,3 +10,6 @@
 [submodule "taglib-sharp"]
 	path = taglib-sharp
 	url = https://github.com/mono/taglib-sharp
+[submodule "ObjectModelExtensions"]
+	path = ObjectModelExtensions
+	url = https://github.com/sealkeen/ObjectModelExtensions

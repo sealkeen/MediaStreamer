@@ -1,10 +1,17 @@
-﻿using System;
+﻿using ObjectModelExtensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace LinqExtensions
 {
+    /// <summary>
+    /// https://github.com/sealkeen/ObjectModelExtensions
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <returns></returns>
     public static class QueueExtensions
     {
         public static string ToLine(this Queue<string> value)

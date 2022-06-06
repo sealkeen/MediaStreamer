@@ -40,6 +40,8 @@ namespace MediaStreamer.WPF.Components
             Program.mePlayer = this.mePlayer;
             Program.txtStatus = this.txtStatus; 
             ListInitialized = true;
+
+            //LoggerPage.GetInstance();
         }
 
         private double volumeSliderValue = 0.025;

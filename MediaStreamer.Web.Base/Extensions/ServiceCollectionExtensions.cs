@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-using MediaStreamer;
+using MediaStreamer.DataAccess.NetStandard;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 //using Microsoft.AspNetCore.Identity;

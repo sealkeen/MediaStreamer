@@ -26,6 +26,7 @@ namespace MediaStreamer.RAMControl
         public static bool PlayerStopped = false;
         public static TimeSpan NewPosition;
         public static bool startupFromCommandLine = false;
+        public static Action<Action<string>, string> LoggingAction;
 
         #region AutoPlay Closing / Opening
         public static void OnClosing()
@@ -193,7 +194,7 @@ namespace MediaStreamer.RAMControl
             txtStatus.Text = status;
             if (error)
             {
-                MediaStreamer.Logging.SimpleLogger.LogStatically(status);
+                LoggingAction?.Invoke(MediaStreamer.Logging.SimpleLogger.LogStatically, status);
                 Debug.WriteLine(status);
             }
         }

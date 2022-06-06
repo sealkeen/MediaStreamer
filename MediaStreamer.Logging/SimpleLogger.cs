@@ -22,7 +22,7 @@ namespace MediaStreamer.Logging
                 StreamWriter sw = new StreamWriter(filepath, true);
                 sw.WriteLine($"[{DateTime.Now}] " + message);
                 Console.WriteLine($"[{DateTime.Now}] " + message);
-                CreateLogRecord(message); sw.Close();
+                CreateLogRecord(message);
             }
             catch (Exception ex) {
                 try {
@@ -34,17 +34,17 @@ namespace MediaStreamer.Logging
             }
         }
 
-        private static void CreateLogRecord(string message)
+        public static void CreateLogRecord(string message)
         {
             try {
 #if !NET40
-            Task.Factory.StartNew(new Action(
-                delegate
-                {
+            //Task.Factory.StartNew(new Action(
+            //    delegate
+            //    {
                     LogRecord lR = new LogRecord(DateTime.Now, message);
                     LogData.LogList.Add(lR);
-                }
-            ));
+            //    }
+            //));
 #endif          
             } catch(Exception ex) {
                 

@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks><!--netstandard2.1-->
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+	  <!--netcoreapp3.1-->
 	  <RootNamespace>MediaStreamer.DataAccess.NetStandard</RootNamespace>
   </PropertyGroup>
 

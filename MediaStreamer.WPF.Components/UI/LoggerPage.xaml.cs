@@ -1,4 +1,5 @@
 ﻿using MediaStreamer.Logging;
+using MediaStreamer.RAMControl;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MediaStreamer.WPF.Components.UI
+namespace MediaStreamer.WPF.Components
 {
     /// <summary>
     /// Singleton pattern LoggerPage.xaml
@@ -24,6 +25,15 @@ namespace MediaStreamer.WPF.Components.UI
         {
             InitializeComponent();
             lstOutput.ItemsSource = LogData.LogList;
+            Program.LoggingAction = DoInDispatcher;
+        }
+
+        public static void DoInDispatcher(Action<string> action, string parameter)
+        {
+            _loggerPage.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                action(parameter);
+            }));
         }
 
         public static LoggerPage GetInstance() 
