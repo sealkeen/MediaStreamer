@@ -47,7 +47,8 @@ namespace MediaStreamer.WPF.Components
                 Session.CompositionsVM = new CompositionsViewModel();
 
             ListInitialized = false;
-            Selector.MainPage.SetFrameContent( Selector.LoadingPage ); //LoadManagementElements(); //ListCompositionsAsync();
+
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage())); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
 
             $"Setting valid DataContext = {Session.CompositionsVM.CompositionsStore != null}".LogStatically();
@@ -382,8 +383,12 @@ namespace MediaStreamer.WPF.Components
                 {
                     SessionInformation.CurrentUser = new User() { UserID = Guid.Empty };
                 }
-                Program.DBAccess?.ClearListenedCompositions();
+                //Program.DBAccess?.ClearListenedCompositions();
                 Program.DBAccess?.AddNewListenedComposition(target.GetInstance(), SessionInformation.CurrentUser);
+                if (Selector.ListenedCompositionsPage != null)
+                {
+                    Task.Factory.StartNew( () => Selector.ListenedCompositionsPage.List() );
+                }
                 if (lstItems.SelectedIndex < 0 || lstItems.SelectedItem.GetHashCode() != target.GetHashCode())
                 {
                     TryToSelectItem(target);
@@ -410,9 +415,15 @@ namespace MediaStreamer.WPF.Components
         {
             if (lstItems.SelectedIndex < 0)
                 return;
-            PlayTarget(Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex]);
+            if (Session.CompositionsVM.CompositionsStore.Compositions != null &&
+                Session.CompositionsVM.CompositionsStore.Compositions.Count > lstItems.SelectedIndex)
+                PlayTarget(Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex]);
+            else
+            {       
+                Program.SetCurrentStatus("ViewModel for Compositions was not initialized correctly.");
+                return;
+            }
             Program.currentComposition = Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex];
-            
         }
 
         //TODO: Remove TagEditing import from WPF.Components

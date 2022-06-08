@@ -21,16 +21,16 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.Administrator", b =>
                 {
-                    b.Property<long>("AdministratorID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("AdministratorID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("AdministratorID");
 
-                    b.Property<long?>("ModeratorID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("ModeratorID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ModeratorID");
 
-                    b.Property<long?>("UserID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("UserID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("UserID");
 
                     b.HasKey("AdministratorID");
@@ -44,8 +44,8 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.Album", b =>
                 {
-                    b.Property<long>("AlbumID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("AlbumID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("AlbumID");
 
                     b.Property<string>("AlbumName")
@@ -53,12 +53,12 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<long?>("ArtistID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("ArtistID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ArtistID");
 
-                    b.Property<long>("GenreID")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("GenreID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Label")
                         .HasMaxLength(50)
@@ -82,12 +82,12 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.AlbumGenre", b =>
                 {
-                    b.Property<long>("AlbumID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("AlbumID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("AlbumID");
 
-                    b.Property<long>("GenreID")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("GenreID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AlbumID", "GenreID");
 
@@ -98,8 +98,8 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.Artist", b =>
                 {
-                    b.Property<long>("ArtistID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("ArtistID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ArtistID");
 
                     b.Property<string>("ArtistName")
@@ -114,12 +114,12 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.ArtistGenre", b =>
                 {
-                    b.Property<long>("ArtistID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("ArtistID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ArtistID");
 
-                    b.Property<long>("GenreID")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("GenreID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DateOfApplication")
                         .HasColumnType("datetime2");
@@ -137,20 +137,20 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.Composition", b =>
                 {
-                    b.Property<long>("CompositionID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("CompositionID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("CompositionID");
 
                     b.Property<string>("About")
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
-                    b.Property<long?>("AlbumID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("AlbumID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("AlbumID");
 
-                    b.Property<long?>("ArtistID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("ArtistID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ArtistID");
 
                     b.Property<string>("CompositionName")
@@ -180,12 +180,12 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.CompositionVideo", b =>
                 {
-                    b.Property<long>("VideoID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("VideoID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("VideoID");
 
-                    b.Property<long>("CompositionID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("CompositionID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("CompositionID");
 
                     b.HasKey("VideoID", "CompositionID");
@@ -197,10 +197,9 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.Genre", b =>
                 {
-                    b.Property<long>("GenreID")
+                    b.Property<Guid>("GenreID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("GenreName")
                         .HasMaxLength(256)
@@ -213,30 +212,31 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.ListenedComposition", b =>
                 {
-                    b.Property<DateTime>("ListenDate")
-                        .HasColumnType("DATETIME");
+                    b.Property<Guid>("ListenedCompositionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("UserID")
-                        .HasColumnType("bigint")
-                        .HasColumnName("UserID");
+                    b.Property<Guid?>("ArtistID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CompositionID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("CompositionID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("CompositionID");
-
-                    b.Property<long?>("ArtistID")
-                        .HasColumnType("bigint");
 
                     b.Property<long?>("CountOfPlays")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ListenedCompositionID")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("ListenDate")
+                        .HasColumnType("DATETIME");
 
                     b.Property<double>("StoppedAt")
                         .HasColumnType("float");
 
-                    b.HasKey("ListenDate", "UserID", "CompositionID");
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserID");
+
+                    b.HasKey("ListenedCompositionID");
 
                     b.HasIndex("ArtistID");
 
@@ -249,12 +249,12 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.Moderator", b =>
                 {
-                    b.Property<long>("ModeratorID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("ModeratorID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ModeratorID");
 
-                    b.Property<long?>("UserID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("UserID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("UserID");
 
                     b.HasKey("ModeratorID");
@@ -266,23 +266,23 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.Picture", b =>
                 {
-                    b.Property<long>("PictureID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("PictureID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("PictureID");
 
                     b.Property<string>("FilePath")
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
-                    b.Property<long?>("SizeKb")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("SizeKb")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("XResolution")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("XResolution")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("XResolution");
 
-                    b.Property<long?>("YResolution")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("YResolution")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("YResolution");
 
                     b.HasKey("PictureID");
@@ -292,10 +292,9 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.PlayerState", b =>
                 {
-                    b.Property<long>("StateID")
+                    b.Property<Guid>("StateID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("StateTime")
                         .HasColumnType("DATETIME");
@@ -310,8 +309,8 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.User", b =>
                 {
-                    b.Property<long>("UserID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("UserID");
 
                     b.Property<string>("Bio")
@@ -358,8 +357,8 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
 
             modelBuilder.Entity("MediaStreamer.Domain.Video", b =>
                 {
-                    b.Property<long>("VideoID")
-                        .HasColumnType("bigint")
+                    b.Property<Guid>("VideoID")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("VideoID");
 
                     b.Property<double?>("FPS")
@@ -370,19 +369,19 @@ namespace MediaStreamer.DataAccess.NetStandard.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
-                    b.Property<long?>("SizeKb")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("SizeKb")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("VariableFPS")
                         .HasColumnType("BIT")
                         .HasColumnName("VariableFPS");
 
-                    b.Property<long?>("XResolution")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("XResolution")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("XResolution");
 
-                    b.Property<long?>("YResolution")
-                        .HasColumnType("bigint")
+                    b.Property<Guid?>("YResolution")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("YResolution");
 
                     b.HasKey("VideoID");

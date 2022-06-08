@@ -29,10 +29,12 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        public void ListCompositions()
+        public override void List()
         {
             GetCompositions();
-            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+            this.Dispatcher.BeginInvoke( new Action( delegate {
+                lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget(); 
+            }));
         }
 
         public UserCompositionsPage()
@@ -40,13 +42,14 @@ namespace MediaStreamer.WPF.Components
             //Compositions = new List<ListenedComposition>();
             InitializeComponent();
             DataContext = this;
-            ListCompositions();
+            List();
+            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
         private void buttonListen_Click(object sender, RoutedEventArgs e)
         {
             Program.FileManipulator.DecomposeAudioFile(Program.FileManipulator.OpenAudioFileCrossPlatform().Result);
-            ListCompositions();
+            List();
         }
 
         private void buttonNew_Click(object sender, RoutedEventArgs e)
@@ -96,7 +99,7 @@ namespace MediaStreamer.WPF.Components
                     Program.DBAccess.DeleteListenedComposition(Compositions[index]);
                     Program.DBAccess.DB.SaveChanges();
                 }
-                ListCompositions();
+                List();
             }
             catch (Exception ex)
             {

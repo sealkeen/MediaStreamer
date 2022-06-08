@@ -16,7 +16,7 @@ namespace MediaStreamer.RAMControl
         public static ArtistsViewModel ArtistsVM { get; set; }
         public static FirstFMPage AGenresVM { get; set; }
         public static FirstFMPage MembersVM { get; set; }
-        public static FirstFMPage GenresVM { get; set; }
+        public static GenresViewModel GenresVM { get; set; }
         public static FirstFMPage SignUpVM { get; set; }
         public static CompositionsViewModel ListenedCompositionsPage { get; set; }
         public static FirstFMPage ListenedAlbumsVM { get; set; }

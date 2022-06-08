@@ -165,7 +165,7 @@ namespace MediaStreamer.WPF.Components
         [MTAThread]
         public override async Task ListAsync()
         {
-            mainFrame.Content = (Selector.LoadingPage == null) ? Selector.LoadingPage = new LoadingPage() : Selector.LoadingPage;
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
             if (Selector.CompositionsPage == null)
                 Selector.CompositionsPage = new CompositionsPage();
             if (Session.CompositionsVM.LastDataLoadWasPartial() || !Selector.CompositionsPage.ListInitialized)
@@ -184,7 +184,7 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonAlbums_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Selector.LoadingPage;
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
             if (Selector.AlbumsPage == null)
                 Selector.AlbumsPage = new AlbumsPage();
             else
@@ -208,7 +208,7 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonArtists_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Selector.LoadingPage;
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
             if (Selector.ArtistsPage == null)
                 Selector.ArtistsPage = new ArtistsPage();
             else
@@ -220,7 +220,7 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonGenres_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Selector.LoadingPage;
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
             if (Selector.GenresPage == null)
                 Selector.GenresPage = new GenresPage();
             else
@@ -352,7 +352,7 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonUserAlbums_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Selector.LoadingPage;
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
             if (Selector.ListenedAlbumsPage == null)
                 Selector.ListenedAlbumsPage = new UserAlbumsPage();
             else
@@ -369,7 +369,7 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonVideo_Click(object sender, RoutedEventArgs e)
         {
-            mainFrame.Content = Selector.LoadingPage;
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
             if (Selector.VideoPage == null)
                 Selector.VideoPage = new VideoPage();
             mainFrame.Content = Selector.VideoPage;

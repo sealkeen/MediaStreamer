@@ -8,7 +8,9 @@ namespace MediaStreamer.DataAccess.NetStandard
     {
         public static string GetStandardDatabasePath()
         {
-            return "O:/DB/26.10.2021-3.db3";
+            return "O:/DB/08.06.2022.db3"
+                //"O:/DB/26.10.2021-3.db3"
+                ;
         }
     }
 }

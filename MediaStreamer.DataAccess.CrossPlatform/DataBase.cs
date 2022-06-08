@@ -8,7 +8,7 @@ using StringExtensions;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
-    public class DataBase 
+    public class DataBase
     {
         public static TFieldType GetMaxID<TEntity, TFieldType>(IQueryable<TEntity> entities, string keyPropertyName)
         {

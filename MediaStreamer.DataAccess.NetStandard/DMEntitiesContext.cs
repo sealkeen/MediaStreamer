@@ -53,17 +53,16 @@ namespace MediaStreamer.DataAccess.NetStandard
             {
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
-                    //if (UseSQLServer) {
-                        //optionsBuilder.UseSqlServer("Name=CompositionsConnection");
+                    if (UseSQLServer) {
                         optionsBuilder.UseSqlServer(@"Server=.\SQLExpress;initial catalog=CompositionsDB;user id=sys_admin;password=s0m3P4ssw0rdT3xt;MultipleActiveResultSets=True;");
-                    //}
-                    //else
-                    //    optionsBuilder.UseSqlite(@$"DataSource={Filename}");
+                    }
+                    else
+                        optionsBuilder.UseSqlite(@$"DataSource={PathResolver.GetStandardDatabasePath()}");
                 }
-                //else
-                //{
-                //    optionsBuilder.UseSqlite($"DataSource={Filename}");
-                //}
+                else
+                {
+                    optionsBuilder.UseSqlite($"DataSource={PathResolver.GetStandardDatabasePath()}");
+                }
             }
         }
 
@@ -231,7 +230,7 @@ namespace MediaStreamer.DataAccess.NetStandard
 
             modelBuilder.Entity<ListenedComposition>(entity =>
             {
-                entity.HasKey(e => new { e.ListenDate, e.UserID, e.CompositionID });
+                entity.HasKey(e => new { e.ListenedCompositionID });
 
                 entity.ToTable("ListenedComposition");
 

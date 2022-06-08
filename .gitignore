@@ -12,6 +12,7 @@ _MediaStreamer.Domain
 _MediaStreamer.Xamarin
 _MediaStreamer.DataAccess.Net40.SQLServer.VS2010
 _MediaStreamer.Exceptions
+MediaStreamer.DataAccess.NetStandard/Migrations
 
 # User-specific files
 *.rsuser

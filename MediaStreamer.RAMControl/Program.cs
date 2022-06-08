@@ -52,7 +52,7 @@ namespace MediaStreamer.RAMControl
             var query = DBAccess.DB.GetListenedCompositions();
             if (query.Count() == 0)
                 return new List<Composition>();
-            var lcomp = DBAccess.DB.GetListenedCompositions().First();
+            var lcomp = DBAccess.DB.GetListenedCompositions().Last();
             var comp = DBAccess.DB.GetCompositions().Where(c => c.CompositionID == lcomp.CompositionID).ToList();
             NewPosition = TimeSpan.FromMilliseconds(lcomp.StoppedAt);
             return comp;
@@ -145,6 +145,7 @@ namespace MediaStreamer.RAMControl
             if (Session.MainPage != null && Session.MainPage.ListInitialized && status != null)
             {
                 SetTxtStatusContents(status);
+                LoggingAction?.Invoke(MediaStreamer.Logging.SimpleLogger.LogStatically, status);
             }
         }
 

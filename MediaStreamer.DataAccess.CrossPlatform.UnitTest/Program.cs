@@ -18,7 +18,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
             JSONDataContext context = new JSONDataContext();
             //var comps = context.GetCompositions();
             context.ClearTable("ListenedCompositions");
-            ListenedComposition ls = new ListenedComposition() { ListenDate = DateTime.Now, CompositionID = 23, UserID = 0};
+            ListenedComposition ls = new ListenedComposition() { ListenDate = DateTime.Now, CompositionID = Guid.Empty, UserID = Guid.Empty};
             context.Add(ls);
             var comps = context.GetListenedCompositions();
         }
@@ -52,7 +52,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
             dc.EnsureCreated();
 
             Genre g = new Genre();
-            g.GenreID = 2;
+            g.GenreID = Guid.NewGuid();
             g.GenreName = "newGenre";
 
             dc.AddEntity(g);

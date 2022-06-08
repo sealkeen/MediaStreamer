@@ -36,7 +36,7 @@
             </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Artist.ArtistName}" 
+                    <GridViewColumn DisplayMemberBinding="{Binding Composition.Artist.ArtistName}" 
                                     Header="Artist"
                                     Width="100"></GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Composition.CompositionName}" 

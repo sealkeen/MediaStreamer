@@ -12,14 +12,13 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class GenresPage : FirstFMPage
     {
-        public List<Genre> Genres { get; set; }
 
         public void ListGenres()
         {
             //DBAccess.Update();
             try
             {
-                Genres = Program.DBAccess.DB.GetGenres().ToList();
+                Session.GenresVM.Genres = Program.DBAccess.DB.GetGenres().ToList();
             } catch (Exception ex) {
                 Program.SetCurrentStatus("Database was not loaded correctly.");
             }
@@ -34,7 +33,7 @@ namespace MediaStreamer.WPF.Components
 
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var genreName = this.Genres[lstItems.SelectedIndex].GenreName;
+            var genreName = Session.GenresVM.Genres[lstItems.SelectedIndex].GenreName;
 
             if (Selector.ArtistsPage == null)
                 Selector.ArtistsPage = new ArtistsPage(genreName);

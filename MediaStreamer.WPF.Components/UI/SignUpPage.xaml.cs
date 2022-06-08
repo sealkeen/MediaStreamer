@@ -49,7 +49,7 @@ namespace MediaStreamer.WPF.Components
                 txtStatus.Text = "Successfully signed up!";
 
                 Selector.MainPage.SetFrameContent( Selector.SignedUpPage ??
-                    (Selector.SignedUpPage = new SignedUpPage($"{user.UserName ?? "Unknown"}"))
+                    (Selector.SignedUpPage = new SignedUpPage($"{user?.UserName ?? "Unknown"}"))
                     );
                 return user;
 
@@ -71,9 +71,11 @@ namespace MediaStreamer.WPF.Components
                 valid = IsReEnteredCorrectly(psswd, repeatedPsswd);
                 if (!valid) { throw new Exception("Reenter exception."); }
 
-                var user = Program.DBAccess.DB.GetUsers().First();
+                var user = Program.DBAccess.DB.GetUsers().Where(u => u.UserID == SessionInformation.CurrentUser.UserID).First();
                 user.Password = Program.DBAccess.ToMD5(psswd);
+                //Program.DBAccess.DB.SaveChanges();
                 Program.DBAccess.DB.SaveChanges();
+                Program.DBAccess.DB.UpdateAndSaveChanges(user);
 
                 txtStatus.Text = "Successfully changed password!";
 

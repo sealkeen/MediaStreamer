@@ -118,6 +118,7 @@ namespace MediaStreamer.DataAccess.NetStandard
                 entity.Property(e => e.ModeratorID).HasColumnName("ModeratorID");
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
+
             });
 
             modelBuilder.Entity<Album>(entity =>
@@ -140,17 +141,15 @@ namespace MediaStreamer.DataAccess.NetStandard
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Albums)
                     .HasForeignKey(d => d.GenreID);
-
             });
 
             modelBuilder.Entity<AlbumGenre>(entity =>
             {
-                entity.HasKey(e => new { e.AlbumID , e.GenreID });
+                entity.HasKey(e => new { e.AlbumID, e.GenreID });
 
                 entity.ToTable("AlbumGenre");
 
                 entity.Property(e => e.AlbumID).HasColumnName("AlbumID");
-
 
                 entity.HasOne(d => d.Album)
                     .WithMany(p => p.AlbumGenres)
@@ -182,8 +181,6 @@ namespace MediaStreamer.DataAccess.NetStandard
 
                 entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
 
-                entity.Property(e => e.DateOfApplication).HasColumnType("DATE");
-
                 entity.HasOne(d => d.Artist)
                     .WithMany(p => p.ArtistGenres)
                     .HasForeignKey(d => d.ArtistID)
@@ -209,8 +206,6 @@ namespace MediaStreamer.DataAccess.NetStandard
 
                 entity.Property(e => e.CompositionName).IsRequired();
 
-                //entity.Property(e => e.GroupFormationDate).HasColumnType("DATE");
-
                 entity.HasOne(d => d.Album)
                     .WithMany(p => p.Compositions)
                     .HasForeignKey(d => d.AlbumID);
@@ -223,11 +218,12 @@ namespace MediaStreamer.DataAccess.NetStandard
 
             modelBuilder.Entity<CompositionVideo>(entity =>
             {
-                entity.HasKey(e => new { e.CompositionID,  e.VideoID});
+                entity.HasKey(e => new { e.VideoID, e.CompositionID });
 
                 entity.ToTable("CompositionVideo");
 
                 entity.Property(e => e.VideoID).HasColumnName("VideoID");
+
 
                 entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
 
@@ -241,20 +237,19 @@ namespace MediaStreamer.DataAccess.NetStandard
             modelBuilder.Entity<Genre>(entity =>
             {
                 entity.HasKey(e => e.GenreID);
-
+                entity.Property(e => e.GenreID).IsRequired();
                 entity.ToTable("Genre");
             });
 
             modelBuilder.Entity<ListenedComposition>(entity =>
             {
-                entity.HasKey(e => new { e.ListenDate });
+                entity.HasKey(e => new { e.ListenedCompositionID });
 
                 entity.ToTable("ListenedComposition");
 
                 entity.Property(e => e.ListenDate).HasColumnType("DATETIME");
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
-
 
                 entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
 
@@ -263,6 +258,7 @@ namespace MediaStreamer.DataAccess.NetStandard
                     .WithMany(p => p.ListenedCompositions)
                     .HasForeignKey(d => d.CompositionID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ListenedCompositions)
@@ -279,7 +275,6 @@ namespace MediaStreamer.DataAccess.NetStandard
                     .HasColumnName("ModeratorID");
 
                 entity.Property(e => e.UserID).HasColumnName("UserID");
-
             });
 
             modelBuilder.Entity<Picture>(entity =>
@@ -333,12 +328,25 @@ namespace MediaStreamer.DataAccess.NetStandard
                 entity.Property(e => e.FPS).HasColumnName("FPS");
 
                 entity.Property(e => e.VariableFPS)
-                    .HasColumnType("BOOLEAN")
+                    .HasColumnType("BIT")
                     .HasColumnName("VariableFPS");
 
                 entity.Property(e => e.XResolution).HasColumnName("XResolution");
 
                 entity.Property(e => e.YResolution).HasColumnName("YResolution");
+            });
+
+            modelBuilder.Entity<PlayerState>(entity =>
+            {
+                entity.HasKey(e => e.StateID);
+
+                entity.Property(e => e.StateTime)
+                .IsRequired()
+                .HasColumnType("DATETIME");
+
+                entity.Property(e => e.VolumeLevel)
+                .IsRequired()
+                .HasColumnType("NUMERIC");
             });
 
             OnModelCreatingPartial(modelBuilder);

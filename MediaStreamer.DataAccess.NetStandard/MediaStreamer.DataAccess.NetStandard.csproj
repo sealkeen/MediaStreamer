@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1; netcoreapp3.1</TargetFrameworks>
-	  <!---->
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+	  <!--netstandard2.1; -->
 	  <RootNamespace>MediaStreamer.DataAccess.NetStandard</RootNamespace>
   </PropertyGroup>
 
@@ -37,7 +37,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
-    <ProjectReference Include="..\MediaStreamer.Exceptions\MediaStreamer.Exceptions.csproj" />
     <!--<ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />-->
   </ItemGroup>
 

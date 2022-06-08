@@ -10,6 +10,6 @@
       Title="SignedUpPage">
 
     <Grid Background="White">
-        <TextBox x:Name="txtLogin" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24">Successfully signed up as:</TextBox>
+        <TextBox x:Name="txtLogin" Height="Auto" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24">Successfully signed up as:</TextBox>
     </Grid>
 </VM:FirstFMPage>
