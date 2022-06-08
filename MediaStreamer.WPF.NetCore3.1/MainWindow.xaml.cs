@@ -156,10 +156,8 @@ namespace MediaStreamer.WPF.NetCore3_1
                 Program.DBAccess.DB.EnsureCreated();
             })
             );
-            Selector.CompositionsPage = new CompositionsPage();
-            Session.GenresVM = new GenresViewModel();
-            Session.ArtistsVM = new ArtistsViewModel();
-            Session.AlbumsVM = new AlbumsViewModel();
+
+            UpdatePageViews();
             await tsk;
             Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             await Selector.CompositionsPage?.ListAsync();
@@ -174,10 +172,7 @@ namespace MediaStreamer.WPF.NetCore3_1
                 }
             );
 
-            Selector.CompositionsPage = new CompositionsPage();
-            Session.ArtistsVM = new ArtistsViewModel();
-            Session.AlbumsVM = new AlbumsViewModel();
-            Session.GenresVM = new GenresViewModel();
+            UpdatePageViews();
             await tsk;
             Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             await Selector.CompositionsPage?.ListAsync();
@@ -187,18 +182,24 @@ namespace MediaStreamer.WPF.NetCore3_1
         {
             Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
             DMEntitiesContext.UseSQLServer = false;
-            var tsk = Task.Factory.StartNew(new Action(delegate {
-                    Program.DBAccess = new DBRepository() { DB = new DMEntitiesContext() };
-                    Program.DBAccess.DB.EnsureCreated();
-                })
+            var tsk = Task.Factory.StartNew(new Action(delegate
+            {
+                Program.DBAccess = new DBRepository() { DB = new DMEntitiesContext() };
+                Program.DBAccess.DB.EnsureCreated();
+            })
             );
-            Session.CompositionsVM = new CompositionsViewModel();
-            Session.ArtistsVM = new ArtistsViewModel();
-            Session.AlbumsVM = new AlbumsViewModel();
-            Session.GenresVM = new GenresViewModel();
+            UpdatePageViews();
             await tsk;
             Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
             await Selector.CompositionsPage?.ListAsync();
+        }
+
+        private static void UpdatePageViews()
+        {
+            Selector.CompositionsPage = new CompositionsPage();
+            Session.ArtistsVM = new ArtistsViewModel();
+            Session.AlbumsVM = new AlbumsViewModel();
+            Session.GenresVM = new GenresViewModel();
         }
 
         private void btnSQLJsonNavigate_Click(object sender, RoutedEventArgs e)

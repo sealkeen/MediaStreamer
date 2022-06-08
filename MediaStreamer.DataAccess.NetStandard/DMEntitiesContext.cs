@@ -395,28 +395,33 @@ namespace MediaStreamer.DataAccess.NetStandard
 
         public bool ClearTable(string tableName)
         {
-            int cnt = 0;
-            switch (tableName)
+            try
             {
-                case nameof(Administrators):if ((cnt = Administrators.Count()) >0 ) Administrators.RemoveRange(Administrators); break;
-                case nameof(Albums):        if ((cnt = Albums.Count()) > 0) Albums.RemoveRange(Albums); break;
-                case nameof(AlbumGenres):   if ((cnt = AlbumGenres.Count()) > 0) AlbumGenres.RemoveRange(AlbumGenres); break;
-                case nameof(Artists):       if ((cnt = Artists.Count()) > 0) Artists.RemoveRange(Artists); break;
-                case nameof(ArtistGenres):  if ((cnt = ArtistGenres.Count()) > 0) ArtistGenres.RemoveRange(ArtistGenres); break;
-                case nameof(Compositions):  if ((cnt = Compositions.Count()) > 0) Compositions.RemoveRange(Compositions); break;
-                case nameof(CompositionVideos): 
-                                            if ((cnt = CompositionVideos.Count()) > 0) CompositionVideos.RemoveRange(CompositionVideos); break;
-                case nameof(Genres):        if ((cnt = Genres.Count()) > 0) Genres.RemoveRange(Genres); break;
-                case nameof(ListenedCompositions): 
-                                            if ((cnt = ListenedCompositions.Count()) > 0) ListenedCompositions.RemoveRange(ListenedCompositions); break;
-                case nameof(Moderators):    if ((cnt = Moderators.Count()) > 0) Moderators.RemoveRange(Moderators); break;
-                case nameof(Pictures):      if ((cnt = Pictures.Count()) > 0) Pictures.RemoveRange(Pictures); break;
-                case nameof(Users):         if ((cnt = Users.Count()) > 0) Users.RemoveRange(Users); break;
-                case nameof(Videos):        if ((cnt = Videos.Count()) > 0) Videos.RemoveRange(Videos); break;
-                case nameof(PlayerStates):  if ((cnt = PlayerStates.Count()) > 0) PlayerStates.RemoveRange(PlayerStates); break;
+                int cnt = 0;
+                switch (tableName)
+                {
+                    case nameof(Administrators): if ((cnt = Administrators.Count()) > 0) Administrators.RemoveRange(Administrators); break;
+                    case nameof(Albums): if ((cnt = Albums.Count()) > 0) Albums.RemoveRange(Albums); break;
+                    case nameof(AlbumGenres): if ((cnt = AlbumGenres.Count()) > 0) AlbumGenres.RemoveRange(AlbumGenres); break;
+                    case nameof(Artists): if ((cnt = Artists.Count()) > 0) Artists.RemoveRange(Artists); break;
+                    case nameof(ArtistGenres): if ((cnt = ArtistGenres.Count()) > 0) ArtistGenres.RemoveRange(ArtistGenres); break;
+                    case nameof(Compositions): if ((cnt = Compositions.Count()) > 0) Compositions.RemoveRange(Compositions); break;
+                    case nameof(CompositionVideos):
+                        if ((cnt = CompositionVideos.Count()) > 0) CompositionVideos.RemoveRange(CompositionVideos); break;
+                    case nameof(Genres): if ((cnt = Genres.Count()) > 0) Genres.RemoveRange(Genres); break;
+                    case nameof(ListenedCompositions):
+                        if ((cnt = ListenedCompositions.Count()) > 0) ListenedCompositions.RemoveRange(ListenedCompositions); break;
+                    case nameof(Moderators): if ((cnt = Moderators.Count()) > 0) Moderators.RemoveRange(Moderators); break;
+                    case nameof(Pictures): if ((cnt = Pictures.Count()) > 0) Pictures.RemoveRange(Pictures); break;
+                    case nameof(Users): if ((cnt = Users.Count()) > 0) Users.RemoveRange(Users); break;
+                    case nameof(Videos): if ((cnt = Videos.Count()) > 0) Videos.RemoveRange(Videos); break;
+                    case nameof(PlayerStates): if ((cnt = PlayerStates.Count()) > 0) PlayerStates.RemoveRange(PlayerStates); break;
+                }
+                if (cnt > 0)
+                    SaveChanges();
             }
-            if(cnt > 0)
-                SaveChanges();
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ue) { 
+            }
             return false;
         }
 
