@@ -28,7 +28,7 @@ namespace MediaStreamer.WPF.Components
             ListByTitle(genreName);
             DataContext = Session.ArtistsVM;
         }
-        public ArtistsPage(long userID, long artistID)
+        public ArtistsPage(Guid userID, Guid artistID)
         {
             Session.ArtistsVM = new ArtistsViewModel();
             InitializeComponent();
@@ -46,12 +46,12 @@ namespace MediaStreamer.WPF.Components
                 Program.SetCurrentStatus(ex.Message);
             }
         }
-        public override void ListByID(long ArtistID)
+        public override void ListByID(Guid ArtistID)
         {
             Session.ArtistsVM.Artists = Program.DBAccess.DB.GetArtists().Where(art => art.ArtistID == ArtistID).ToList();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
-        public override void ListByUserAndID(long userID, long ArtistID)
+        public override void ListByUserAndID(Guid userID, Guid ArtistID)
         {
             Session.ArtistsVM.Artists = (
                 from art in Program.DBAccess.DB.GetArtists()

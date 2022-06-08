@@ -60,7 +60,7 @@ namespace MediaStreamer.WPF.Components
             $"The new position is : {Program.NewPosition}".LogStatically();
         }
 
-        public CompositionsPage(long ArtistID, long albumID)
+        public CompositionsPage(Guid ArtistID, Guid albumID)
         {
             Session.CompositionsVM.CompositionsStore.Compositions = new List<IComposition>();
             InitializeComponent();
@@ -98,14 +98,14 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        public async override void ListByID(long albumID)
+        public async override void ListByID(Guid albumID)
         {
             if (!Program.DBAccess.DB.GetCompositions().Where(a => a.AlbumID == albumID).Any())
                 return;
 #if !NET40
-            await Session.CompositionsVM.PartialListCompositions(albumID);
+            await Session.CompositionsVM.PartialListCompositions(albumID, Guid.Empty);
 #else
-            Session.CompositionsVM.PartialListCompositions(albumID);
+            Session.CompositionsVM.PartialListCompositions(albumID, Guid.Empty);
 #endif
             //Session.CompositionsVM.GetPartOfCompositions();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
@@ -380,7 +380,7 @@ namespace MediaStreamer.WPF.Components
 
                 if (SessionInformation.CurrentUser == null)
                 {
-                    SessionInformation.CurrentUser = new User() { UserID = 0 };
+                    SessionInformation.CurrentUser = new User() { UserID = Guid.Empty };
                 }
                 Program.DBAccess?.ClearListenedCompositions();
                 Program.DBAccess?.AddNewListenedComposition(target.GetInstance(), SessionInformation.CurrentUser);

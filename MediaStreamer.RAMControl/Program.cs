@@ -39,7 +39,7 @@ namespace MediaStreamer.RAMControl
             var comp = currentComposition;
             ListenedComposition lC = new ListenedComposition();
             lC.CompositionID = comp.CompositionID;
-            lC.UserID = SessionInformation.CurrentUser == null ? 0 : SessionInformation.CurrentUser.UserID;
+            lC.UserID = SessionInformation.CurrentUser == null ? Guid.Empty : SessionInformation.CurrentUser.UserID;
             lC.StoppedAt = position;
             lC.ListenDate = DateTime.Now;
 

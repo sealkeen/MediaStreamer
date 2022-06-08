@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using MediaStreamer.Domain;
@@ -51,7 +52,7 @@ namespace MediaStreamer.WPF.Components
                 ).UpdateTarget();
         }
 
-        public void PartialListArtists(long ArtistID)
+        public void PartialListArtists(Guid ArtistID)
         {
 
             Artists = (

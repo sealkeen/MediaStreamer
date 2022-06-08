@@ -1,5 +1,6 @@
 ﻿//using DataBaseResource;
 
+using System;
 using System.Threading.Tasks;
 
 namespace MediaStreamer.RAMControl
@@ -7,7 +8,7 @@ namespace MediaStreamer.RAMControl
     public class FirstFMPage : System.Windows.Controls.Page
     {
         readonly public int PageID;
-        public long? ownerID { get; set; }
+        public Guid? ownerID { get; set; }
         public bool ListInitialized = false;
         
         protected bool lastDataLoadWasPartial = false;
@@ -49,7 +50,7 @@ namespace MediaStreamer.RAMControl
         {
             return null;
         }
-        public virtual void ListByID(long ID)
+        public virtual void ListByID(Guid ID)
         {
             
         }
@@ -58,7 +59,7 @@ namespace MediaStreamer.RAMControl
             
         }
 
-        public virtual void ListByUserAndID(long userID, long id)
+        public virtual void ListByUserAndID(Guid userID, Guid id)
         {
             
         }

@@ -319,22 +319,22 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public void AddEntity<T>(T entity) where T : class
         {
             if (typeof(T) == typeof(Composition)) {
-                //var id = DataBase.GetMaxID<Composition, long>(Compositions.AsQueryable(), "CompositionID") + 1;
+                //var id = DataBase.GetMaxID<Composition, Guid>(Compositions.AsQueryable(), "CompositionID") + 1;
                 //id++;
                 //Table.SetProperty(entity, "CompositionID", id);
                 Add(entity as Composition);
             } else if (typeof(T) == typeof(Artist)) {
-                //var id = DataBase.GetMaxID<Artist, long>(Artists.AsQueryable(), "ArtistID");
+                //var id = DataBase.GetMaxID<Artist, Guid>(Artists.AsQueryable(), "ArtistID");
                 //id++;
                 //Table.SetProperty(entity, "ArtistID", id);
                 Add(entity as Artist);
             } else if (typeof(T) == typeof(Album)) {
-                //var id = DataBase.GetMaxID<Album, long>(Albums.AsQueryable(), "AlbumID");
+                //var id = DataBase.GetMaxID<Album, Guid>(Albums.AsQueryable(), "AlbumID");
                 //id++;
                 //Table.SetProperty(entity, "AlbumID", id);
                 Add(entity as Album);
             } else if (typeof(T) == typeof(Genre)) {
-                //var id = DataBase.GetMaxID<Genre, long>(Genres.AsQueryable(), "GenreID");
+                //var id = DataBase.GetMaxID<Genre, Guid>(Genres.AsQueryable(), "GenreID");
                 //id++;
                 //Table.SetProperty(entity, "GenreID", id);
                 Add(entity as Genre);
@@ -410,10 +410,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.AlbumID:
-                            Table.SetProperty(received, Key.AlbumID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                     }
                 }
@@ -437,16 +437,16 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.AlbumID:
-                            Table.SetProperty(received, Key.AlbumID, Key.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.AlbumName:
                             Table.SetProperty(received, Key.AlbumName, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.Year:
                             Table.SetProperty(received, Key.Year, kv.GetIntegerValueOrReturnNull());
@@ -482,10 +482,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, Key.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                     }
                 }
@@ -508,7 +508,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, Key.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.ArtistName:
                             Table.SetProperty(received, Key.ArtistName, kv.GetPairedValue().AsUnquoted());
@@ -535,16 +535,16 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.CompositionID:
-                            Table.SetProperty(received, Key.CompositionID, Key.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.CompositionID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.CompositionName:
                             Table.SetProperty(received, Key.CompositionName, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, kv.GetIntegerValueOrReturnNull());
+                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.AlbumID:
-                            Table.SetProperty(received, Key.AlbumID, kv.GetIntegerValueOrReturnNull());
+                            Table.SetProperty(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.Duration:
                             Table.SetProperty(received, Key.Duration, kv.GetIntegerValueOrReturnNull());
@@ -569,10 +569,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             return Compositions.AsQueryable();
         }
 
-        public Task<IQueryable<Composition>> GetCompositionsAsync()
-        {
-            return Task.Factory.StartNew(() => GetCompositions());
-        }
+        //public Task<IQueryable<Composition>> GetCompositionsAsync()
+        //{
+        //    return Task.Factory.StartNew(() => GetCompositions());
+        //}
 
         public IQueryable<CompositionVideo> GetCompositionVideos()
         {
@@ -593,7 +593,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, Key.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreName:
                             Table.SetProperty(received, Key.GenreName, kv.GetPairedValue().AsUnquoted());
@@ -628,10 +628,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             Table.SetProperty(received, Key.ListenDate, DateTime.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.CompositionID:
-                            Table.SetProperty(received, Key.CompositionID, Key.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.CompositionID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.UserID:
-                            Table.SetProperty(received, Key.UserID, kv.GetIntegerValueOrReturnNull().Value);
+                            Table.SetProperty(received, Key.UserID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.StoppedAt:
                             Table.SetProperty(received, Key.StoppedAt, double.Parse(kv.Value.AsUnquoted()));
@@ -658,7 +658,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.StateID:
-                            Table.SetProperty(received, Key.StateID, Key.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.StateID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.StateTime:
                             Table.SetProperty(received, Key.StateTime, DateTime.Parse(kv.Value.AsUnquoted()));

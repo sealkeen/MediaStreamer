@@ -13,7 +13,7 @@ namespace MediaStreamer.WPF.Components
     {
         public bool lastDataLoadWasPartial = false;
         public List<Genre> Genres { get; set; }
-        public UserGenresPage(long userID)
+        public UserGenresPage(Guid userID)
         {
             //Genres = new List<Genre>();
             InitializeComponent();
@@ -21,7 +21,7 @@ namespace MediaStreamer.WPF.Components
             DataContext = this;
         }
 
-        public void ListGenres(long userID)
+        public void ListGenres(Guid userID)
         {
             Genres = GetListenedGenres(userID).ToList();
 
@@ -43,7 +43,7 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        private static IQueryable<Genre> GetListenedGenres(long userID)
+        private static IQueryable<Genre> GetListenedGenres(Guid userID)
         {
             return (from lc in Program.DBAccess.DB.GetListenedCompositions()
                         join comp in Program.DBAccess.DB.GetCompositions()

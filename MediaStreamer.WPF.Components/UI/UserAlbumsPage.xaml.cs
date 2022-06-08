@@ -30,7 +30,7 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        public void PartialListAlbums(long userID)
+        public void PartialListAlbums(Guid userID)
         {
             try
             {

@@ -1,4 +1,5 @@
 ﻿using MediaStreamer.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,8 +8,8 @@ namespace MediaStreamer.RAMControl
 {
     public class AlbumsViewModel
     {
-        protected long _lastPartialGenreID = -1;
-        protected long _lastPartialArtistID = -1;
+        protected Guid _lastPartialGenreID = Guid.Empty;
+        protected Guid _lastPartialArtistID = Guid.Empty;
 
         public List<Album> Albums { get; set; }
         public AlbumsViewModel()
@@ -16,7 +17,7 @@ namespace MediaStreamer.RAMControl
             Albums = new List<Album>();
         }
 
-        public AlbumsViewModel(long artistID)
+        public AlbumsViewModel(Guid artistID)
         {
             _lastPartialArtistID = artistID;
             Albums = (from album in Program.DBAccess.DB.GetAlbums()
@@ -29,20 +30,20 @@ namespace MediaStreamer.RAMControl
             Albums = new List<Album>();
         }
 
-        public void SetLastArtistID(long artistID)
+        public void SetLastArtistID(Guid artistID)
         {
             _lastPartialArtistID = artistID;
         }
 
         public bool LastDataLoadWasPartial()
         {
-            return _lastPartialArtistID != -1;
+            return _lastPartialArtistID != Guid.Empty;
         }
 
         public void ResetPartialLoad()
         {
-            _lastPartialArtistID = -1;
-            _lastPartialGenreID = -1;
+            _lastPartialArtistID = Guid.Empty;
+            _lastPartialGenreID = Guid.Empty;
         }
 
         public async void PartialListAlbums()

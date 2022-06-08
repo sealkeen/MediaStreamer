@@ -23,7 +23,7 @@ namespace MediaStreamer.WPF.Components
             DataContext = Session.AlbumsVM;
         }
 
-        public AlbumsPage(long ArtistID)
+        public AlbumsPage(Guid ArtistID)
         {
             Session.AlbumsVM = new AlbumsViewModel(ArtistID);
             InitializeComponent();
@@ -56,7 +56,7 @@ namespace MediaStreamer.WPF.Components
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
-        public override void ListByID(long artistID)
+        public override void ListByID(Guid artistID)
         {
             Session.AlbumsVM.Albums = (from album in Program.DBAccess.DB.GetAlbums()
                       where album.ArtistID == artistID

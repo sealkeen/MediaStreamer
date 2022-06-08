@@ -15,7 +15,6 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class UserCompositionsPage : FirstFMPage
     {
-        public bool lastDataLoadWasPartial = false;
         public List<ListenedComposition> Compositions { get; set; }
         public void GetCompositions(Action<string> errorAction = null)
         {

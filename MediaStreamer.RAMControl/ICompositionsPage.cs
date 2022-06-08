@@ -1,4 +1,5 @@
-﻿using MediaStreamer.Domain;
+﻿using System;
+using MediaStreamer.Domain;
 using System.Collections;
 
 namespace MediaStreamer.RAMControl
@@ -7,7 +8,7 @@ namespace MediaStreamer.RAMControl
     {
         IComposition GetCurrentComposition();
 
-        void SetLastAlbumAndArtistID(long albumID, long artistID);
+        void SetLastAlbumAndArtistID(Guid albumID, Guid artistID);
         void SwitchToNextSelected();
         void PlayTarget(IComposition composition);
         void PartialListCompositions();
