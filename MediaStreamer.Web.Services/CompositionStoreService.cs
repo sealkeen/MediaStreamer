@@ -23,6 +23,7 @@ namespace MediaStreamer.WebApplication.Services
         protected async void OnStart()
         {
             FinishedLoading = false;
+            DMEntitiesContext.UseSQLServer = true;
             //SetStatusText("Loading Database in progress...");
             var tsk = Task.Run(() =>
             //FileManipulator = new FileManipulator
@@ -42,6 +43,38 @@ namespace MediaStreamer.WebApplication.Services
 
         public bool FinishedLoading = true;
         public DBRepository DBRepository { get; private set; }
+        
+        public IEnumerable<Genre> GetGenres()
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                //if (DBRepository == null)
+                //    OnStart();
+                while (!FinishedLoading)
+                {
+                    Thread.Sleep(450);
+                    System.Diagnostics.Debug.WriteLine("GetCompositions() : waiting 450 ms");
+                }
+                //var debugCount = DBRepository.DB.GetGenres().Count();
+                return DBRepository.DB.GetGenres().ToList();
+            }
+        }
+
+        public IEnumerable<Album> GetAlbums()
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                //if (DBRepository == null)
+                //    OnStart();
+                while (!FinishedLoading)
+                {
+                    Thread.Sleep(450);
+                    System.Diagnostics.Debug.WriteLine("GetCompositions() : waiting 450 ms");
+                }
+                //var debugCount = DBRepository.DB.GetCompositions().Count();
+                return DBRepository.DB.GetAlbums().ToList();
+            }
+        }
 
         public IEnumerable<Composition> GetCompositions()
         {
@@ -54,8 +87,24 @@ namespace MediaStreamer.WebApplication.Services
                     Thread.Sleep(450);
                     System.Diagnostics.Debug.WriteLine("GetCompositions() : waiting 450 ms");
                 }
-                var debugCount = DBRepository.DB.GetCompositions().Count();
+                //var debugCount = DBRepository.DB.GetCompositions().Count();
                 return DBRepository.DB.GetCompositions().ToList();
+            }
+        }
+
+        public IEnumerable<Composition> GetAlbumCompositions(Guid albumID)
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                //if (DBRepository == null)
+                //    OnStart();
+                while (!FinishedLoading)
+                {
+                    Thread.Sleep(450);
+                    System.Diagnostics.Debug.WriteLine("GetCompositions() : waiting 450 ms");
+                }
+                //var debugCount = DBRepository.DB.GetCompositions().Count();
+                return DBRepository.DB.GetCompositions().Where(c => c.AlbumID == albumID).ToList();
             }
         }
 

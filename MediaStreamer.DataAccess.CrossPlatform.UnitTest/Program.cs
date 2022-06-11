@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using EPAM.CSCourse2016.JSONParser.Library;
+using Sealkeen.CSCourse2016.JSONParser.Core;
 using MediaStreamer.Domain;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest

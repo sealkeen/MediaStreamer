@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using EPAM.CSCourse2016.JSONParser.Library;
+using Sealkeen.CSCourse2016.JSONParser.Core;
 using System;
 using System.Reflection;
 using System.Linq;

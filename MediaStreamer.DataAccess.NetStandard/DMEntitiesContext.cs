@@ -351,7 +351,7 @@ namespace MediaStreamer.DataAccess.NetStandard
 
         public IQueryable<Administrator> GetAdministrators() { return Administrators; }
         void IDMDBContext.Add(Administrator administrator) => Administrators.Add(administrator);
-        public IQueryable<Album> GetAlbums() { return Albums; }
+        public IQueryable<Album> GetAlbums() { return Albums.Include(a => a.Artist); }
         void IDMDBContext.Add(Album album) => Albums.Add(album);
         public IQueryable<AlbumGenre> GetAlbumGenres() { return AlbumGenres; }
         void IDMDBContext.Add(AlbumGenre albumGenre) => AlbumGenres.Add(albumGenre);

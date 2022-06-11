@@ -43,7 +43,7 @@ namespace MediaStreamer.RAMControl
             lC.StoppedAt = position;
             lC.ListenDate = DateTime.Now;
 
-            DBAccess.ClearListenedCompositions();
+            //DBAccess.ClearListenedCompositions();
             DBAccess.DB.Add(lC);
         }
 

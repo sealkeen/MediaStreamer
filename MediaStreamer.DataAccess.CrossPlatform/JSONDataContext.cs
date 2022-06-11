@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaStreamer.Domain;
-using EPAM.CSCourse2016.JSONParser.Library;
+using Sealkeen.CSCourse2016.JSONParser.Core;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {

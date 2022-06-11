@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using EPAM.CSCourse2016.JSONParser.Library;
+using Sealkeen.CSCourse2016.JSONParser.Core;
 using StringExtensions;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
