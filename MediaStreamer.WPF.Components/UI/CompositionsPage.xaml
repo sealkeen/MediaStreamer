@@ -25,8 +25,8 @@
         <ListView VerticalAlignment="Stretch" Name="lstItems" Grid.Row="0" HorizontalAlignment="Stretch"
                   ItemsSource="{Binding Compositions}" Grid.Column="0"
                   MouseDoubleClick="lstItems_MouseDoubleClick"
-                  GridViewColumnHeader.Click="ListView_OnColumnClick"
-                  PreviewMouseLeftButtonDown="LstItems_PreviewMouseLeftButtonDown"
+                  GridViewColumnHeader.Click="lstItems_OnColumnClick"
+                  PreviewMouseLeftButtonDown="lstItems_PreviewMouseLeftButtonDown"
                   SelectionChanged="lstItems_SelectionChanged"
                   Drop="lstItems_Drop" AllowDrop="true"
                   Margin="0,0,0,50" Grid.RowSpan="2"
@@ -36,11 +36,11 @@
                   MouseLeftButtonDown="lstItems_MouseLeftButtonDown"-->
             <ListView.ContextMenu>
                 <ContextMenu x:Name="conMen">
-                    <Button x:Name="cmiChangeComposition" Click="CmiChangeComposition_Click">Change Composition's Tags</Button>
-                    <Button x:Name="cmiPlaySeveral" Click="CmiPlaySeveral_Click">Play Several Songs</Button>
+                    <Button x:Name="cmiChangeComposition" Click="cmiChangeComposition_Click">Change Composition's Tags</Button>
+                    <Button x:Name="cmiPlaySeveral" Click="cmiPlaySeveral_Click">Play Several Songs</Button>
                     <Button x:Name="cmiOpenInWinamp" Click="cmiOpenInWinamp_Click">Open in Winamp</Button> />
-                    <Button x:Name="cmiRename" Click="CmiRename_Click">Rename to Standard</Button>
-                    <Button x:Name="cmiDelete" Click="buttonDelete_Click">Delete from Database</Button> />
+                    <Button x:Name="cmiRename" Click="cmiRename_Click">Rename to Standard</Button>
+                    <Button x:Name="cmiDelete" Click="cmiDelete_Click">Delete from Database</Button> />
                     <Button x:Name="cmiQueue" Click="cmiEnQueue_Click">EnQueue Selected</Button>
                     <Button x:Name="cmiPush" Click="cmiPush_Click">Push Selected</Button>
                     <Button x:Name="cmiOpenLocation" Click="cmiOpenLocation_Click">Open File Location</Button>
@@ -75,15 +75,12 @@
                   >
             <ListView.ContextMenu>
                 <ContextMenu x:Name="queMen">
-                    <Button x:Name="queChangeComposition" Click="CmiChangeComposition_Click">Change Composition's Tags</Button>
-                    <Button x:Name="quePlaySeveral" Click="CmiPlaySeveral_Click">Play Several Songs</Button>
+                    <Button x:Name="queChangeComposition" Click="cmiChangeComposition_Click">Change Composition's Tags</Button>
+                    <Button x:Name="quePlaySeveral" Click="cmiPlaySeveral_Click">Play Several Songs</Button>
                     <Button x:Name="queOpenInWinamp" Click="cmiOpenInWinamp_Click">Open in Winamp</Button> />
-                    <Button x:Name="queRename" Click="CmiRename_Click">Rename to Standard</Button>
-                    <Button x:Name="queDelete" Click="buttonDelete_Click">Delete from Database</Button> />
-                    <Button x:Name="queQueue" Click="cmiEnQueue_Click">EnQueue Selected</Button>
-                    <Button x:Name="quePush" Click="cmiPush_Click">Push Selected</Button>
+                    <Button x:Name="queRename" Click="cmiRename_Click">Rename to Standard</Button>
+                    <Button x:Name="queDelete" Click="cmiDelete_Click">Delete from Database</Button> />
                     <Button x:Name="queOpenLocation" Click="queOpenLocation_Click">Open File Location</Button>
-                    <Button x:Name="queUpdate" Click="cmiUpdate_Click">Update list</Button>
                 </ContextMenu>
             </ListView.ContextMenu>
                     <!--<ListView.ItemContainerStyle>
@@ -123,9 +120,9 @@
                 Click="buttonListen_Click" Height="21" />-->
             <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Bottom" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
                
-                    Click="buttonDelete_Click"/> <!--Background="AliceBlue"-->
+                    Click="cmiDelete_Click"/> <!--Background="AliceBlue"-->
             <Button Grid.Row="1" Grid.Column="3" VerticalAlignment="Bottom" x:Name="buttonNew" Content="Add New Song"
-                Click="buttonNew_Click" Height="21" /><!--Background="AliceBlue"-->
+                Click="buttonNewComp_Click" Height="21" /><!--Background="AliceBlue"-->
             <Button Grid.Row="1" Grid.Column="4" VerticalAlignment="Bottom" x:Name="buttonNewRange" Content="Add Range"
                 Click="buttonNewRange_Click" Height="21"/><!--Background="AliceBlue"-->
         </Grid>

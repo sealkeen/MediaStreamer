@@ -65,7 +65,7 @@ namespace MediaStreamer.WPF.Components
                 if (savedQuery != null && savedQuery.Count > 0)
                 {
                     Program.currentComposition = savedQuery[0] as IComposition;
-                    Selector.CompositionsPage.TryToSelectItem(Program.currentComposition);
+                    Selector.CompositionsPage.lstitems_TryToSelectItem(Program.currentComposition);
                 }
             } else {
                 Program.SetPlayerPositionToZero();
@@ -79,8 +79,8 @@ namespace MediaStreamer.WPF.Components
         {
             switch (e.Key) {
                 case (Key.Space) : HandleSpacePressed(); break;
-                case (Key.Up): if(!Selector.CompositionsPage.ListViewOwnsFocus()) VolumeUp("Up Arrow", volumeKeyValue); break;
-                case (Key.Down): if(!Selector.CompositionsPage.ListViewOwnsFocus()) VolumeDown("Down Arrow", volumeKeyValue); break;
+                case (Key.Up): if(!Selector.CompositionsPage.lstItems_OwnsFocus()) VolumeUp("Up Arrow", volumeKeyValue); break;
+                case (Key.Down): if(!Selector.CompositionsPage.lstItems_OwnsFocus()) VolumeDown("Down Arrow", volumeKeyValue); break;
                 case (Key.Enter): 
                     if(Selector.CompositionsPage.lstItems.SelectedIndex >= 0)
                         Selector.CompositionsPage.PlaySelectedTarget(); break;

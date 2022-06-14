@@ -70,34 +70,6 @@ namespace MediaStreamer.WPF.Components
             DataContext = Session.CompositionsVM;
         }
 
-        protected void ListView_OnColumnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _orderByDescending = !_orderByDescending;
-                string columnName = ((GridViewColumnHeader)e.OriginalSource).Column.Header.ToString();
-                switch (columnName)
-                {
-                    case "Composition":
-                        Session.CompositionsVM.CompositionsStore.Compositions = Program.DBAccess.DB.GetICompositions().OrderByWithDirection(x => x.CompositionName, _orderByDescending).ToList();
-                        break;
-                    case "Artist":
-                        Session.CompositionsVM.CompositionsStore.Compositions = Program.DBAccess.DB.GetICompositions().OrderByWithDirection(x => x.Artist.ArtistName, _orderByDescending).ToList();
-                        break;
-                    case "Duration (sec)":
-                        Session.CompositionsVM.CompositionsStore.Compositions = Program.DBAccess.DB.GetICompositions().OrderByWithDirection(x => x.Duration, _orderByDescending).ToList();
-                        break;
-                    case "File Path":
-                        Session.CompositionsVM.CompositionsStore.Compositions = Program.DBAccess.DB.GetICompositions().OrderByWithDirection(x => x.FilePath, _orderByDescending).ToList();
-                        break;
-                }
-                lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-            }
-            catch (Exception ex)
-            {
-                Program.SetCurrentStatus("CompositionsPage.ListView_OnColumnClick :" + ex.Message, true);
-            }
-        }
 
         public async override void ListByID(Guid albumID)
         {
@@ -186,7 +158,7 @@ namespace MediaStreamer.WPF.Components
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
-        protected async void buttonNew_Click(object sender, RoutedEventArgs e)
+        protected async void buttonNewComp_Click(object sender, RoutedEventArgs e)
         {
             var tsk = await Program.FileManipulator.OpenAudioFileCrossPlatform();
 
@@ -276,11 +248,6 @@ namespace MediaStreamer.WPF.Components
                 Program.SetCurrentStatus("GetNextComposition(): " + ex.Message, true);
                 return null;
             }
-        }
-
-        protected void buttonListen_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         public void SwitchToPreviousSelected()
@@ -391,7 +358,7 @@ namespace MediaStreamer.WPF.Components
                 }
                 if (lstItems.SelectedIndex < 0 || lstItems.SelectedItem.GetHashCode() != target.GetHashCode())
                 {
-                    TryToSelectItem(target);
+                    lstitems_TryToSelectItem(target);
                 }
             }
             catch (Exception ex)
@@ -400,16 +367,6 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        public void lstItems_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //if ((Program.mePlayer != null) && (Program.mePlayer.Source != null)) {
-            if (null == (((FrameworkElement)e.OriginalSource).DataContext as Composition))
-            {
-                return;
-            }
-
-            PlaySelectedTarget();
-        }
 
         public void PlaySelectedTarget()
         {
@@ -459,27 +416,7 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        protected void CmiChangeComposition_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeComposition(lstItems.SelectedItems);
-        }
 
-        protected void buttonDelete_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                int? index = lstItems?.SelectedIndex;
-                if (index != null && index != -1)
-                {
-                    Program.DBAccess?.DeleteComposition(Session.CompositionsVM.CompositionsStore.Compositions[index.Value].GetInstance());
-                }
-                ReList();
-            }
-            catch (Exception ex)
-            {
-                Program.SetCurrentStatus($"Delete composition violation: {ex.Message}", true);
-            }
-        }
 
         protected void ReList()
         {
@@ -493,17 +430,6 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        protected void CmiPlaySeveral_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Program.FileManipulator.PlaySeveralSongs(lstItems?.SelectedItems, typeof(Composition));
-            }
-            catch (Exception ex)
-            {
-                Program.SetCurrentStatus(ex.Message, true);
-            }
-        }
 
         protected void ApplyToSelectedItems(Action<List<IComposition>> action)
         {
@@ -543,169 +469,46 @@ namespace MediaStreamer.WPF.Components
         /// <param name="compositions"></param>
         protected static void RenameCompositionFiles(List<IComposition> compositions)
         {
-            FileInfo fileInfo;
-            foreach (var comp in compositions)
-            {
-                fileInfo = new FileInfo(comp.FilePath);
-                Artist artist = comp.Artist;
-                if (comp.Artist == null)
-                {
-                    artist = Program.DBAccess.DB.GetICompositions().Where(x => x.ArtistID == comp.ArtistID).First().Artist;
-                }
-                string newName = fileInfo.DirectoryName + "\\" +
-                    artist.ArtistName + " – " + comp.CompositionName;
-                if (comp.Album.Year != null)
-                {
-                    if (comp.Album.Year < 2100 && comp.Album.Year > 1900)
-                        newName += $" ({comp.Album.Year})";
-                }
-                newName += fileInfo.Extension;
-                System.IO.File.Move(fileInfo.FullName, newName);
-                comp.FilePath = newName;
-                Program.DBAccess.DB.SaveChanges();
-
-                //TimeSpan tS;
-                //if (comp.Duration != null)
-                //    tS = TimeSpan.FromSeconds(comp.Duration.Value);
-                //else
-                //    tS = TimeSpan.FromSeconds(int.MinValue);
-
-                Program.DBAccess.AddComposition(artist.ArtistName,
-                    comp.CompositionName, comp.Album.AlbumName, comp.Duration.Value, comp.FilePath);
-            }
-        }
-
-        /// <summary>
-        /// TODO:Fix "Rename to Standard" check menu item button -> enable renaming the file to match pattern "Artist – Title (Year if exists)".
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void CmiRename_Click(object sender, RoutedEventArgs e)
-        {
             try
             {
-                if (lstItems.SelectedIndex >= 0 && lstItems.SelectedItems.Count >= 1)
-                {// For every selected element
-                    Session.CompositionsVM.CompositionsStore.ChangeCompositionTags(lstItems.SelectedItems);
-                }
-            }
-            catch (Exception ex)
-            {
-                Program.SetCurrentStatus(ex.Message, true);
-            } finally {
-                ReList();
-            }
-        }
-
-        protected void Button_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (lstItems.SelectedIndex >= 0 && lstItems.SelectedItems.Count >= 1)
-                {// For every selected element
-                    int currentIndex = lstItems.SelectedIndex/* + i*/;
-                    var currentComp = Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex];
-
-                    var fileInfo = new FileInfo(currentComp.FilePath);
-                    string newName = fileInfo.DirectoryName + "\\" +
-                        currentComp.Artist.ArtistName + " – " + currentComp.CompositionName;
-                    if (currentComp.Album.Year != null)
+                FileInfo fileInfo;
+                foreach (var comp in compositions)
+                {
+                    fileInfo = new FileInfo(comp.FilePath);
+                    Artist artist = comp.Artist;
+                    if (comp.Artist == null)
                     {
-                        if (currentComp.Album.Year < 2100 && currentComp.Album.Year > 1900)
-                            newName += $" ({currentComp.Album.Year})";
+                        artist = Program.DBAccess.DB.GetICompositions().Where(x => x.ArtistID == comp.ArtistID).First().Artist;
                     }
-                    newName += ".mp3";
+                    string newName = fileInfo.DirectoryName + "\\" +
+                        artist.ArtistName + " – " + comp.CompositionName;
+                    if (comp.Album.Year != null)
+                    {
+                        if (comp.Album.Year < 2100 && comp.Album.Year > 1900)
+                            newName += $" ({comp.Album.Year})";
+                    }
+                    newName += fileInfo.Extension;
                     System.IO.File.Move(fileInfo.FullName, newName);
-                    currentComp.FilePath = newName;
-                    TimeSpan tS = GetDurationFrom(currentComp);
+                    comp.FilePath = newName;
+                    Program.DBAccess.DB.SaveChanges();
 
-                    Program.DBAccess.AddComposition(currentComp.Artist, currentComp.Album,
-                        currentComp.CompositionName, tS, currentComp.FilePath, null, false, Program.SetCurrentStatus);
+                    //TimeSpan tS;
+                    //if (comp.Duration != null)
+                    //    tS = TimeSpan.FromSeconds(comp.Duration.Value);
+                    //else
+                    //    tS = TimeSpan.FromSeconds(int.MinValue);
+
+                    Program.DBAccess.AddComposition(artist.ArtistName,
+                        comp.CompositionName, comp.Album.AlbumName, comp.Duration.Value, comp.FilePath);
                 }
-            }
-            catch (Exception ex)
-            {
-                Program.SetCurrentStatus(ex.Message, true);
+            } catch (Exception ex) {
+                SimpleLogger.LogStatically("RenameCompositionFiles" + ex.Message);
             }
         }
 
-        protected static TimeSpan GetDurationFrom(IComposition currentComp)
-        {
-            TimeSpan tS;
-            if (currentComp.Duration != null)
-                tS = TimeSpan.FromSeconds(currentComp.Duration.Value);
-            else
-                tS = TimeSpan.FromSeconds(int.MinValue);
-            return tS;
-        }
 
-        protected void lstItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                txtArtistName.Text = Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex].Artist?.ArtistName;
-                txtAlbumName.Text = Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex].Album?.AlbumName;
-            }
-            catch (Exception ex)
-            {
-                //Program.SetCurrentStatus(ex.Message);
-            }
-        }
 
-        protected void cmiEnQueue_Click(object sender, RoutedEventArgs e)
-        {
-            QueueSelected();
-        }
-
-        protected void cmiOpenInWinamp_Click(object sender, RoutedEventArgs e)
-        {
-            CmiPlaySeveral_Click(sender, e);
-        }
-
-        protected void cmiOpenLocation_Click(object sender, RoutedEventArgs e)
-        {
-            int currentIndex = lstItems.SelectedIndex/* + i*/;
-            if (currentIndex != -1)
-            {
-                IComposition currentComp = Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex];
-                if (currentComp.FilePath.FileExists())
-                {
-                    currentComp.FilePath.SelectInExplorer();
-                }
-            }
-        }
-
-        protected void cmiPush_Click(object sender, RoutedEventArgs e)
-        {
-            QueueSelected(false);
-        }
-
-        protected void cmiUpdate_Click(object sender, RoutedEventArgs e)
-        {
-            ReList();
-        }
-
-        private async void lstItems_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                // Note that you can have more than one file.
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                // Assuming you have one file that you care about, pass it off to whatever
-                // handling code you have defined.
-                //HandleFileOpen(files[0]);
-
-                List<string> lstFiles = new List<string>(files);
-                //var tsk = await 
-                //Task.Factory.StartNew( () =>
-                Program.FileManipulator.DecomposeAudioFiles(lstFiles, Program.SetCurrentStatus) 
-                //    )
-                ;
-                ReList();
-            }
-        }
-
+        // GridSplitter -->
         double _oldLstItemsWidth = 0.0;
         double _oldGridWidth = 0.0;
         double _oldWindowWidth = 0.0;
@@ -725,7 +528,6 @@ namespace MediaStreamer.WPF.Components
             _oldGridWidth = mainGrid.ActualWidth;
             //_oldRoamingGroupWidth = firstColumn.ActualWidth + secondColumn.ActualWidth + thirdColumn.ActualWidth;
         }
-
         private void GridSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             double newGridWidth = mainGrid.ActualWidth;
@@ -754,75 +556,11 @@ namespace MediaStreamer.WPF.Components
             //    }
             //}
         }
+        // <-- GridSplitter 
 
-        private void lstItems_MouseMove(object sender, MouseEventArgs e)
-        {
-            //if (e.LeftButton == MouseButtonState.Pressed)
-            //{
-            //    if (e.Source != null)
-            //    {
-            //        List<IComposition> myList = new List<IComposition>();
-            //        foreach (IComposition Item in lstItems.SelectedItems)
-            //        {
-            //            myList.Add(Item);
-            //        }
 
-            //        DataObject dataObject = new DataObject(myList);
-            //        DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
-            //    }
-            //}
-        }
 
-        private LinkedList<object> _selectedItems = new LinkedList<object>();
-        protected void LstItems_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (lstItems.SelectedItems.Count <= 0)
-                return;
-
-            _selectedItems.Clear();
-            foreach (object i in lstItems.SelectedItems)
-                _selectedItems.Enqueue(i);
-
-            var tsk = Task.Factory.StartNew(() =>
-                    lstItems_MouseLeftButtonDown(sender, e.ButtonState, e.Source, e.OriginalSource, _selectedItems)
-            );
-        }
-
-        private void lstItems_MouseLeftButtonDown(object sender, 
-            MouseButtonState state, 
-            object source, 
-            object originalSource, 
-            IEnumerable SelectedItems)
-        {
-            try
-            {
-                Application.Current.Dispatcher.BeginInvoke(
-                    new Action(delegate
-                    {
-                        if (null == (((FrameworkElement)originalSource).DataContext as Composition))
-                            return;
-
-                        if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-                        Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
-                        )
-                            return;
-
-                    //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
-                    if (state == MouseButtonState.Pressed)
-                        {
-                            if (source != null)
-                            {
-                                DataObject dataObject = new DataObject(SelectedItems);
-                                DragDrop.DoDragDrop(lstItems, dataObject, DragDropEffects.Move);
-                            }
-                        }
-                    })
-                );
-            } catch(Exception ex){
-                MediaStreamer.Logging.SimpleLogger.LogStatically("lstItems_MouseLeftButtonDown :" + ex.Message);
-            }
-        }
-
+        // lstQuery -->
         private void lstQuery_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(LinkedList<object>)))
@@ -840,7 +578,6 @@ namespace MediaStreamer.WPF.Components
             if(e.Data.GetDataPresent(DataFormats.FileDrop));
                 lstItems_Drop(sender, e);
         }
-
         private void queOpenLocation_Click(object sender, RoutedEventArgs e)
         {
             int currentIndex = lstQuery.SelectedIndex/* + i*/;
@@ -853,30 +590,6 @@ namespace MediaStreamer.WPF.Components
                 }
             }
         }
-
-        public bool ListViewOwnsFocus()
-        {
-            if (lstItems.IsKeyboardFocusWithin || lstQuery.IsKeyboardFocusWithin)
-                return true;
-            return false;
-        }
-
-        public void TryToSelectItem(IComposition comp)
-        {
-            try
-            {
-                if (comp == null)
-                    return;
-                var found = Session.CompositionsVM.CompositionsStore.Compositions.Where(c => c.CompositionID == comp.CompositionID);
-                if (found.Count() > 0)
-                {
-                    lstItems.SelectedItem = found.First();
-                }
-            }
-            catch (Exception ex)
-            {
-                MediaStreamer.Logging.SimpleLogger.LogStatically("TryToSelectItem :" + ex.Message);
-            }
-        }
+        // <-- lstQuery
     }
 }
