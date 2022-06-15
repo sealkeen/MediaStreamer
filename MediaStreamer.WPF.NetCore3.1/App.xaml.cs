@@ -20,6 +20,9 @@ namespace MediaStreamer.WPF.NetCore3_1
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1) 
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+
             // Crazy hack
             var args1 = Environment.GetCommandLineArgs()/*.CreateArgs().*/.Skip(1);
             if (args1 != null && args1.Count() > 0)
@@ -27,7 +30,7 @@ namespace MediaStreamer.WPF.NetCore3_1
                 var arguments1 = args1.Aggregate((a, b) => Path.Combine(a + Environment.NewLine + b));
                 SimpleLogger.LogStatically($"cmd arguments 1 : {arguments1}");
                 SimpleLogger.LogStatically("Arguments.Count() > 0, ok.");
-            //    //HandleMultipleArguments(args1);
+                // HandleMultipleArguments(args1);
             }
         }
 

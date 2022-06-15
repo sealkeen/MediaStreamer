@@ -12,6 +12,9 @@ _MediaStreamer.Domain
 _MediaStreamer.Xamarin
 _MediaStreamer.DataAccess.Net40.SQLServer.VS2010
 _MediaStreamer.Exceptions
+_MediaStreamer.Web.Api
+_MediaStreamer.Web.Services
+_MediaStreamer.Web.Base
 _backup
 MediaStreamer.DataAccess.NetStandard/Migrations
 
