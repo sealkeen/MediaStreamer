@@ -21,6 +21,7 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class CompositionsPage : FirstFMPage
     {
+        protected Control CurrentListView { get; set; }
         public CompositionsPage()
         {
             try
@@ -162,7 +163,7 @@ namespace MediaStreamer.WPF.Components
         {
             var tsk = await Program.FileManipulator.OpenAudioFileCrossPlatform();
 
-            Program.FileManipulator.DecomposeAudioFile(tsk, Program.SetCurrentStatus);
+            Program.FileManipulator.DecomposeAudioFile(tsk, SimpleLogger.LogStatically);
             ReList();
         }
 
@@ -358,7 +359,7 @@ namespace MediaStreamer.WPF.Components
                 }
                 if (lstItems.SelectedIndex < 0 || lstItems.SelectedItem.GetHashCode() != target.GetHashCode())
                 {
-                    lstitems_TryToSelectItem(target);
+                    lstItems_TryToSelectItem(target);
                 }
             }
             catch (Exception ex)
@@ -589,6 +590,11 @@ namespace MediaStreamer.WPF.Components
                     currentComp.FilePath.SelectInExplorer();
                 }
             }
+        }
+
+        private void lstQuery_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentListView = sender as Control;
         }
         // <-- lstQuery
     }

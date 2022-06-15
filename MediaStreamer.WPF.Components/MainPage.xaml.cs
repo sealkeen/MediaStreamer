@@ -65,7 +65,7 @@ namespace MediaStreamer.WPF.Components
                 if (savedQuery != null && savedQuery.Count > 0)
                 {
                     Program.currentComposition = savedQuery[0] as IComposition;
-                    Selector.CompositionsPage.lstitems_TryToSelectItem(Program.currentComposition);
+                    Selector.CompositionsPage.lstItems_TryToSelectItem(Program.currentComposition);
                 }
             } else {
                 Program.SetPlayerPositionToZero();
