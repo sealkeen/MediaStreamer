@@ -34,6 +34,11 @@ namespace MediaStreamer.Logging
             }
         }
 
+        public static void LogError(string message)
+        {
+            LogStatically("ERROR: " + message);
+        }
+
         public static void CreateLogRecord(string message)
         {
             try {
