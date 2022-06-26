@@ -66,11 +66,11 @@ namespace MediaStreamer.WPF.Components
         public override void ListByTitle(string genreName) //TODO: optimize the method
         {
             var genres = Program.DBAccess.DB.GetGenres().Where(g => g.GenreName == genreName);
-            if (genres.Count() == 0)
+            if (genres == null || genres.Count() == 0)
                 return;
 
             var artists = Program.DBAccess.DB.GetArtistGenres().Where(ag => ag.GenreID == genres.First().GenreID);
-            if (artists.Count() == 0)
+            if (artists == null || artists.Count() == 0)
                 return;
 
             Session.ArtistsVM.Artists = (from ag in artists

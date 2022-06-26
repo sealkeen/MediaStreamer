@@ -91,5 +91,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Nullable.GetUnderlyingType(piShared.PropertyType));
             piShared.SetValue(entity, convertedValue, null);
         }
+
+
     }
 }

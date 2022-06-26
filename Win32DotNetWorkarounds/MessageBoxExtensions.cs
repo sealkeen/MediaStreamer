@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediaStreamer.Logging;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -11,7 +12,7 @@ namespace Win32DotNetWorkarounds
         {
 //#if DEBUG
             MessageBox.Show(message);
-            MediaStreamer.Logging.SimpleLogger.LogStatically(message);
+            (message).LogStatically();
 //#endif
         }
     }

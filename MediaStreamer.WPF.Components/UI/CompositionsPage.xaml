@@ -32,6 +32,7 @@
                   Margin="0,0,0,50" Grid.RowSpan="2"
                   VirtualizingStackPanel.IsVirtualizing="False"
                   PreviewMouseRightButtonDown="lstQuery_PreviewMouseRightButtonDown"
+                  KeyDown="lstItems_KeyDown"
                   >
                   <!--MouseMove="lstItems_MouseMove"
                   MouseLeftButtonDown="lstItems_MouseLeftButtonDown"-->

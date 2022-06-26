@@ -15,9 +15,9 @@
             MouseLeftButtonDown="Window_MouseLeftButtonDown"
             PreviewKeyDown="Window_PreviewKeyDown"
             Closing="Window_Closing"
-            Style="{DynamicResource MainWindowStyle}"
             MinHeight="510" MinWidth="492"
         >
+            <!--Style="{DynamicResource MainWindowStyle}"-->
     <!--<Window.Resources>
         <Style TargetType="{x:Type local:MainWindow}">
             <Setter Property="WindowChrome.WindowChrome">
@@ -60,12 +60,18 @@
                     <MenuItem x:Name="btnSQLite" Header="SQLite" >
                         <MenuItem Click="btnSQLite_Click" Header="Load data."/>
                         <MenuItem x:Name="btnSQLiteNavigate" Header="Open data folder." Click="btnSQLiteNavigate_Click"/>
+                        <MenuItem x:Name="btnSQLiteLoadFile" Header="Open from file." Click="btnSQLiteLoadFile_Click"></MenuItem>
+                    </MenuItem>
+                    <MenuItem x:Name="btnClearData" Header="Clear all current connection's data." Click="btnClearData_Click">
+                    </MenuItem>
+                    <MenuItem x:Name="btnAddRawData" Header="Add data from list of file paths." Click="btnAddRawData_Click">
                     </MenuItem>
                 </MenuItem>
-                <MenuItem x:Name="btnBrowser" Click="btnBrowser_Click" Header="Browser" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
-                <MenuItem x:Name="btnCMD" Header="CMD arguments" Click="btnCMD_Click" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
-                <MenuItem x:Name="btnLogs" Header="Logs" Click="btnLogs_Click" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
-                <MenuItem x:Name="btnAbout" Header="About" Click="btnAbout_Click" IsCheckable="true" Foreground="White" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnView" Click="btnView_Click" Header="View" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnBrowser" Click="btnBrowser_Click" Header="Browser" IsCheckable="true" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnCMD" Header="CMD arguments" Click="btnCMD_Click" IsCheckable="true" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnLogs" Header="Logs" Click="btnLogs_Click" IsCheckable="true" FontSize="12"></MenuItem>
+                <MenuItem x:Name="btnAbout" Header="About" Click="btnAbout_Click" IsCheckable="true" FontSize="12"></MenuItem>
             </Menu>
             <Border HorizontalAlignment="Right" DockPanel.Dock="Right" Padding="5 0 5 0">
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">

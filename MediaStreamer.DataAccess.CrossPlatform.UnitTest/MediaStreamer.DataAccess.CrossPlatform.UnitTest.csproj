@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
+    <ProjectReference Include="..\MediaStreamer.DataAccess.RawSQL\MediaStreamer.DataAccess.RawSQL.csproj" />
+    <ProjectReference Include="..\MediaStreamer.Logging\MediaStreamer.Logging.csproj" />
   </ItemGroup>
 
 </Project>

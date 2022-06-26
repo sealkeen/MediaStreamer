@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using StringExtensions;
 using System.Windows;
 using MediaStreamer.DataAccess.NetStandard;
+using MediaStreamer.DataAccess.CrossPlatform;
+using System.Threading;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {
@@ -25,16 +27,12 @@ namespace MediaStreamer.WPF.NetCore3_1
         public MainWindow()
         {
             InitializeComponent();
-            if (Program.DBAccess == null)
-            {
-                var task = Task.Factory.StartNew(() =>
-                Program.DBAccess = new DBRepository()
-                { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() });
+            InitializeDataConnections().Wait();
 
-                task.Wait();
-            }
             Program.DBAccess.DB.EnsureCreated();
-            $"The new position is : {Program.NewPosition}".LogStatically();
+            Program.ApplicationsSettingsContext.EnsureCreated();
+
+            Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
 
             ResolveCMDParamFilePaths();
 
@@ -45,23 +43,41 @@ namespace MediaStreamer.WPF.NetCore3_1
             //Session.MainPage.btnMinimize.Click += this.btnMinimize_Click;
         }
 
+        public async Task InitializeDataConnections()
+        {
+            if (Program.DBAccess == null)
+            {
+                var task = Task.Factory.StartNew(() =>
+                Program.DBAccess = new DBRepository()
+                { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() });
+
+                task.Wait();
+            }
+            if (Program.ApplicationsSettingsContext == null)
+            {
+                var task = Task.Factory.StartNew(() => Program.ApplicationsSettingsContext = new ApplicationSettingsContext());
+
+                task.Wait();
+            }
+        }
+
         private static void ResolveCMDParamFilePaths()
         {
             try
             {
                 string cmd = "Arguments: " + Environment.NewLine;
                 foreach (var l in Environment.GetCommandLineArgs().Skip(1)) cmd += l + Environment.NewLine;
-                cmd.LogStatically();
+                Program._logger?.LogTrace(cmd);
                 var cmdList = CommandLine.StartUpFromCommandLine( Environment.GetCommandLineArgs().Skip(1).ToArray() );
                 if (cmdList != null && cmdList.Count > 0)
                 {
                     if (cmdList[0]?.FilePath == null)
-                        "FATAL: CMD [0] FILEPATH IS NULL".LogStatically();
-                    $"OK: CMD list is fine. Composition: {cmdList[0].FilePath}".LogStatically();
+                        Program._logger?.LogTrace("FATAL: CMD [0] FILEPATH IS NULL");
+                    Program._logger?.LogTrace($"OK: CMD list is fine. Composition: {cmdList[0].FilePath}");
                     Program.currentComposition = cmdList[0];
                 }
                 else
-                    "FATAL: CMD list is null".LogStatically();
+                    Program._logger?.LogTrace("FATAL: CMD list is null");
                 CommandLine.SetUpPlayingEnvironment(cmdList);
             }
             catch (Exception ex)
@@ -159,7 +175,7 @@ namespace MediaStreamer.WPF.NetCore3_1
 
             UpdatePageViews();
             await tsk;
-            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
             await Selector.CompositionsPage?.ListAsync();
         }
 
@@ -174,7 +190,7 @@ namespace MediaStreamer.WPF.NetCore3_1
 
             UpdatePageViews();
             await tsk;
-            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
             await Selector.CompositionsPage?.ListAsync();
         }
 
@@ -190,7 +206,7 @@ namespace MediaStreamer.WPF.NetCore3_1
             );
             UpdatePageViews();
             await tsk;
-            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
             await Selector.CompositionsPage?.ListAsync();
         }
 
@@ -207,6 +223,11 @@ namespace MediaStreamer.WPF.NetCore3_1
             MediaStreamer.DataAccess.CrossPlatform.PathResolver.GetStandardDatabasePath().ExplorePath();
         }
 
+        private void btnSQLJSONClear_Click(object sender, RoutedEventArgs e)
+        {
+            Program.DBAccess.DB.Clear();
+        }
+
         private void btnSQLiteNavigate_Click(object sender, RoutedEventArgs e)
         {
             MediaStreamer.DataAccess.NetStandard.PathResolver.GetStandardDatabasePath().ExplorePath();
@@ -215,6 +236,52 @@ namespace MediaStreamer.WPF.NetCore3_1
         private void btnLogs_Click(object sender, RoutedEventArgs e)
         {
             Session.MainPage.SetFrameContent(LoggerPage.GetInstance());
+        }
+
+        private void btnClearData_Click(object sender, RoutedEventArgs e)
+        {
+            var ok = MessageBox.Show($"Clear all data from: {Program.DBAccess.DB.ToString()}", "Dateting all data", MessageBoxButton.YesNoCancel);
+            if (ok == MessageBoxResult.Yes)
+            {
+                Program.DBAccess.DB.Clear();
+            }
+        }
+            
+        private void btnAddRawData_Click(object sender, RoutedEventArgs e)
+        {
+            Session.MainPage.SetFrameContent(AddNewItems.GetPage());
+        }
+
+        private async void btnSQLiteLoadFile_Click(object sender, RoutedEventArgs e)
+        {
+            Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
+            //var tsk = Task.Factory.StartNew(new Action(async delegate
+            //{
+            var path = await Program.FileManipulator.GetOpenedDatabasePathAsync();
+            if (!File.Exists(path))
+                return;
+            Program.DBAccess = new DBRepository() { DB = new DataAccess.RawSQL.ReadonlyDBContext(path, Program._logger) };
+            //})
+            //);
+            UpdatePageViews();
+            //await tsk;
+            Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
+            Selector.CompositionsPage?.ListAsync();
+        }
+
+        private void btnView_Click(object sender, RoutedEventArgs e)
+        {
+            var position = Program.mePlayer.Position;
+            this.Style = (Style)FindResource("MainWindowStyle");
+
+            int delay = 500;
+            Task.Factory.StartNew(new Action(delegate
+            {
+                Thread.Sleep(delay);
+                this.Dispatcher.BeginInvoke(new Action(delegate {
+                    Program.mePlayer.Position = position + TimeSpan.FromMilliseconds(delay);
+                }));
+            }));
         }
     }
 }

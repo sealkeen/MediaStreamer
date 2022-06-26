@@ -15,26 +15,26 @@ namespace MediaStreamer.RAMControl
         public static List<Composition> StartUpFromCommandLine(string[] args)
         {
             Program.startupFromCommandLine = false;
-            "Command line startup executed ok.".LogStatically();
+            Program._logger?.LogTrace("Command line startup executed ok.");
             if (args.Count() <= 0)
             {
-                "FATAL: Args Count <= 0.".LogStatically();
+                Program._logger?.LogTrace("error: Args Count <= 0.");
                 return null;
             }
-            $"OK: Args Count <{args.Count()}> > 0.".LogStatically();
+
+            Program._logger?.LogInfo($"OK: Args Count <{args.Count()}> > 0.");
             Program.startupFromCommandLine = true;
             List<Composition> lst = new List<Composition>();
 
-
-            "Starting ForEach.".LogStatically();
+            Program._logger?.LogTrace("Starting ForEach.");
             foreach (var c in args)
             {
                 if (File.Exists(c.Trim().Trim('\"')))
                 {
-                    SimpleLogger.LogStatically($"File {c.Trim().Trim('\"')} exists ok.");
+                    Program._logger?.LogInfo($"File {c.Trim().Trim('\"')} exists ok.");
                     HandleExistingFile(lst, c);
                 } else {
-                    SimpleLogger.LogStatically($"FATAL: {c.Trim().Trim('\"')} doesn't exist.");
+                    Program._logger?.LogError($"{c.Trim().Trim('\"')} doesn't exist.");
                 }
             }
 
@@ -43,17 +43,17 @@ namespace MediaStreamer.RAMControl
 
         private static void HandleExistingFile(List<Composition> lst, string path)
         {
-            SimpleLogger.LogStatically($"File {path.Trim().Trim('\"')} exists ok.");
+            Program._logger?.LogTrace($"File {path.Trim().Trim('\"')} exists ok.");
 
             if (Program.FileManipulator == null)
             {
-                $"Creating file manipulator : {File.Exists(path)}".LogStatically();
-                Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+                Program._logger?.LogTrace($"Creating file manipulator : {File.Exists(path)}");
+                Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
             }
-            $"Passing to decompose: {path}, existing : {File.Exists(path)}".LogStatically();
-            var cmp = Program.FileManipulator.DecomposeAudioFile(path.Trim().Trim('\"'), MediaStreamer.Logging.SimpleLogger.LogStatically);
+            Program._logger?.LogInfo($"Passing to decompose: {path}, existing : {File.Exists(path)}");
+            var cmp = Program.FileManipulator.DecomposeAudioFile(path.Trim().Trim('\"'), Program._logger.LogInfo);
 
-            $"Adding comp to list and it is valid: {cmp != null && cmp.FilePath != null}".LogStatically();
+            Program._logger?.LogInfo($"Adding comp to list and it is valid: {cmp != null && cmp.FilePath != null}");
             lst.Add(cmp);
         }
 
@@ -61,13 +61,14 @@ namespace MediaStreamer.RAMControl
         {
             if (lst == null || lst.Count() <= 0)
             {
-                "CMD valid arguments == 0".LogStatically();
+                Program._logger?.LogTrace("CMD valid arguments == 0");
                 return;
             }
+
             if (lst.Count() > 0)
             {
                 Program.currentComposition = lst[0];
-                $"CMD valid arguments == {lst.Count()}".LogStatically();
+                Program._logger?.LogTrace($"CMD valid arguments == {lst.Count()}");
                 Session.CompositionsVM = new CompositionsViewModel();
                 foreach (var c in lst)
                 {

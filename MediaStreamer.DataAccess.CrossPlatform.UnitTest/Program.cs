@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using Sealkeen.CSCourse2016.JSONParser.Core;
 using MediaStreamer.Domain;
+using MediaStreamer.DataAccess.RawSQL;
+using MediaStreamer.Logging;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
 {
@@ -10,7 +12,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
     {
         public static void Main(string[] args)
         {
-            GetCompositions();
+            var logFile = Path.Combine(Environment.CurrentDirectory + "log.txt");
+            ReadonlyDBContext context = new ReadonlyDBContext(@"O:\DB\26.10.2021-3.db3", new SimpleLogger());
+            var comps = context.GetCompositions();
+
+           // GetCompositions();
         }
 
         public static void GetCompositions()

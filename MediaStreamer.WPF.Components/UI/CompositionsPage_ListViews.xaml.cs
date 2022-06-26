@@ -13,6 +13,7 @@ using LinqExtensions;
 using MediaStreamer.RAMControl;
 using System.Threading;
 using MediaStreamer.Logging;
+using System.Text;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -66,7 +67,7 @@ namespace MediaStreamer.WPF.Components
                     })
                 );
             } catch(Exception ex){
-                MediaStreamer.Logging.SimpleLogger.LogStatically("lstItems_MouseLeftButtonDown :" + ex.Message);
+                Program._logger?.LogTrace("lstItems_MouseLeftButtonDown :" + ex.Message);
             }
         }
         private async void lstItems_Drop(object sender, DragEventArgs e)
@@ -156,7 +157,7 @@ namespace MediaStreamer.WPF.Components
             }
             catch (Exception ex)
             {
-                MediaStreamer.Logging.SimpleLogger.LogStatically("TryToSelectItem :" + ex.Message);
+                Program._logger?.LogTrace("TryToSelectItem :" + ex.Message);
             }
         }
 
@@ -165,6 +166,31 @@ namespace MediaStreamer.WPF.Components
             if (lstItems.IsKeyboardFocusWithin || lstQuery.IsKeyboardFocusWithin)
                 return true;
             return false;
+        }
+
+        private void lstItems_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if ((sender as ListView).SelectedItems.Count >= 1)
+                {
+                    if (e.Key == Key.C && Keyboard.Modifiers == ModifierKeys.Control)
+                    {
+                        var sb = new StringBuilder();
+                        var selectedItems = lstItems.SelectedItems;
+
+                        foreach (var item in selectedItems)
+                        {
+                            sb.Append((item as IComposition).FilePath);
+                            sb.Append(Environment.NewLine);
+                        }
+                        Clipboard.SetDataObject(sb.ToString().TrimEnd());
+                    }
+                }
+            }
+            catch (Exception ex) {
+                Program._logger?.LogError(ex.Message);
+            }
         }
     }
 }

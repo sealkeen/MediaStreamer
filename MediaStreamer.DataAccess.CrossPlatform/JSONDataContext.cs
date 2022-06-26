@@ -19,6 +19,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 _log = Console.WriteLine;
             //FolderName = Path.Combine(Environment.CurrentDirectory, "Compositions");
             FolderName = PathResolver.GetStandardDatabasePath();
+
             Genres = new List<Genre>();
             Artists = new List<Artist>();
             Albums = new List<Album>();
@@ -39,7 +40,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         //public virtual List<CompositionVideo> CompositionVideos { get; set; }
         public virtual List<Genre> Genres { get; set; }
         public virtual List<ListenedComposition> ListenedCompositions { get; set; }
-        public virtual List<PlayerState> PlayerStates { get; set; }
+
+
         //public virtual List<Picture> Pictures { get; set; }
         //public virtual List<Video> Videos { get; set; }
 
@@ -216,6 +218,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             throw new NotImplementedException();
         }
 
+
         public void Add(Genre genre)
         {
             string genresDB = Path.Combine(FolderName, "Genres.json");
@@ -270,30 +273,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             root.ToFile(listenedDB);
         }
 
-        public void Add(PlayerState playerState)
-        {
-            string listenedDB = Path.Combine(FolderName, "PlayerStates.json");
-
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "PlayerStates.json");
-
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("PlayerStates".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
-
-            JObject jLS = new JObject(itemsCollection);
-
-            //Properties
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.StateID.ToString(), playerState.StateID.ToString(), jLS));
-            list.Add(new JKeyValuePair(Key.StateTime.ToString(), playerState.StateTime.ToString(), jLS));
-            list.Add(new JKeyValuePair(Key.VolumeLevel.ToString(), playerState.VolumeLevel.ToString(), jLS));
-
-            jLS.AddPairs(list);
-            itemsCollection.Add(jLS);
-            root.ToFile(listenedDB);
-        }
 
         public void Add(Moderator moderator)
         {
@@ -354,6 +333,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             DataBase.DeleteTable(FolderName, "Compositions.json");
             DataBase.DeleteTable(FolderName, "ArtistGenres.json");
             DataBase.DeleteTable(FolderName, "AlbumGenres.json");
+            DataBase.DeleteTable(FolderName, "ListenedCompositions.json");
 
             EnsureCreated();
         }
@@ -644,35 +624,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             return ListenedCompositions.AsQueryable();
         }
 
-        public IQueryable<PlayerState> GetPlayerStates()
-        {
-            var jCompositions = Table.LoadInMemory(FolderName, "PlayerStates.json");
-
-            PlayerStates = new List<PlayerState>();
-            foreach (var jComposition in jCompositions)
-            {
-                PlayerState received = new PlayerState();
-                var fields = jComposition.DescendantPairs();
-                foreach (var kv in fields)
-                {
-                    switch (kv.Key.ToString().Trim('\"'))
-                    {
-                        case Key.StateID:
-                            Table.SetProperty(received, Key.StateID, Guid.Parse(kv.Value.AsUnquoted()));
-                            break;
-                        case Key.StateTime:
-                            Table.SetProperty(received, Key.StateTime, DateTime.Parse(kv.Value.AsUnquoted()));
-                            break;
-                        case Key.VolumeLevel:
-                            Table.SetProperty(received, Key.VolumeLevel, double.Parse(kv.Value.AsUnquoted()));
-                            break;
-                    }
-                }
-                PlayerStates.Add(received);
-            }
-
-            return PlayerStates.AsQueryable();
-        }
 
 
         public IQueryable<Moderator> GetModerators()

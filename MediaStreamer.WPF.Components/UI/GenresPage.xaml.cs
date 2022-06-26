@@ -25,10 +25,11 @@ namespace MediaStreamer.WPF.Components
         }
         public GenresPage()
         {
-            //Genres = new List<Genre>();
+            Session.GenresVM = new GenresViewModel();
             InitializeComponent();
+
             ListGenres();
-            DataContext = this;
+            DataContext = Session.GenresVM;
         }
 
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -39,7 +40,7 @@ namespace MediaStreamer.WPF.Components
                 Selector.ArtistsPage = new ArtistsPage(genreName);
             else
                 Selector.ArtistsPage.ListByTitle(genreName);
-            Selector.MainPage.SetFrameContent( Selector.ArtistsPage);
+            Selector.MainPage.SetFrameContent( Selector.ArtistsPage );
             Selector.MainPage.UpdateFrameLayout();
             Selector.MainPage.SetStatus($"Chosen genres's <{genreName}> artist listing:");
         }

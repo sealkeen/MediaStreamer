@@ -32,6 +32,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public const string StateID = "StateID";
         public const string StateTime = "StateTime";
         public const string VolumeLevel = "VolumeLevel";
+
+        //DBPath
+        public const string DBPathID = "DBPathID";
+        public const string DataSource = "DataSource";
+
         public static long Parse(string str)
         {
             long lg;

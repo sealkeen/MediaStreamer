@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.DataAccess.Ne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DataAccess.NetStandard", "..\MediaStreamer.DataAccess.NetStandard\MediaStreamer.DataAccess.NetStandard.csproj", "{26D675D9-47A3-4C12-9995-D06D7D40759E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMXamarin", "..\MediaStreamer.Xamarin\DMXamarin\DMXamarin.csproj", "{3AE8BECE-9F70-401F-9A9B-0F19D2181C9E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.FilePicker", "..\..\XamarinFilePicker\FilePicker-Plugin-for-Xamarin-and-Windows\src\Plugin.FilePicker\Plugin.FilePicker.csproj", "{A946E686-B0BF-46F4-B708-A04E38F18C05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.Net40.UnitTests", "..\MediaStreamer.Net40.UnitTests\MediaStreamer.Net40.UnitTests.csproj", "{56270AC4-1DD5-4E40-AF70-FA2B4C7FC04A}"
@@ -54,6 +52,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObjectModelExtensions", "..\ObjectModelExtensions\ObjectModelExtensions.csproj", "{40AFA8EA-74E3-4416-A28D-13734D4607D8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sealkeen.CSCourse2016.JSONParser.Core", "..\..\JSON-Parsing-Compiler\Sealkeen.CSCourse2016.JSONParser.Core\Sealkeen.CSCourse2016.JSONParser.Core.csproj", "{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sealkeen.Abstractions", "..\Sealkeen.Abstractions\Sealkeen.Abstractions.csproj", "{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.DataAccess.RawSQL", "..\MediaStreamer.DataAccess.RawSQL\MediaStreamer.DataAccess.RawSQL.csproj", "{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,12 +145,6 @@ Global
 		{26D675D9-47A3-4C12-9995-D06D7D40759E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26D675D9-47A3-4C12-9995-D06D7D40759E}.Release|x86.ActiveCfg = Release|Any CPU
 		{26D675D9-47A3-4C12-9995-D06D7D40759E}.Release|x86.Build.0 = Release|Any CPU
-		{3AE8BECE-9F70-401F-9A9B-0F19D2181C9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AE8BECE-9F70-401F-9A9B-0F19D2181C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AE8BECE-9F70-401F-9A9B-0F19D2181C9E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3AE8BECE-9F70-401F-9A9B-0F19D2181C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AE8BECE-9F70-401F-9A9B-0F19D2181C9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AE8BECE-9F70-401F-9A9B-0F19D2181C9E}.Release|x86.ActiveCfg = Release|Any CPU
 		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -267,6 +263,22 @@ Global
 		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Release|x86.ActiveCfg = Release|Any CPU
 		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Release|x86.Build.0 = Release|Any CPU
+		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Debug|x86.Build.0 = Debug|Any CPU
+		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Release|x86.ActiveCfg = Release|Any CPU
+		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Release|x86.Build.0 = Release|Any CPU
+		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Debug|x86.Build.0 = Debug|Any CPU
+		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

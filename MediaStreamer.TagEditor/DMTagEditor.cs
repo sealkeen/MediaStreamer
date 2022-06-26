@@ -77,6 +77,8 @@ namespace MediaStreamer.TagEditing
                 var tagv2 = tagFile.GetTag(TagLib.TagTypes.Id3v2);
                 //check if the title isn't null
                 if (!string.IsNullOrEmpty(title)) {
+                    if (tagv2 == null || tagv2.Title == null)
+                        return;
                     string titleFromFile = tagv2.Title;
                     if (titleFromFile == null || !title.ToLower().Contains(titleFromFile.ToLower())) {
                         tagv2.Title = title;
@@ -98,6 +100,8 @@ namespace MediaStreamer.TagEditing
                 //check if the artist isn't null
                 if (!string.IsNullOrEmpty(artist))
                 {
+                    if (tagv2 == null || tagv2.Performers == null)
+                        return;
                     string[] artistsFromFile = tagv2.Performers;
 
                     if (artistsFromFile == null || artistsFromFile.Count() == 0

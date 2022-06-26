@@ -40,7 +40,7 @@ namespace MediaStreamer.WPF.Net40
 
         private async void btnDatabase_Click(object sender, RoutedEventArgs e)
         {
-            MediaStreamer.IO.FileManipulator fM = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+            MediaStreamer.IO.FileManipulator fM = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
             var fullpath = fM.GetOpenedDatabasePathAsync();
 
             fullpath.Wait();

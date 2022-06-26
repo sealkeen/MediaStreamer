@@ -175,6 +175,10 @@
       <Project>{461a676c-e7b5-44ab-9f1d-5d543e8e35dc}</Project>
       <Name>MediaStreamer.WPF.EventAction</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sealkeen.Abstractions\Sealkeen.Abstractions.csproj">
+      <Project>{81fd0dea-c02f-4d88-a05e-d0184be8ba98}</Project>
+      <Name>Sealkeen.Abstractions</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="doge.ico" />

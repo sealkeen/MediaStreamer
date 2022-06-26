@@ -83,11 +83,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public static void DeleteTable(string folderPath, string fileName)
         {
             string fullName = System.IO.Path.Combine(folderPath, fileName);
-            if (!Directory.Exists(folderPath))
+            if (Directory.Exists(folderPath))
             {
-                if (File.Exists(fileName))
+                if (File.Exists(fullName))
                 {
-                    File.Delete(fileName);
+                    File.Delete(fullName);
                 }
             }
         }

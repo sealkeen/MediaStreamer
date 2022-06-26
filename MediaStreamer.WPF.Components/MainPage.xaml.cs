@@ -15,24 +15,26 @@ using System.Windows.Controls.Primitives;
 using MediaStreamer.RAMControl;
 using MediaStreamer.Domain;
 using MediaStreamer.Logging;
+using Sealkeen.Abstractions;
 
 namespace MediaStreamer.WPF.Components
 {
     public partial class MainPage : StatusPage
     {
+
         public MainPage()
         {
             InitializeComponent();
 
-            $"The new position is : {Program.NewPosition}".LogStatically();
-            "Creating MainPage()".LogStatically();
+            Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
+            Program._logger?.LogTrace("Creating MainPage()");
             if(Program.FileManipulator == null)
-                Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess);
+                Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
 
             Selector.MainPage = this;
             Session.MainPage = this;
 
-            "Creating Dispatcher Timer".LogStatically();
+            Program._logger?.LogTrace("Creating Dispatcher Timer");
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += timer_Tick;
@@ -48,6 +50,11 @@ namespace MediaStreamer.WPF.Components
         private double volumeKeyValue = 0.0125;
         private bool userIsDraggingSlider = false;
         private bool canExecute = false;
+
+        public override Frame GetFrame()
+        {
+            return mainFrame;
+        }
 
         /// <summary> Load Page Event </summary>
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -82,7 +89,8 @@ namespace MediaStreamer.WPF.Components
                 case (Key.Up): if(!Selector.CompositionsPage.lstItems_OwnsFocus()) VolumeUp("Up Arrow", volumeKeyValue); break;
                 case (Key.Down): if(!Selector.CompositionsPage.lstItems_OwnsFocus()) VolumeDown("Down Arrow", volumeKeyValue); break;
                 case (Key.Enter): 
-                    if(Selector.CompositionsPage.lstItems.SelectedIndex >= 0)
+                    if(Session.MainPage.GetFrame().Content is CompositionsPage &&
+                        Selector.CompositionsPage.lstItems.SelectedIndex >= 0)
                         Selector.CompositionsPage.PlaySelectedTarget(); break;
             }
         }

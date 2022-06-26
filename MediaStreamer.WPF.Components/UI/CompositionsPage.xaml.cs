@@ -26,17 +26,17 @@ namespace MediaStreamer.WPF.Components
         {
             try
             {
-                $"The new position is : {Program.NewPosition}".LogStatically();
-                $"Creating CompositionsPage(), Program.startupFromCommandLine = {Program.startupFromCommandLine}".LogStatically();
-                ($"Current composition is not nuLL = {Program.currentComposition != null}" + Environment.NewLine +
-                    $"Current composition path is not nuLL = {Program.currentComposition?.FilePath != null}").LogStatically();
+                Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
+                Program._logger?.LogTrace($"Creating CompositionsPage(), Program.startupFromCommandLine = {Program.startupFromCommandLine}");
+                Program._logger?.LogTrace($"Current composition is not nuLL = {Program.currentComposition != null}" + Environment.NewLine +
+                    $"Current composition path is not nuLL = {Program.currentComposition?.FilePath != null}");
                 //cmd mode play from cmd parameter file
                 if (Program.startupFromCommandLine)
                 {
                     Program.SetPlayerPositionToZero();
                     Program.mePlayer.Source = new Uri(Program.currentComposition.FilePath);
-                    ($"Setting Program.mePlayer.Source = {Program.currentComposition.FilePath}, " +
-                        $"File valid = {File.Exists(Program.currentComposition.FilePath)}").LogStatically();
+                    Program._logger?.LogTrace($"Setting Program.mePlayer.Source = {Program.currentComposition.FilePath}, " +
+                        $"File valid = {File.Exists(Program.currentComposition.FilePath)}");
                 }
             }
             catch (Exception ex) 
@@ -52,14 +52,13 @@ namespace MediaStreamer.WPF.Components
             Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage())); //LoadManagementElements(); //ListCompositionsAsync();
             InitializeComponent();
 
-            $"Setting valid DataContext = {Session.CompositionsVM.CompositionsStore != null}".LogStatically();
+            Program._logger?.LogTrace($"Setting valid DataContext = {Session.CompositionsVM.CompositionsStore != null}");
 
             DataContext = Session.CompositionsVM.CompositionsStore;
             //tsk.Wait();
             Selector.MainPage.SetFrameContent(this);
 
-
-            $"The new position is : {Program.NewPosition}".LogStatically();
+            Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
         }
 
         public CompositionsPage(Guid ArtistID, Guid albumID)
@@ -163,7 +162,7 @@ namespace MediaStreamer.WPF.Components
         {
             var tsk = await Program.FileManipulator.OpenAudioFileCrossPlatform();
 
-            Program.FileManipulator.DecomposeAudioFile(tsk, SimpleLogger.LogStatically);
+            Program.FileManipulator.DecomposeAudioFile(tsk, Program._logger?.GetLogErorrOrReturnNull());
             ReList();
         }
 
@@ -503,11 +502,9 @@ namespace MediaStreamer.WPF.Components
                         comp.CompositionName, comp.Album.AlbumName, comp.Duration.Value, comp.FilePath);
                 }
             } catch (Exception ex) {
-                SimpleLogger.LogStatically("RenameCompositionFiles" + ex.Message);
+                Program._logger?.LogError("RenameCompositionFiles" + ex.Message);
             }
         }
-
-
 
         // GridSplitter -->
         double _oldLstItemsWidth = 0.0;
@@ -576,7 +573,7 @@ namespace MediaStreamer.WPF.Components
                     Session.CompositionsVM.CompositionsStore.Queue.AddLast(c as Composition);
                 ReList();
             }
-            if(e.Data.GetDataPresent(DataFormats.FileDrop));
+            if(e.Data.GetDataPresent(DataFormats.FileDrop))
                 lstItems_Drop(sender, e);
         }
         private void queOpenLocation_Click(object sender, RoutedEventArgs e)

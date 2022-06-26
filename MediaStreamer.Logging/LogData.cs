@@ -9,6 +9,6 @@ namespace MediaStreamer.Logging
 {
     public class LogData
     {
-        public static ConcurrentObservableCollection<LogRecord> LogList { get; set; } = new ConcurrentObservableCollection<LogRecord>();
+        public static ObservableCollection<LogRecord> LogList { get; set; } = new ObservableCollection<LogRecord>();
     }
 }

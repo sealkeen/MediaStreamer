@@ -49,7 +49,7 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonListen_Click(object sender, RoutedEventArgs e)
         {
-            Program.FileManipulator.DecomposeAudioFile(Program.FileManipulator.OpenAudioFileCrossPlatform().Result, SimpleLogger.LogStatically);
+            Program.FileManipulator.DecomposeAudioFile(Program.FileManipulator.OpenAudioFileCrossPlatform().Result, Program._logger?.GetLogErorrOrReturnNull());
             List();
         }
 

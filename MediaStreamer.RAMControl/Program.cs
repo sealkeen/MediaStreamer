@@ -2,11 +2,14 @@
 using System.Diagnostics;
 using System.Windows.Controls;
 using MediaStreamer.Domain;
+using MediaStreamer.IO;
 using StringExtensions;
 using System.Collections;
 using System.Collections.Generic;
 using LinqExtensions;
 using System.Linq;
+using Sealkeen.Abstractions;
+using StringExtensions;
 
 namespace MediaStreamer.RAMControl
 {
@@ -16,46 +19,75 @@ namespace MediaStreamer.RAMControl
         //TODO: Move CompositionStorage to RAMControl
         //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
         //TODO: Move CompositionStorage to RAMControl
-
+        public Program(ILogger logger)
+        {
+            _logger = logger;
+        }
         public static IDBRepository DBAccess;
-        public static bool mediaPlayerIsPlaying = false;
-        public static MediaElement mePlayer;
-        public static System.Windows.Controls.TextBlock txtStatus;
         public static IComposition currentComposition;
-        public static MediaStreamer.IO.FileManipulator FileManipulator;
+        public static IApplicationsSettingsContext ApplicationsSettingsContext;
+        public static MediaElement mePlayer;
+        public static TextBlock txtStatus;
+        public static FileManipulator FileManipulator;
+        public static bool mediaPlayerIsPlaying = false;
         public static bool PlayerStopped = false;
         public static TimeSpan NewPosition;
+
         public static bool startupFromCommandLine = false;
         public static Action<Action<string>, string> LoggingAction;
+
+        public static ILogger _logger { get; set; }
 
         #region AutoPlay Closing / Opening
         public static void OnClosing()
         {
-            if (currentComposition == null)
-                return;
-            double position = mePlayer.Position.TotalMilliseconds;
-            var ts = TimeSpan.FromMilliseconds(position);
+            try
+            {
+                if (currentComposition == null)
+                    return;
+                double position = mePlayer.Position.TotalMilliseconds;
+                var ts = TimeSpan.FromMilliseconds(position);
 
-            var comp = currentComposition;
-            ListenedComposition lC = new ListenedComposition();
-            lC.CompositionID = comp.CompositionID;
-            lC.UserID = SessionInformation.CurrentUser == null ? Guid.Empty : SessionInformation.CurrentUser.UserID;
-            lC.StoppedAt = position;
-            lC.ListenDate = DateTime.Now;
+                var comp = currentComposition;
+                ListenedComposition lC = new ListenedComposition();
+                lC.CompositionID = comp.CompositionID;
+                lC.UserID = SessionInformation.CurrentUser == null ? Guid.Empty : SessionInformation.CurrentUser.UserID;
+                lC.StoppedAt = position;
+                lC.ListenDate = DateTime.Now;
 
-            //DBAccess.ClearListenedCompositions();
-            DBAccess.DB.Add(lC);
+                //DBAccess.ClearListenedCompositions();
+                DBAccess.DB.Add(lC);
+
+                ApplicationsSettingsContext.ClearPlayerStates();
+                _logger?.LogTrace($"Setting last player state...");
+                PlayerState ps = new PlayerState() { StateID = Guid.NewGuid(), StateTime = DateTime.Now, VolumeLevel = mePlayer.Volume };
+                ApplicationsSettingsContext.Add(ps);
+            } catch (Exception ex) {
+                _logger?.LogError("FATAL: " + ex.Message);
+            }
         }
 
         public static IList OnOpen()
         {
-            var query = DBAccess.DB.GetListenedCompositions();
-            if (query.Count() == 0)
-                return new List<Composition>();
-            var lcomp = DBAccess.DB.GetListenedCompositions().Last();
-            var comp = DBAccess.DB.GetCompositions().Where(c => c.CompositionID == lcomp.CompositionID).ToList();
-            NewPosition = TimeSpan.FromMilliseconds(lcomp.StoppedAt);
-            return comp;
+            try {
+                var volume = ApplicationsSettingsContext.GetCachedVolumeLevel(); 
+                _logger?.LogTrace($"Trying to load last volume level ({NullReferenceResolution.Coalesce(volume)})...");
+                if (volume != null) {
+                    mePlayer.Volume = volume.Value;
+                    _logger?.LogTrace($"Setting last volume level ({volume})...");
+                }
+
+                var query = DBAccess.DB.GetListenedCompositions();
+                if (query.Count() == 0)
+                    return new List<Composition>();
+                var lcomp = DBAccess.DB.GetListenedCompositions().Last();
+                var comp = DBAccess.DB.GetCompositions().Where(c => c.CompositionID == lcomp.CompositionID).ToList();
+                NewPosition = TimeSpan.FromMilliseconds(lcomp.StoppedAt);
+                return comp;
+            } catch (Exception ex) {
+                 _logger?.LogError("FATAL: " + ex.Message);
+                return null;
+            }
         }
         #endregion
 
@@ -145,7 +177,7 @@ namespace MediaStreamer.RAMControl
             if (Session.MainPage != null && Session.MainPage.ListInitialized && status != null)
             {
                 SetTxtStatusContents(status);
-                LoggingAction?.Invoke(MediaStreamer.Logging.SimpleLogger.LogStatically, status);
+                Program._logger?.LogTrace(status);
             }
         }
 
@@ -195,7 +227,7 @@ namespace MediaStreamer.RAMControl
             txtStatus.Text = status;
             if (error)
             {
-                LoggingAction?.Invoke(MediaStreamer.Logging.SimpleLogger.LogStatically, status);
+                Program._logger?.LogTrace(status);
                 Debug.WriteLine(status);
             }
         }
