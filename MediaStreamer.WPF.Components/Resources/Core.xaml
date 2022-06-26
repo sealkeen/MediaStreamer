@@ -1188,7 +1188,8 @@
                                           HorizontalAlignment="Left"  />
                         <TextBox x:Name="PART_EditableTextBox" Style="{x:Null}" Template="{StaticResource ComboBoxTextBox}" HorizontalAlignment="Left" 
                                  VerticalAlignment="Center" Margin="6,3,32,3" Focusable="True" Background="Transparent" Visibility="Hidden" IsReadOnly="{TemplateBinding IsReadOnly}"/>
-                        <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False"
+                        <!--AllowsTransparency="True"-->
+                        <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" Focusable="False"
                                PopupAnimation="Slide" Margin="3,-8,-3,8">
                             <Grid Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                 <Border x:Name="DropDownBorder" Background="{StaticResource ControlLightBackground}" BorderThickness="1" CornerRadius="3" Margin="0,3,0,3"
@@ -1215,7 +1216,7 @@
                         <Trigger Property="IsGrouping" Value="True">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
                         </Trigger>
-                        <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="True"/>
+                        <!--<Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="True"/>-->
                         <Trigger Property="IsEditable" Value="True">
                             <Setter Property="IsTabStop" Value="False"/>
                             <Setter TargetName="PART_EditableTextBox" Property="Visibility"	Value="Visible"/>
@@ -1666,7 +1667,8 @@
                 <Path x:Name="CheckMarkerMenuItem" Visibility="Collapsed" FlowDirection="LeftToRight" Margin="6,0,0,0"  VerticalAlignment="Center" Fill="{TemplateBinding Foreground}" Data="{StaticResource CheckMarker}"/>
                 <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="{TemplateBinding Padding}" ContentSource="Header" RecognizesAccessKey="True"/>
             </DockPanel>
-            <Popup x:Name="PART_Popup" Focusable="False" AllowsTransparency="True" HorizontalOffset="1" IsOpen="{TemplateBinding IsSubmenuOpen}"
+            <!--AllowsTransparency="True"-->
+            <Popup x:Name="PART_Popup" Focusable="False" HorizontalOffset="1" IsOpen="{TemplateBinding IsSubmenuOpen}"
                    Placement="Bottom" PopupAnimation="Scroll" VerticalOffset="-1">
                 <ContentControl IsTabStop="False" x:Name="SubmenuBorder" Template="{DynamicResource {ComponentResourceKey ResourceId=SubmenuContent, TypeInTargetAssembly={x:Type FrameworkElement}}}">
                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="2" Grid.IsSharedSizeScope="True" KeyboardNavigation.DirectionalNavigation="Cycle" KeyboardNavigation.TabNavigation="Cycle"/>
@@ -1815,7 +1817,8 @@
                 <TextBlock Visibility="Collapsed" Margin="{TemplateBinding Padding}" Grid.Column="4" Text="{TemplateBinding InputGestureText}"/>
                 <Path Margin="4,0,0,0" VerticalAlignment="Center" Fill="{TemplateBinding Foreground}" Grid.Column="5" Data="{StaticResource RightArrow}"/>
             </Grid>
-            <Popup x:Name="PART_Popup" Focusable="False" AllowsTransparency="True" HorizontalOffset="-2" IsOpen="{TemplateBinding IsSubmenuOpen}"
+            <!--AllowsTransparency="True"-->
+            <Popup x:Name="PART_Popup" Focusable="False" HorizontalOffset="-2" IsOpen="{TemplateBinding IsSubmenuOpen}"
                    Placement="Right" PopupAnimation="Slide" VerticalOffset="-2" >
                 <ContentControl x:Name="SubmenuBorder" IsTabStop="False" Template="{DynamicResource {ComponentResourceKey ResourceId=SubmenuContent, TypeInTargetAssembly={x:Type FrameworkElement}}}" >
                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="2" Grid.IsSharedSizeScope="True" KeyboardNavigation.DirectionalNavigation="Cycle" KeyboardNavigation.TabNavigation="Cycle"/>
@@ -3149,7 +3152,8 @@
                             </Grid.ColumnDefinitions>
                             <Rectangle Grid.Column="0" Fill="#a6FFFFFF" RadiusY="1" Grid.Row="0" RadiusX="1"/>
                             <Rectangle Grid.Column="1" Fill="#a6FFFFFF" Height="18" Margin="3,0,3,0" RadiusY="1" Grid.Row="0" RadiusX="1" Width="19"/>
-                            <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" PlacementTarget="{Binding ElementName=PART_TextBox}" StaysOpen="False"/>
+                            <!--AllowsTransparency="True"-->
+                            <Popup x:Name="PART_Popup" Placement="Bottom" PlacementTarget="{Binding ElementName=PART_TextBox}" StaysOpen="False"/>
                         </Grid>
                     </Grid>
                 </ControlTemplate>
@@ -4464,8 +4468,8 @@
                         <Grid HorizontalAlignment="Right" x:Name="OverflowGrid">
                             <ToggleButton IsEnabled="{TemplateBinding HasOverflowItems}" FocusVisualStyle="{x:Null}" x:Name="OverflowButton" 
                                           Style="{StaticResource ToolBarHorizontalOverflowButtonStyle}" ClickMode="Press" 
-                                          IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
-                            <Popup Focusable="False" AllowsTransparency="True" IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}" 
+                                          IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/><!--AllowsTransparency="True"--> 
+                            <Popup Focusable="False" IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}" 
                                    Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" 
                                    StaysOpen="False" x:Name="OverflowPopup">
                                 <Border x:Name="Shdw">
@@ -4609,8 +4613,8 @@
                             <DoubleAnimation Storyboard.TargetName="Bg" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.3" To="0"/>
                         </Storyboard>
                     </ControlTemplate.Resources>
-                    <Grid>
-                        <Popup x:Name="PART_Popup" Placement="Bottom" VerticalOffset="2" IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" 
+                    <Grid><!--AllowsTransparency="True"-->
+                        <Popup x:Name="PART_Popup" Placement="Bottom" VerticalOffset="2" IsOpen="{TemplateBinding IsSubmenuOpen}"  
                                Focusable="False" PopupAnimation="Scroll">
                             <Border Name="SubMenuBorder" Background="{StaticResource ControlLightBackground}" BorderThickness="1" 
                                     BorderBrush="{StaticResource ControlBorderBrush}">
@@ -4856,8 +4860,8 @@
                             <DoubleAnimation Storyboard.TargetName="Bg" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.3" To="0"/>
                         </Storyboard>
                     </ControlTemplate.Resources>
-                    <Grid>
-                        <Popup x:Name="PART_Popup" Placement="Bottom" VerticalOffset="2" IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" 
+                    <Grid><!--AllowsTransparency="True"--> 
+                        <Popup x:Name="PART_Popup" Placement="Bottom" VerticalOffset="2" IsOpen="{TemplateBinding IsSubmenuOpen}" 
                                Focusable="False" PopupAnimation="Scroll">
                             <Border Name="SubMenuBorder" Background="{StaticResource ControlLightBackground}" BorderThickness="1" 
                                     BorderBrush="{StaticResource ControlBorderBrush}">

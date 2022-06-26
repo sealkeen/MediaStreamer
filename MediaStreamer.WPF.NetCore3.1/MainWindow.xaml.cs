@@ -15,6 +15,7 @@ using System.Windows;
 using MediaStreamer.DataAccess.NetStandard;
 using MediaStreamer.DataAccess.CrossPlatform;
 using System.Threading;
+using System.Windows.Controls;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {
@@ -28,6 +29,7 @@ namespace MediaStreamer.WPF.NetCore3_1
         {
             InitializeComponent();
             InitializeDataConnections().Wait();
+            Selector.MainWindow = this;
 
             Program.DBAccess.DB.EnsureCreated();
             Program.ApplicationsSettingsContext.EnsureCreated();
@@ -269,19 +271,47 @@ namespace MediaStreamer.WPF.NetCore3_1
             Selector.CompositionsPage?.ListAsync();
         }
 
+        public Style BlankStyle { get; set; }
+        public const int delay = 1500;
         private void btnView_Click(object sender, RoutedEventArgs e)
         {
-            var position = Program.mePlayer.Position;
-            this.Style = (Style)FindResource("MainWindowStyle");
-
-            int delay = 500;
-            Task.Factory.StartNew(new Action(delegate
+            try
             {
-                Thread.Sleep(delay);
-                this.Dispatcher.BeginInvoke(new Action(delegate {
-                    Program.mePlayer.Position = position + TimeSpan.FromMilliseconds(delay);
+                Program.NewPosition = Program.mePlayer.Position;
+                if (this.Style != BlankStyle)
+                {
+                    if(BlankStyle == null)
+                        BlankStyle = new Style
+                        {
+                            TargetType = typeof(Window)
+                        };
+
+                    this.Style = BlankStyle;
+                }
+                else
+                {
+                    this.Style = (Style)FindResource("MainWindowStyle");
+                }
+                InitializeComponent();
+                Selector.Rerender();
+                Program.OnClosing();
+                //this.Close();
+
+            } catch (Exception ex) {
+
+                Program._logger.LogError($" UI Reload failed. ");
+                Program.SetCurrentStatus(" while changing the window style: " + ex.Message);
+            } finally {
+                // Hacking the UI reload (reseting the player position)
+                Task.Factory.StartNew(new Action(delegate
+                {
+                    Task.Delay(delay);
+                    Selector.MainWindow.Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        Program.mePlayer.Position = Program.NewPosition + TimeSpan.FromMilliseconds(delay);
+                    }));
                 }));
-            }));
+            }
         }
     }
 }

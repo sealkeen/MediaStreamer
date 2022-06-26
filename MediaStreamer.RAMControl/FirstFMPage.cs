@@ -30,6 +30,12 @@ namespace MediaStreamer.RAMControl
             PageID = NewPageID;
             NewPageID++;
         }
+
+        public virtual void Rerender()
+        {
+            
+        }
+
         virtual public void LoadManagementElements()
         {
 

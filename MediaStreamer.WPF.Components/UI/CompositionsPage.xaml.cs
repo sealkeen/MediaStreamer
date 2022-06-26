@@ -594,5 +594,9 @@ namespace MediaStreamer.WPF.Components
             CurrentListView = sender as Control;
         }
         // <-- lstQuery
+        public override void Rerender()
+        {
+            this.InitializeComponent();
+        }
     }
 }

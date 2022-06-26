@@ -171,6 +171,10 @@ namespace MediaStreamer.RAMControl
                 }));
             }
         }
+        /// <summary>
+        /// Also logs to <trace> 
+        /// </summary>
+        /// <param name="status"></param>
         [MTAThread]
         public static void SetCurrentStatus(string status)
         {
