@@ -14,11 +14,21 @@ namespace MediaStreamer.Logging
             {
                 _sw = new StreamWriter(filepath, true);
             }
-            catch (IOException i) {
-                var logFile = Path.Combine(Environment.CurrentDirectory + "log.txt");
-                _sw = new StreamWriter(logFile, true);
+            catch (IOException)
+            {
+                filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MediaStreamer.WPF.NetCore3_1", "Logs"
+                    , DateTime.Now.ToString("log_dd-mm-yyyy_hh-mm-ss.fff") + ".txt"
+                    );
+                _sw = new StreamWriter(filepath, true);
+            }
+            finally {
+                if (_sw != null && File.Exists(filepath))
+                {
+                    LogDebug("Opening file stream: " + filepath + "...");
+                }
             }
         }
+        ~SimpleLogger() => _sw.Close();
 
         public string filepath = 
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MediaStreamer.WPF.NetCore3_1", "Logs", "log.txt");
@@ -26,11 +36,20 @@ namespace MediaStreamer.Logging
 
         public LogLevel LogLevel { get; set; } = LogLevel.Trace;
 
-        ~SimpleLogger() => _sw.Close();
-        /// <summary>
-        /// Logs to the Environment's currentDirectory slash log.txt
-        /// </summary>
-        /// <param name="message"></param>
+        public LogLevel GetLogLevel()
+        {
+            return this.LogLevel;
+        }
+        public void LogTrace(string message)
+        {
+            if (LogLevel <= LogLevel.Trace)
+                Log("[trace] " + message);
+        }
+        public void LogDebug(string message)
+        {
+            if (LogLevel <= LogLevel.Debug)
+                Log("[debug] " + message);
+        }
         public void LogInfo(string message)
         {
             if(LogLevel <= LogLevel.Info)
@@ -41,12 +60,11 @@ namespace MediaStreamer.Logging
             if (LogLevel <= LogLevel.Error)
                 Log("[error] " + message);
         }
-        public void LogTrace(string message)
-        {
-            if (LogLevel <= LogLevel.Trace)
-                Log("[trace] " + message);
-        }
 
+        /// <summary>
+        /// Logs to the Environment's currentDirectory slash log.txt
+        /// </summary>
+        /// <param name="message"></param>
         private void Log(string message)
         {
             try
