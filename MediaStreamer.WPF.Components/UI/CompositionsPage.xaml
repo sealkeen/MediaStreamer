@@ -39,8 +39,6 @@
             <ListView.ContextMenu>
                 <ContextMenu x:Name="conMen">
                     <Button x:Name="cmiChangeComposition" Click="cmiChangeComposition_Click">Change Composition's Tags</Button>
-                    <Button x:Name="cmiPlaySeveral" Click="cmiPlaySeveral_Click">Play Several Songs</Button>
-                    <Button x:Name="cmiOpenInWinamp" Click="cmiOpenInWinamp_Click">Open in Winamp</Button> />
                     <Button x:Name="cmiRename" Click="cmiRename_Click">Rename to Standard</Button>
                     <Button x:Name="cmiDelete" Click="cmiDelete_Click">Delete from Database</Button> />
                     <Button x:Name="cmiQueue" Click="cmiEnQueue_Click">EnQueue Selected</Button>
@@ -78,18 +76,11 @@
             <ListView.ContextMenu>
                 <ContextMenu x:Name="queMen" Focusable="False">
                     <Button x:Name="queChangeComposition" Click="cmiChangeComposition_Click" Focusable="False">Change Composition's Tags</Button>
-                    <Button x:Name="quePlaySeveral" Click="cmiPlaySeveral_Click" Focusable="False">Play Several Songs</Button>
-                    <Button x:Name="queOpenInWinamp" Click="cmiOpenInWinamp_Click" Focusable="False">Open in Winamp</Button> />
                     <Button x:Name="queRename" Click="cmiRename_Click" Focusable="False">Rename to Standard</Button>
                     <Button x:Name="queDelete" Click="cmiDelete_Click" Focusable="False">Delete from Database</Button> />
                     <Button x:Name="queOpenLocation" Click="queOpenLocation_Click" Focusable="False">Open File Location</Button>
                 </ContextMenu>
             </ListView.ContextMenu>
-                    <!--<ListView.ItemContainerStyle>
-                <Style TargetType="GridViewColumn">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                </Style>
-            </ListView.ItemContainerStyle>-->
             <ListView.View>
                     <GridView x:Name="queryGridView">
                     <GridViewColumn DisplayMemberBinding="{Binding Artist.ArtistName}" 

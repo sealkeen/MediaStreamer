@@ -1,19 +1,15 @@
+using LinqExtensions;
+using MediaStreamer.Domain;
+using MediaStreamer.RAMControl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MediaStreamer.Domain;
-using StringExtensions;
-using LinqExtensions;
-using MediaStreamer.RAMControl;
-using System.Threading;
-using MediaStreamer.Logging;
-using System.Text;
 
 namespace MediaStreamer.WPF.Components
 {

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using MediaStreamer.Domain;
-using System.Linq;
-using MediaStreamer.IO;
-using MediaStreamer.RAMControl;
 using MediaStreamer.Logging;
+using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -75,19 +73,6 @@ namespace MediaStreamer.WPF.Components
         private void cmiChangeComposition_Click(object sender, RoutedEventArgs e)
         {
             Selector.CompositionsPage.ChangeComposition(lstItems.SelectedItems);
-        }
-
-        private void cmiPlaySeveral_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Program.FileManipulator.PlaySeveralSongs(lstItems.SelectedItems, typeof(ListenedComposition), Program.SetCurrentStatus);
-                lstItems.SelectedIndex = -1;
-            }
-            catch (Exception ex)
-            {
-                Program.SetCurrentStatus(ex.Message);
-            }
         }
 
         private void cmiDelete_Click(object sender, RoutedEventArgs e)

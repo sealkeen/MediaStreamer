@@ -1,12 +1,12 @@
-﻿using System;
+﻿using LinqExtensions;
+using MediaStreamer.Domain;
+using MediaStreamer.RAMControl;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MediaStreamer.Domain;
-using LinqExtensions;
-using MediaStreamer.RAMControl;
 
 namespace MediaStreamer.WPF.Components
 {

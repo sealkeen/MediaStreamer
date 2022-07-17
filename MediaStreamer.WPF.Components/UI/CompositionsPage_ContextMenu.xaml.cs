@@ -26,10 +26,10 @@ namespace MediaStreamer.WPF.Components
             QueueSelected();
         }
 
-        protected void cmiOpenInWinamp_Click(object sender, RoutedEventArgs e)
-        {
-            cmiPlaySeveral_Click(sender, e);
-        }
+        //protected void cmiOpenInWinamp_Click(object sender, RoutedEventArgs e)
+        //{
+        //    cmiPlaySeveral_Click(sender, e);
+        //}
 
         protected void cmiOpenLocation_Click(object sender, RoutedEventArgs e)
         {
@@ -56,17 +56,17 @@ namespace MediaStreamer.WPF.Components
             ReList();
         }
 
-        protected void cmiPlaySeveral_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Program.FileManipulator.PlaySeveralSongs(lstItems?.SelectedItems, typeof(Composition));
-            }
-            catch (Exception ex)
-            {
-                Program.SetCurrentStatus(ex.Message, true);
-            }
-        }
+        //protected void cmiPlaySeveral_Click(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        Program.FileManipulator.PlaySeveralSongs(lstItems?.SelectedItems, typeof(Composition));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Program.SetCurrentStatus(ex.Message, true);
+        //    }
+        //}
 
         protected void cmiChangeComposition_Click(object sender, RoutedEventArgs e)
         {
