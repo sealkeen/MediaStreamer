@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net40; netcoreapp3.1</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		<UseWPF>true</UseWPF>
+		<Platforms>AnyCPU;x86</Platforms>
+		<ApplicationIcon />
+		<StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net40')) ">
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+
+</Project>
