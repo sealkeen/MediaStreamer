@@ -1,9 +1,9 @@
-﻿using System;
+﻿using MediaStreamer.Domain;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
-using MediaStreamer.Domain;
 
 namespace MediaStreamer.RAMControl
 {

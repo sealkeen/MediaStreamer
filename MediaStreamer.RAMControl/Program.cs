@@ -1,42 +1,38 @@
-﻿using System;
-using System.Diagnostics;
-using System.Windows.Controls;
+﻿using LinqExtensions;
 using MediaStreamer.Domain;
 using MediaStreamer.IO;
-using StringExtensions;
-using System.Collections;
-using System.Collections.Generic;
-using LinqExtensions;
-using System.Linq;
 using Sealkeen.Abstractions;
 using StringExtensions;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Controls;
 
 namespace MediaStreamer.RAMControl
 {
     public class Program
     {
-        //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
-        //TODO: Move CompositionStorage to RAMControl
-        //TODO: Connect with RAMControl (Exclude Program, Session, SessionInformation, FirstFMPage)
-        //TODO: Move CompositionStorage to RAMControl
+        // ctor:
         public Program(ILogger logger)
         {
             _logger = logger;
         }
+        // static interfaces:
         public static IDBRepository DBAccess;
         public static IComposition currentComposition;
         public static IApplicationsSettingsContext ApplicationsSettingsContext;
+        public static ILogger _logger { get; set; }
+        // static fields:
         public static MediaElement mePlayer;
         public static TextBlock txtStatus;
         public static FileManipulator FileManipulator;
         public static bool mediaPlayerIsPlaying = false;
         public static bool PlayerStopped = false;
         public static TimeSpan NewPosition;
-
         public static bool startupFromCommandLine = false;
         public static Action<Action<string>, string> LoggingAction;
-
-        public static ILogger _logger { get; set; }
 
         #region AutoPlay Closing / Opening
         public static void OnClosing()
@@ -70,11 +66,16 @@ namespace MediaStreamer.RAMControl
         public static IList OnOpen()
         {
             try {
-                var volume = ApplicationsSettingsContext.GetCachedVolumeLevel(); 
-                _logger?.LogTrace($"Trying to load last volume level ({NullReferenceResolution.Coalesce(volume)})...");
-                if (volume != null) {
-                    mePlayer.Volume = volume.Value;
-                    _logger?.LogTrace($"Setting last volume level ({volume})...");
+                if (ApplicationsSettingsContext != null)
+                {
+                    var volume = ApplicationsSettingsContext.GetCachedVolumeLevel();
+
+                    _logger?.LogDebug($"Trying to load last volume level ({NullReferenceResolution.Coalesce(volume)})...");
+                    if (volume != null)
+                    {
+                        mePlayer.Volume = volume.Value;
+                        _logger?.LogTrace($"Setting last volume level ({volume})...");
+                    }
                 }
 
                 var query = DBAccess.DB.GetListenedCompositions();
@@ -185,6 +186,21 @@ namespace MediaStreamer.RAMControl
             }
         }
 
+        public static void ShowQueue(IEnumerable compositions, string action = "Now playing")
+        {
+            SetCurrentStatus($"Queued: {ToString(compositions)}");
+        }
+
+        public static void SetCurrentStatus(string status, bool error)
+        {
+            txtStatus.Text = status;
+            if (error)
+            {
+                Program._logger?.LogTrace(status);
+                Debug.WriteLine(status);
+            }
+        }
+
         public static string ToString(IEnumerable comps)
         {
             string result = "";
@@ -219,21 +235,6 @@ namespace MediaStreamer.RAMControl
             last = last?.TrimEnd(new char[] { ',', ' ' });
             last += ".";
             return result.ToLine();
-        }
-
-        public static void ShowQueue(IEnumerable compositions, string action = "Now playing")
-        {
-            SetCurrentStatus($"Queued: {ToString(compositions)}");
-        }
-
-        public static void SetCurrentStatus(string status, bool error)
-        {
-            txtStatus.Text = status;
-            if (error)
-            {
-                Program._logger?.LogTrace(status);
-                Debug.WriteLine(status);
-            }
         }
     } // public class Program
 }  // namespace MediaStreamer.RAMControl
