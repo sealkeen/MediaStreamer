@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaStreamer.Domain;
 using Sealkeen.CSCourse2016.JSONParser.Core;
+using LinqExtensions;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
@@ -46,7 +47,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         //public virtual List<Video> Videos { get; set; }
 
         public string FolderName { get; set; } = "Compositions";
-        public string GetContainingFolderPath() => FolderName; 
+        public string GetContainingFolderPath() => FolderName;
 
         public void Add(Administrator administrator)
         {
@@ -66,7 +67,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             JObject jAlbum = new JObject(itemsCollection);
 
-            List<JKeyValuePair> list = new List<JKeyValuePair>( );
+            List<JKeyValuePair> list = new List<JKeyValuePair>();
 
             //Properties
             list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(album.AlbumID).ToSingleValue(), jAlbum));
@@ -93,7 +94,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         {
             string AlbumGenresDB = Path.Combine(FolderName, "AlbumGenres.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres.json"); 
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres.json");
             JItem itemsCollection = null;
             if (root != null)
                 itemsCollection = root.FindPairByKey("AlbumGenres".ToJString()).GetPairedValue();
@@ -123,7 +124,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         {
             string AlbumGenresDB = Path.Combine(FolderName, "Artists.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json"); 
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
             JItem itemsCollection = null;
             if (root != null)
                 itemsCollection = root.FindPairByKey("Artists".ToJString()).GetPairedValue();
@@ -142,7 +143,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     c => c.ArtistName == artist.ArtistName).Count() != 0)
                 return;
 
-            jArtist.AddPairs(list); 
+            jArtist.AddPairs(list);
             itemsCollection.Add(jArtist);
             root.ToFile(AlbumGenresDB);
         }
@@ -168,7 +169,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             // Already Exists, return 
             if (ArtistGenres.Where(
                     c => c.ArtistID == artistGenre.ArtistID &&
-                    c.GenreID == artistGenre.GenreID 
+                    c.GenreID == artistGenre.GenreID
                     ).Count() != 0)
                 return;
 
@@ -318,7 +319,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 //Table.SetProperty(entity, "GenreID", id);
                 Add(entity as Genre);
             } else if (typeof(T) == typeof(ListenedComposition))
-                Add(entity as ListenedComposition); 
+                Add(entity as ListenedComposition);
             else if (typeof(T) == typeof(AlbumGenre))
                 Add(entity as AlbumGenre);
             else if (typeof(T) == typeof(ArtistGenre))
@@ -377,7 +378,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         }
 
         public IQueryable<AlbumGenre> GetAlbumGenres()
-        {            
+        {
             var jAlbums = Table.LoadInMemory(FolderName, "Albums.json");
 
             AlbumGenres = new List<AlbumGenre>();
@@ -385,7 +386,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             {
                 AlbumGenre received = new AlbumGenre();
                 var fields = jAlbum.DescendantPairs();
-                foreach (var kv in fields) 
+                foreach (var kv in fields)
                 {
                     switch (kv.Key.ToString().Trim('\"'))
                     {
@@ -412,7 +413,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             {
                 Album received = new Album();
                 var fields = jAlbum.DescendantPairs();
-                foreach (var kv in fields) 
+                foreach (var kv in fields)
                 {
                     switch (kv.Key.ToString().Trim('\"'))
                     {
@@ -540,7 +541,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             break;
                     }
                 }
-                if(Artists.Count == 0)
+                if (Artists.Count == 0)
                     GetArtists();
                 received.Artist = Table.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
                 Compositions.Add(received);
@@ -548,11 +549,19 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             return Compositions.AsQueryable();
         }
-
-        //public Task<IQueryable<Composition>> GetCompositionsAsync()
-        //{
-        //    return Task.Factory.StartNew(() => GetCompositions());
-        //}
+#if !NET40
+        public async Task<List<Composition>> GetCompositionsAsync() => await GetCompositions().CreateListAsync();
+        public async Task<List<IComposition>> GetICompositionsAsync() => await GetICompositions().CreateListAsync();
+#else //Net Framework 4.0 doesn't support <await> until 4.5
+        public async Task<List<Composition>> GetCompositionsAsync()
+        { 
+            return GetCompositions().ToList();
+        }
+        public async Task<List<IComposition>> GetICompositionsAsync()
+        { 
+            return GetICompositions().ToList();
+        }
+#endif
 
         public IQueryable<CompositionVideo> GetCompositionVideos()
         {

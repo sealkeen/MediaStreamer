@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
-
+using System.Collections.Generic;
 
 namespace MediaStreamer.DataAccess.NetStandard
 {
@@ -360,10 +360,16 @@ namespace MediaStreamer.DataAccess.NetStandard
         void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
         public IQueryable<Composition> GetCompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist); }
 
-        public Task<IQueryable<Composition>> GetCompositionsAsync() 
-        { 
-            return Task.Factory.StartNew(GetCompositions); 
+        public async Task<List<Composition>> GetCompositionsAsync()
+        {
+            return await GetCompositions().ToListAsync();
         }
+
+        public async Task<List<IComposition>> GetICompositionsAsync()
+        {
+            return await GetICompositions().ToListAsync();
+        }
+
         public IQueryable<IComposition> GetICompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist); }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
         public IQueryable<CompositionVideo> GetCompositionVideos() { return CompositionVideos; }
@@ -428,5 +434,6 @@ namespace MediaStreamer.DataAccess.NetStandard
         {
             return Filename;
         }
+
     }
 }

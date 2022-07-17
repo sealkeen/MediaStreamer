@@ -374,10 +374,16 @@ namespace MediaStreamer.DataAccess.NetStandard
         void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
         public IQueryable<Composition> GetCompositions() { return Compositions.AsQueryable().Include(c => c.Artist); }
 
-        public Task<IQueryable<Composition>> GetCompositionsAsync() 
-        { 
-            return Task.Factory.StartNew(GetCompositions); 
+        public async Task<List<Composition>> GetCompositionsAsync()
+        {
+            return await GetCompositions().ToListAsync();
         }
+
+        public async Task<List<IComposition>> GetICompositionsAsync()
+        {
+            return await GetICompositions().ToListAsync();
+        }
+
         public IQueryable<IComposition> GetICompositions() { return Compositions.AsQueryable(); }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
         public IQueryable<CompositionVideo> GetCompositionVideos() { return CompositionVideos.AsQueryable(); }
