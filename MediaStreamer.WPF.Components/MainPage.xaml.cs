@@ -1,49 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediaStreamer.Domain;
+using MediaStreamer.RAMControl;
+using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
-using MediaStreamer.RAMControl;
-using MediaStreamer.Domain;
-using MediaStreamer.Logging;
-using Sealkeen.Abstractions;
+using System.Windows.Input;
+using System.Windows.Navigation;
+using System.Windows.Threading;
 
 namespace MediaStreamer.WPF.Components
 {
     public partial class MainPage : StatusPage
     {
 
-        public MainPage()
+        public MainPage(bool async = false)
         {
             InitializeComponent();
-
-            Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
-            Program._logger?.LogTrace("Creating MainPage()");
-            if(Program.FileManipulator == null)
-                Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
-
-            Selector.MainPage = this;
-            Session.MainPage = this;
-
-            Program._logger?.LogTrace("Creating Dispatcher Timer");
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += timer_Tick;
-            timer.Start();
-            Program.mePlayer = this.mePlayer;
-            Program.txtStatus = this.txtStatus; 
-            ListInitialized = true;
+            if(!async)
+                InitializeData();
 
             //LoggerPage.GetInstance();
+        }
+
+        public async Task InitializeData()
+        {
+            try
+            {
+                Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
+                Program._logger?.LogTrace("Creating MainPage()");
+                if (Program.FileManipulator == null)
+                    Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
+
+                Selector.MainPage = this;
+                Session.MainPage = this;
+
+                Program._logger?.LogTrace("Creating Dispatcher Timer");
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromSeconds(1);
+                timer.Tick += timer_Tick;
+                timer.Start();
+                Program.mePlayer = this.mePlayer;
+                Program.txtStatus = this.txtStatus;
+                ListInitialized = true;
+            } catch (Exception ex) {
+                Program._logger?.LogError("in MainWindow.InitializeData(): " + ex.ToString() + ex.Message);
+            }
         }
 
         private double volumeSliderValue = 0.025;
@@ -85,18 +87,28 @@ namespace MediaStreamer.WPF.Components
         public void StatusPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key) {
-                case (Key.Space) : HandleSpacePressed(); break;
-                case (Key.Up): if(!Selector.CompositionsPage.lstItems_OwnsFocus()) VolumeUp("Up Arrow", volumeKeyValue); break;
-                case (Key.Down): if(!Selector.CompositionsPage.lstItems_OwnsFocus()) VolumeDown("Down Arrow", volumeKeyValue); break;
+                case (Key.Space): HandleSpacePressed(sender, e); break;
+                case (Key.Down): StatusPage_HandleArrows(sender, e); break;
+                case (Key.Up): StatusPage_HandleArrows(sender, e); break;
                 case (Key.Enter): 
                     if(Session.MainPage.GetFrame().Content is CompositionsPage &&
                         Selector.CompositionsPage.lstItems.SelectedIndex >= 0)
                         Selector.CompositionsPage.PlaySelectedTarget(); break;
             }
         }
-
-        private void HandleSpacePressed()
+        private void StatusPage_HandleArrows(object sender, KeyEventArgs e)
         {
+            if (!Selector.CompositionsPage.lstItems_OwnsFocus())
+            {
+                if (e.Key == Key.Up) VolumeUp("Up Arrow", volumeKeyValue);
+                if (e.Key == Key.Down) VolumeDown("Down Arrow", volumeKeyValue);
+            }
+        }
+
+        private void HandleSpacePressed(object sender, KeyEventArgs e)
+        {
+
+            var ok = mainFrame.Focus();
             if (Program.mePlayer.Source == null && Selector.CompositionsPage.HasNextInListOrQueue())
             {
                 Selector.CompositionsPage?.SwitchToNextSelected();
@@ -147,12 +159,20 @@ namespace MediaStreamer.WPF.Components
                 Program.SetCurrentStatus("PlayNextIfExists: " + ex.Message);
             }
         }
-
+#if !NET40
+        private async void buttonCompositions_Click(object sender, RoutedEventArgs e)
+#else
         private void buttonCompositions_Click(object sender, RoutedEventArgs e)
+#endif
         {
             try
             {
+                Program._logger?.LogTrace("Started loading from context ");
+#if !NET40
+                await ListAsync();
+#else
                 ListAsync().Wait();
+#endif
             }
             catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
