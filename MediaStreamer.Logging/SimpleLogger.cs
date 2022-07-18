@@ -28,7 +28,7 @@ namespace MediaStreamer.Logging
                 }
             }
         }
-        ~SimpleLogger() => _sw.Close();
+        ~SimpleLogger() => _sw?.Close();
 
         public string filepath = 
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MediaStreamer.WPF.NetCore3_1", "Logs", "log.txt");
