@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1; net40</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;</TargetFrameworks>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
@@ -31,7 +31,6 @@
     <ProjectReference Include="..\MediaStreamer.TagEditor\MediaStreamer.TagEditor.csproj" />
     <ProjectReference Include="..\StringExtensions\StringExtensions.csproj" />
     <ProjectReference Include="..\taglib-sharp\src\TaglibSharp\TaglibSharp.csproj" />
-    <ProjectReference Include="..\Win32DotNetWorkarounds\Win32DotNetWorkarounds.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">

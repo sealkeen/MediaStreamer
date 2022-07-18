@@ -16,7 +16,6 @@
     <ProjectReference Include="..\MediaStreamer.DataAccess.RawSQL\MediaStreamer.DataAccess.RawSQL.csproj" />
     <ProjectReference Include="..\MediaStreamer.Logging\MediaStreamer.Logging.csproj" />
     <ProjectReference Include="..\MediaStreamer.WPF.Components\MediaStreamer.WPF.Components.csproj" />
-    <ProjectReference Include="..\Win32DotNetWorkarounds\Win32DotNetWorkarounds.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="MediaStreamer.WPF.NetCore3_1.BuildDateTime">
