@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
@@ -163,6 +163,16 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         {
             PlayerStates = null;
             DataBase.DeleteTable(FolderName, "PlayerStates.json");
+        }
+
+        private static ApplicationSettingsContext _instance;
+        public static async Task<ApplicationSettingsContext> GetInstanceAsync()
+        {
+            if (_instance == null)
+            {
+                _instance = new ApplicationSettingsContext();
+            }
+            return _instance;
         }
     }
 }

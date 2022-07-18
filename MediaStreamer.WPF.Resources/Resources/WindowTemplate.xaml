@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary 
-    x:Class="FtpClient.WindowTemplate"
+    x:Class="MediaStreamer.WPF.Resources.WindowTemplate"
     x:ClassModifier="public"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

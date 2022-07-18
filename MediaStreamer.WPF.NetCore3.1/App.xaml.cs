@@ -27,18 +27,7 @@ namespace MediaStreamer.WPF.NetCore3_1
                 Program._logger = new SimpleLogger()
                 //); tsk.Wait()
                 ;
-                if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
-                {
-                    Program._logger?.LogTrace("Another instance of the application is already running.");
-                    foreach (var proc in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location))
-                        .Where(p => p.Handle != System.Diagnostics.Process.GetCurrentProcess().Handle
-                        && p.Id != System.Diagnostics.Process.GetCurrentProcess().Id
-                        ))
-                    {
-                        Program._logger?.LogTrace("Killing the process...");
-                        proc.CloseMainWindow();
-                    }
-                }
+                KillExistingProgramWindow();
 
                 // Crazy hack
                 var args1 = Environment.GetCommandLineArgs()/*.CreateArgs().*/.Skip(1);
@@ -47,61 +36,33 @@ namespace MediaStreamer.WPF.NetCore3_1
                     var arguments1 = args1.Aggregate((a, b) => Path.Combine(a + Environment.NewLine + b));
                     Program._logger?.LogTrace($"cmd arguments 1 : {arguments1}");
                     Program._logger?.LogTrace("Arguments.Count() > 0, ok.");
-                    // HandleMultipleArguments(args1);
                 }
-            } catch (Exception ex) {
-                ex.Message.LogStatically();
+            }
+            catch (Exception ex) {
+                Program._logger?.LogError(ex.ToString()+ ex.Message);
             }
         }
 
-        //private static void HandleMultipleArguments(IEnumerable<string> args)
-        //{
-        //    List<Composition> lst = new List<Composition>();
-        //    string path = "";
-        //    string fullPath = "";
-        //    for (int i = 0; i < args.Count(); i++)
-        //    {
-        //        path += ' ' + args.ElementAt(i);
-        //        path += args.ElementAt(i) + '/';
-        //        if (File.Exists(path.Trim().Trim('\"')))
-        //        {
-        //            HandleExistingFile(lst, path);
-        //            path = "";
-        //        }
-        //        else
-        //            SimpleLogger.LogStatically($"File {path.Trim().Trim('\"')} doesn't exist.");
+        private static void KillExistingProgramWindow()
+        {
+            try {
+                if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
+                {
+                    Program._logger?.LogDebug("Another instance of the application is already running.");
+                    foreach (var proc in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location))
+                        .Where(p => p.Handle != System.Diagnostics.Process.GetCurrentProcess().Handle
+                        && p.Id != System.Diagnostics.Process.GetCurrentProcess().Id
+                        ))
+                    {
+                        Program._logger?.LogDebug("Killing the process...");
+                        proc.CloseMainWindow();
+                    }
+                    Program._logger.LogDebug("Waiting for another instance to shut down...");
+                    System.Threading.Thread.Sleep(450);
+                }
+            } catch { 
 
-        //        if (File.Exists(fullPath.Trim('/')))
-        //        {
-        //            HandleExistingFile(lst, fullPath);
-        //            fullPath = "";
-        //        }
-        //    }
-        //    SetUpPlayingEnvironment(lst);
-        //}
-
-        //private static void HandleExistingFile(List<Composition> lst, string path)
-        //{
-        //    SimpleLogger.LogStatically($"File {path.Trim().Trim('\"')} exists ok.");
-        //    Program.DBAccess = new DBRepository() { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() };
-        //    Program.FileManipulator = new IO.FileManipulator(Program.DBAccess);
-
-        //    var cmp = Program.FileManipulator.DecomposeAudioFile(path.Trim().Trim('\"'));
-        //    lst.Add(cmp);
-        //}
-
-        //private static void SetUpPlayingEnvironment(List<Composition> lst)
-        //{
-        //    if (lst.Count() > 0)
-        //    {
-        //        Program.startupFromCommandLine = true;
-        //        Session.CompositionsVM = new CompositionsViewModel();
-        //        foreach (var c in lst)
-        //        {
-        //            Session.CompositionsVM.CompositionsStore.Queue.AddLast(c);
-        //        }
-        //        Program.currentComposition = lst[0];
-        //    }
-        //}
+            }
+        }
     }
 }

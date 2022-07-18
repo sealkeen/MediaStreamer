@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using MediaStreamer.Domain;
 using MediaStreamer.TagEditing;
 using MediaStreamer.RAMControl;

@@ -1,21 +1,16 @@
-﻿
+﻿using MediaStreamer.DataAccess.CrossPlatform;
+using MediaStreamer.DataAccess.NetStandard;
 using MediaStreamer.Domain;
-using MediaStreamer.IO;
-using MediaStreamer.Logging;
 using MediaStreamer.RAMControl;
 using MediaStreamer.WPF.Components;
+using StringExtensions;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using StringExtensions;
-using System.Windows;
-using MediaStreamer.DataAccess.NetStandard;
-using MediaStreamer.DataAccess.CrossPlatform;
 using System.Threading;
-using System.Windows.Controls;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {
@@ -28,38 +23,40 @@ namespace MediaStreamer.WPF.NetCore3_1
         public MainWindow()
         {
             InitializeComponent();
-            InitializeDataConnections().Wait();
-            Selector.MainWindow = this;
+            try
+            {
+                InitializeDataConnections().Wait();
+                Selector.MainWindow = this;
 
-            Program.DBAccess.DB.EnsureCreated();
-            Program.ApplicationsSettingsContext.EnsureCreated();
+                Program.DBAccess.DB.EnsureCreated();
+                Program.ApplicationsSettingsContext.EnsureCreated();
 
-            Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
+                Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
 
-            ResolveCMDParamFilePaths();
+                ResolveCMDParamFilePaths();
 
-            this.windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
+                this.windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
 
-            //Session.MainPage.DataBaseClick += this.btnDatabase_Click;
-            //Session.MainPage.btnClose.Click += this.btnClose_Click;
-            //Session.MainPage.btnMinimize.Click += this.btnMinimize_Click;
+                //Session.MainPage.DataBaseClick += this.btnDatabase_Click;
+                //Session.MainPage.btnClose.Click += this.btnClose_Click;
+                //Session.MainPage.btnMinimize.Click += this.btnMinimize_Click;
+            }
+            catch (Exception ex) {
+                Program.SetCurrentStatus(ex.Message);
+            }
         }
+
 
         public async Task InitializeDataConnections()
         {
             if (Program.DBAccess == null)
             {
-                var task = Task.Factory.StartNew(() =>
-                Program.DBAccess = new DBRepository()
-                { DB = new MediaStreamer.DataAccess.CrossPlatform.JSONDataContext() });
+                Program.DBAccess = await DBRepository.GetInstanceAsync(new JSONDataContext(Program.SetCurrentStatus));
 
-                task.Wait();
             }
             if (Program.ApplicationsSettingsContext == null)
             {
-                var task = Task.Factory.StartNew(() => Program.ApplicationsSettingsContext = new ApplicationSettingsContext());
-
-                task.Wait();
+                Program.ApplicationsSettingsContext = await ApplicationSettingsContext.GetInstanceAsync();
             }
         }
 
@@ -171,7 +168,7 @@ namespace MediaStreamer.WPF.NetCore3_1
             DMEntitiesContext.UseSQLServer = true;
             var tsk = Task.Factory.StartNew(new Action( delegate {
                 Program.DBAccess = new DBRepository() { DB = new DMEntitiesContext() };
-                Program.DBAccess.DB.EnsureCreated();
+                Program.DBAccess?.DB.EnsureCreated();
             })
             );
 
@@ -203,7 +200,7 @@ namespace MediaStreamer.WPF.NetCore3_1
             var tsk = Task.Factory.StartNew(new Action(delegate
             {
                 Program.DBAccess = new DBRepository() { DB = new DMEntitiesContext() };
-                Program.DBAccess.DB.EnsureCreated();
+                Program.DBAccess?.DB.EnsureCreated();
             })
             );
             UpdatePageViews();
@@ -227,7 +224,7 @@ namespace MediaStreamer.WPF.NetCore3_1
 
         private void btnSQLJSONClear_Click(object sender, RoutedEventArgs e)
         {
-            Program.DBAccess.DB.Clear();
+            Program.DBAccess?.DB.Clear();
         }
 
         private void btnSQLiteNavigate_Click(object sender, RoutedEventArgs e)
@@ -237,15 +234,15 @@ namespace MediaStreamer.WPF.NetCore3_1
 
         private void btnLogs_Click(object sender, RoutedEventArgs e)
         {
-            Session.MainPage.SetFrameContent(LoggerPage.GetInstance());
+            Session.MainPage?.SetFrameContent(LoggerPage.GetInstance());
         }
 
         private void btnClearData_Click(object sender, RoutedEventArgs e)
         {
-            var ok = MessageBox.Show($"Clear all data from: {Program.DBAccess.DB.ToString()}", "Dateting all data", MessageBoxButton.YesNoCancel);
+            var ok = MessageBox.Show($"Clear all data from: {Program.DBAccess?.DB.ToString()}", "Dateting all data", MessageBoxButton.YesNoCancel);
             if (ok == MessageBoxResult.Yes)
             {
-                Program.DBAccess.DB.Clear();
+                Program.DBAccess?.DB.Clear();
             }
         }
             
@@ -272,19 +269,18 @@ namespace MediaStreamer.WPF.NetCore3_1
         }
 
         public Style BlankStyle { get; set; }
-        public const int delay = 1500;
+        public const int delay = 500;
         private void btnView_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                Program.NewPosition = Program.mePlayer.Position;
+                if (Program.mePlayer != null)
+                    Program.NewPosition = Program.mePlayer.Position;
+                else
+                    Program.NewPosition = TimeSpan.FromSeconds(0.0);
                 if (this.Style != BlankStyle)
                 {
-                    if(BlankStyle == null)
-                        BlankStyle = new Style
-                        {
-                            TargetType = typeof(Window)
-                        };
+                    InitializeAndSetEmptyStyle();
 
                     this.Style = BlankStyle;
                 }
@@ -299,19 +295,29 @@ namespace MediaStreamer.WPF.NetCore3_1
 
             } catch (Exception ex) {
 
-                Program._logger.LogError($" UI Reload failed. ");
+                Program._logger?.LogError($" UI Reload failed. ");
                 Program.SetCurrentStatus(" while changing the window style: " + ex.Message);
             } finally {
                 // Hacking the UI reload (reseting the player position)
                 Task.Factory.StartNew(new Action(delegate
                 {
-                    Task.Delay(delay);
+                    Thread.Sleep(delay);
                     Selector.MainWindow.Dispatcher.BeginInvoke(new Action(delegate
                     {
-                        Program.mePlayer.Position = Program.NewPosition + TimeSpan.FromMilliseconds(delay);
+                        if(Program.mePlayer != null)
+                            Program.mePlayer.Position = Program.NewPosition + TimeSpan.FromMilliseconds(delay);
                     }));
                 }));
             }
+        }
+            
+        private void InitializeAndSetEmptyStyle()
+        {
+            if (BlankStyle == null)
+                BlankStyle = new Style
+                {
+                    TargetType = typeof(Window)
+                };
         }
     }
 }

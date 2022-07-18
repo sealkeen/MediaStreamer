@@ -7,7 +7,8 @@ namespace MediaStreamer.Logging
     public enum LogLevel
     {
         Trace = 1,
-        Info = 2,
-        Error = 3
+        Debug = 2,
+        Info = 3,
+        Error = 4
     }
 }

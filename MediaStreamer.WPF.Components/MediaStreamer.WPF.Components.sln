@@ -55,7 +55,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sealkeen.CSCourse2016.JSONP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sealkeen.Abstractions", "..\Sealkeen.Abstractions\Sealkeen.Abstractions.csproj", "{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.DataAccess.RawSQL", "..\MediaStreamer.DataAccess.RawSQL\MediaStreamer.DataAccess.RawSQL.csproj", "{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DataAccess.RawSQL", "..\MediaStreamer.DataAccess.RawSQL\MediaStreamer.DataAccess.RawSQL.csproj", "{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.WPF.Resources", "..\MediaStreamer.WPF.Resources\MediaStreamer.WPF.Resources.csproj", "{F97470A1-B857-4228-8030-9EC821540B8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -279,6 +281,14 @@ Global
 		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Release|x86.ActiveCfg = Release|Any CPU
 		{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}.Release|x86.Build.0 = Release|Any CPU
+		{F97470A1-B857-4228-8030-9EC821540B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F97470A1-B857-4228-8030-9EC821540B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F97470A1-B857-4228-8030-9EC821540B8C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F97470A1-B857-4228-8030-9EC821540B8C}.Debug|x86.Build.0 = Debug|Any CPU
+		{F97470A1-B857-4228-8030-9EC821540B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F97470A1-B857-4228-8030-9EC821540B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F97470A1-B857-4228-8030-9EC821540B8C}.Release|x86.ActiveCfg = Release|Any CPU
+		{F97470A1-B857-4228-8030-9EC821540B8C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

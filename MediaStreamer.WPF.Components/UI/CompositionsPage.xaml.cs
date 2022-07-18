@@ -88,8 +88,8 @@ namespace MediaStreamer.WPF.Components
         {
             try {
                 //DBAccess.Update();
-                var result = Program.DBAccess.DB.GetICompositions().ToList();
                 Dispatcher.BeginInvoke(new Action(() => Selector.MainPage.SetFrameContent(Selector.CompositionsPage)));
+                var result = Program.DBAccess.DB.GetICompositions().ToList();
                 ListInitialized = true;
                 return result;
             } catch (Exception ex) {
@@ -130,17 +130,15 @@ namespace MediaStreamer.WPF.Components
             try
             {
 #if !NET40
-                var listCompsTask = Task.Factory.StartNew(GetICompositions);
                 //var tsk = await listCompsTask;
-                listCompsTask.Wait();
-                Session.CompositionsVM.CompositionsStore.Compositions = listCompsTask.Result;
+
+                Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync();
 #else
                 Session.CompositionsVM.CompositionsStore.Compositions = GetICompositions();
 #endif
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
                 lastDataLoadWasPartial = false;
-            }
-            catch {
+            } catch {
                 Session.CompositionsVM.CompositionsStore.Compositions = new List<IComposition>();
                 try {
                     Session.CompositionsVM.CompositionsStore.Compositions = GetICompositions();

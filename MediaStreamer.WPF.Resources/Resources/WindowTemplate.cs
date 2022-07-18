@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FtpClient
+namespace MediaStreamer.WPF.Resources
 {
     public partial class WindowTemplate : ResourceDictionary
     {

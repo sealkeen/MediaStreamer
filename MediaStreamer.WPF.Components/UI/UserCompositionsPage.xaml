@@ -27,9 +27,6 @@
                             Name="cmiChangeComposition" 
                               Click="cmiChangeComposition_Click">
                     </Button>
-                    <Button HorizontalAlignment="Stretch" Name="cmiPlaySeveral" 
-                              Content="Play several songs"
-                              Click="cmiPlaySeveral_Click"></Button>
                     <Button x:Name="cmiDelete" Content="delete composition" Click="buttonDelete_Click"/>
                     <Button x:Name="cmiQueue" Click="cmiQueue_Click">EnQueue Selected</Button>
                 </ContextMenu>

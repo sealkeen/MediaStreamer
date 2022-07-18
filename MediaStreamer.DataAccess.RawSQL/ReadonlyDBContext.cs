@@ -3,9 +3,10 @@ using Sealkeen.Abstractions;
 using StringExtensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.SQLite;
+using System.Linq;
+using System.Threading.Tasks;
+using LinqExtensions;
 
 namespace MediaStreamer.DataAccess.RawSQL
 {
@@ -220,6 +221,17 @@ namespace MediaStreamer.DataAccess.RawSQL
 
             return Compositions.AsQueryable();
         }
+
+        public async Task<List<Composition>> GetCompositionsAsync()
+        {
+            return await GetCompositions().CreateListAsync();
+        }
+
+        public async Task<List<IComposition>> GetICompositionsAsync()
+        {
+            return await GetICompositions().CreateListAsync();
+        }
+
 
         public Guid GetIDOrReturnNew<T>(Dictionary<T, Guid> dict, T key)
         {
