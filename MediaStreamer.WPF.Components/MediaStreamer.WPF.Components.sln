@@ -51,13 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.Logging", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObjectModelExtensions", "..\ObjectModelExtensions\ObjectModelExtensions.csproj", "{40AFA8EA-74E3-4416-A28D-13734D4607D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sealkeen.CSCourse2016.JSONParser.Core", "..\..\JSON-Parsing-Compiler\Sealkeen.CSCourse2016.JSONParser.Core\Sealkeen.CSCourse2016.JSONParser.Core.csproj", "{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sealkeen.Abstractions", "..\Sealkeen.Abstractions\Sealkeen.Abstractions.csproj", "{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DataAccess.RawSQL", "..\MediaStreamer.DataAccess.RawSQL\MediaStreamer.DataAccess.RawSQL.csproj", "{36EBF45B-EEF8-4F94-AA2A-27FB92F212CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.WPF.Resources", "..\MediaStreamer.WPF.Resources\MediaStreamer.WPF.Resources.csproj", "{F97470A1-B857-4228-8030-9EC821540B8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.WPF.Resources", "..\MediaStreamer.WPF.Resources\MediaStreamer.WPF.Resources.csproj", "{F97470A1-B857-4228-8030-9EC821540B8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,14 +255,6 @@ Global
 		{40AFA8EA-74E3-4416-A28D-13734D4607D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{40AFA8EA-74E3-4416-A28D-13734D4607D8}.Release|x86.ActiveCfg = Release|Any CPU
 		{40AFA8EA-74E3-4416-A28D-13734D4607D8}.Release|x86.Build.0 = Release|Any CPU
-		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Debug|x86.Build.0 = Debug|Any CPU
-		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Release|x86.ActiveCfg = Release|Any CPU
-		{25BC7544-E48A-41EE-9ED1-D0A46A99EBD3}.Release|x86.Build.0 = Release|Any CPU
 		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81FD0DEA-C02F-4D88-A05E-D0184BE8BA98}.Debug|x86.ActiveCfg = Debug|Any CPU

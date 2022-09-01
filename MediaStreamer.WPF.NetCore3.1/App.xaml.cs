@@ -27,7 +27,7 @@ namespace MediaStreamer.WPF.NetCore3_1
                 Program._logger = new SimpleLogger()
                 //); tsk.Wait()
                 ;
-                KillExistingProgramWindow();
+                KillExistingAppWindows();
 
                 // Crazy hack
                 var args1 = Environment.GetCommandLineArgs()/*.CreateArgs().*/.Skip(1);
@@ -43,25 +43,31 @@ namespace MediaStreamer.WPF.NetCore3_1
             }
         }
 
-        private static void KillExistingProgramWindow()
+        private static void KillExistingAppWindows()
         {
-            try {
-                if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
-                {
-                    Program._logger?.LogDebug("Another instance of the application is already running.");
-                    foreach (var proc in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location))
+            try
+            {
+                int countOfAppsRunning = Process.GetProcessesByName(
+                        Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)
+                        ).Count();
+
+                Program._logger?.LogDebug($"Count of already running instances of the app = {countOfAppsRunning}");
+
+                if (countOfAppsRunning > 1) {
+                    foreach (
+                        var proc in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location))
                         .Where(p => p.Handle != System.Diagnostics.Process.GetCurrentProcess().Handle
                         && p.Id != System.Diagnostics.Process.GetCurrentProcess().Id
                         ))
                     {
-                        Program._logger?.LogDebug("Killing the process...");
+                        Program._logger?.LogDebug($"Killing the process <{proc.Id}>...");
                         proc.CloseMainWindow();
                     }
-                    Program._logger.LogDebug("Waiting for another instance to shut down...");
+                    Program._logger?.LogDebug("Waiting for another instance to shut down...");
                     System.Threading.Thread.Sleep(450);
                 }
-            } catch { 
-
+            } catch {
+                Program._logger?.LogError("Cannot close already running instances of the app. Check the permissions.");
             }
         }
     }
