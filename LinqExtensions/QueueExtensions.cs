@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LinqExtensions
+namespace Sealkeen.Linq.Extensions
 {
     /// <summary>
     /// https://github.com/sealkeen/ObjectModelExtensions

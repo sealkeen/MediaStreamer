@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.WPF.NetCore3.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.WPF.EventAction", "..\MediaStreamer.WPF.EventAction\MediaStreamer.WPF.EventAction.csproj", "{461A676C-E7B5-44AB-9F1D-5D543E8E35DC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqExtensions", "..\LinqExtensions\LinqExtensions.csproj", "{92AA9FF7-3187-4AA8-B3D4-CF2604D32B72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sealkeen.Linq.Extensions", "..\LinqExtensions\Sealkeen.Linq.Extensions.csproj", "{92AA9FF7-3187-4AA8-B3D4-CF2604D32B72}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.Domain", "..\MediaStreamer.Domain\MediaStreamer.Domain.csproj", "{09A91BD6-A533-4945-B834-728A1A326085}"
 EndProject

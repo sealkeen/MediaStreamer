@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
+    <ProjectReference Include="..\LinqExtensions\Sealkeen.Linq.Extensions.csproj" />
     <ProjectReference Include="..\Sealkeen.Abstractions\Sealkeen.Abstractions.csproj" />
     <ProjectReference Include="..\StringExtensions\StringExtensions.csproj" />
   </ItemGroup>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinqExtensions
+namespace Sealkeen.Linq.Extensions
 {
     public static class DbSetExtensions
     {

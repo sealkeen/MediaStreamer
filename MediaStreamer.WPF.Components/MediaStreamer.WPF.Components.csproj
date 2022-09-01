@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
+    <ProjectReference Include="..\LinqExtensions\Sealkeen.Linq.Extensions.csproj" />
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
     <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
     <ProjectReference Include="..\MediaStreamer.RAMControl\MediaStreamer.RAMControl.csproj" />
