@@ -1,4 +1,4 @@
-﻿using LinqExtensions;
+﻿using Sealkeen.Linq.Extensions;
 using MediaStreamer.Domain;
 using MediaStreamer.IO;
 using Sealkeen.Abstractions;

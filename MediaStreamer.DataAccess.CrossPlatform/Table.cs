@@ -4,11 +4,29 @@ using Sealkeen.CSCourse2016.JSONParser.Core;
 using System;
 using System.Reflection;
 using System.Linq;
+using System.Collections.Concurrent;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
     public class Table
     {
+        public static bool SizeChanged(ConcurrentDictionary<string, long> sizes, string directory, string tableName)
+        {
+            if (!sizes.Keys.Any(t => t == tableName))
+                return true;
+
+            return sizes[tableName] != GetTableSize(Path.Combine(directory, tableName + ".json"));
+        }
+
+        public static long GetTableSize(string path)
+        {
+            try {
+                return new System.IO.FileInfo(path).Length;
+            } catch { 
+                return 0;
+            }
+        }
+
         public static TLinkedTarget GetLinkedEntity<TLinkedTarget>(object id, IEnumerable<TLinkedTarget> target, string propName) 
         {
             TLinkedTarget result = default(TLinkedTarget);
@@ -91,7 +109,5 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Nullable.GetUnderlyingType(piShared.PropertyType));
             piShared.SetValue(entity, convertedValue, null);
         }
-
-
     }
 }

@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1; net40</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinqExtensions\Sealkeen.Linq.Extensions.csproj" />
+    <ProjectReference Include="..\Sealkeen.Linq.Extensions\Sealkeen.Linq.Extensions.csproj" />
     <ProjectReference Include="..\Sealkeen.Abstractions\Sealkeen.Abstractions.csproj" />
     <ProjectReference Include="..\StringExtensions\StringExtensions.csproj" />
   </ItemGroup>

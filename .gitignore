@@ -16,6 +16,8 @@ _MediaStreamer.Web.Api
 _MediaStreamer.Web.Services
 _MediaStreamer.Web.Base
 _backup
+_LinqExtensions
+_ObjectModelExtensions
 MediaStreamer.DataAccess.NetStandard/Migrations
 
 # User-specific files

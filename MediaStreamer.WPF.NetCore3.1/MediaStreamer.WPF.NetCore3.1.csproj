@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinqExtensions\Sealkeen.Linq.Extensions.csproj" />
+    <ProjectReference Include="..\Sealkeen.Linq.Extensions\Sealkeen.Linq.Extensions.csproj" />
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
     <ProjectReference Include="..\MediaStreamer.DataAccess.NetStandard\MediaStreamer.DataAccess.NetStandard.csproj" />
     <ProjectReference Include="..\MediaStreamer.DataAccess.RawSQL\MediaStreamer.DataAccess.RawSQL.csproj" />

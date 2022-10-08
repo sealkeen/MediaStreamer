@@ -243,7 +243,7 @@ namespace MediaStreamer.DataAccess.NetStandard
 
             modelBuilder.Entity<ListenedComposition>(entity =>
             {
-                entity.HasKey(e => new { e.ListenedCompositionID });
+                entity.HasKey(e => new { e.UserID, e.CompositionID });
 
                 entity.ToTable("ListenedComposition");
 
@@ -253,12 +253,9 @@ namespace MediaStreamer.DataAccess.NetStandard
 
                 entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
 
-
                 entity.HasOne(d => d.Composition)
                     .WithMany(p => p.ListenedCompositions)
-                    .HasForeignKey(d => d.CompositionID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
-
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ListenedCompositions)

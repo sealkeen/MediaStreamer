@@ -1,4 +1,3 @@
-using LinqExtensions;
 using MediaStreamer.Domain;
 using MediaStreamer.RAMControl;
 using System;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Sealkeen.Linq.Extensions;
 
 namespace MediaStreamer.WPF.Components
 {

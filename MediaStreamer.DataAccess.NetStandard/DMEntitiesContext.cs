@@ -14,10 +14,14 @@ namespace MediaStreamer.DataAccess.NetStandard
         public string DBPath { get; set; } = "";
         public static string Filename { get; set; }
         public static string LocalSource { get; set; } = @"O:/DB/09.06.2021-2.db3";
-
         public DMEntitiesContext()
         {
             this.ChangeTracker.LazyLoadingEnabled = false;
+        }
+
+        public DMEntitiesContext(bool useSQLServer)
+        {
+            UseSQLServer = useSQLServer;
         }
 
         public void EnsureCreated()
@@ -107,7 +111,6 @@ namespace MediaStreamer.DataAccess.NetStandard
                 entity.Property(e => e.AlbumName).IsRequired();
 
                 entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
 
                 entity.HasOne(d => d.Artist)
                     .WithMany(p => p.Albums)
@@ -229,7 +232,7 @@ namespace MediaStreamer.DataAccess.NetStandard
 
             modelBuilder.Entity<ListenedComposition>(entity =>
             {
-                entity.HasKey(e => new { e.ListenedCompositionID });
+                entity.HasKey(e => new { e.UserID, e.CompositionID });
 
                 entity.ToTable("ListenedComposition");
 
@@ -239,12 +242,13 @@ namespace MediaStreamer.DataAccess.NetStandard
 
                 entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
 
+                entity.Property(e => e.StoppedAt).HasColumnName("StoppedAt");
+
+                entity.Property(e => e.CountOfPlays).HasColumnName("CountOfPlays");
 
                 entity.HasOne(d => d.Composition)
                     .WithMany(p => p.ListenedCompositions)
-                    .HasForeignKey(d => d.CompositionID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
-
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ListenedCompositions)
@@ -295,12 +299,10 @@ namespace MediaStreamer.DataAccess.NetStandard
                     .HasColumnType("DATETIME");
 
                 entity.Property(e => e.Email).IsRequired();
-
                 entity.Property(e => e.Password).IsRequired();
-
                 entity.Property(e => e.UserName).IsRequired();
-
                 entity.Property(e => e.VKLink).HasColumnName("VKLink");
+                entity.Property(e => e.AspNetUserId).HasColumnName("AspNetUserId");
             });
 
             modelBuilder.Entity<Video>(entity =>
@@ -376,7 +378,7 @@ namespace MediaStreamer.DataAccess.NetStandard
         void IDMDBContext.Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
         public IQueryable<Genre> GetGenres() { return Genres; }
         void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
-        public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions.Include(c => c.Composition); }
+        public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions; }
         void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
         public IQueryable<Moderator> GetModerators() { return Moderators; }
         void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);

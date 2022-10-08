@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MediaStreamer.Domain;
 using StringExtensions;
-using LinqExtensions;
+using Sealkeen.Linq.Extensions;
 using MediaStreamer.RAMControl;
 using System.Threading;
 using MediaStreamer.Logging;

@@ -47,7 +47,10 @@ namespace MediaStreamer.WPF.NetCore3_1
         {
             if (Program.DBAccess == null)
             {
-                Program.DBAccess = await DBRepository.GetInstanceAsync(new JSONDataContext(Program.SetCurrentStatus));
+                DMEntitiesContext.UseSQLServer = true;
+                var context = new DMEntitiesContext();
+                    //new JSONDataContext(Program.SetCurrentStatus);
+                Program.DBAccess = new DBRepository() { DB = context };
 
             }
             if (Program.ApplicationsSettingsContext == null)
