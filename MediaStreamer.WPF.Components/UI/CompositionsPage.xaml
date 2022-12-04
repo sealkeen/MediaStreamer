@@ -9,6 +9,8 @@
       xmlns:VM="clr-namespace:MediaStreamer.RAMControl;assembly=MediaStreamer.RAMControl"
       mc:Ignorable="d"        
       Title="Compositions" 
+    MinWidth="340"
+    MinHeight="220"
                 >
     <!--MaxWidth="{Binding ElementName=pageControl,Path=ActualWidth}"-->
     <Grid VerticalAlignment="Stretch"  x:Name="mainGrid" ><!--Background="White"-->
@@ -66,7 +68,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="btnNext" Grid.Row="1" Grid.Column="0" Click="btnNext_Click"></Button>
+        <Button x:Name="btnBack" Grid.Row="1" Grid.Column="0" Click="btnBack_Click">Back page</Button>
+        <Button x:Name="btnNext" Grid.Row="1" Grid.Column="2" Click="btnNext_Click">Next page</Button>
         <!--</ScrollViewer>-->
         <GridSplitter Grid.Column ="1" Grid.Row="0" 
                       HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"

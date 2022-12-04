@@ -620,5 +620,15 @@ namespace MediaStreamer.WPF.Components
             Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync(_skipRecordsCount, _takeRecordsCount);
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
+
+        private async void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            _skipRecordsCount = _skipRecordsCount - _takeRecordsCount;
+            if (_skipRecordsCount < 0)
+                _skipRecordsCount = 0;
+
+            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync(_skipRecordsCount, _takeRecordsCount);
+            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+        }
     }
 }
