@@ -8,15 +8,17 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using MediaStreamer.DataAccess.NetStandard;
+using MediaStreamer.Domain.Models;
 
 #nullable disable
 
 namespace MediaStreamer.DataAccess.NetStandard
 {
-    public partial class DMEntities : DbContext, IDMDBContext
+    public partial class DMEntities : NetStandardContext, IPagedDMDBContext
     {
         public static string Filename { get; set; }
         public static string _localSource = @"C:/Users/Sealkeen/Documents/ГУАП Done (v)/7 Базы данных(1)/09.06.2021-2.db3";
+
 
         public DMEntities(string localSource = null)
         {
@@ -66,7 +68,7 @@ namespace MediaStreamer.DataAccess.NetStandard
         //    await Database.EnsureDeleted();
         //    await Database.EnsureCreated();
         //}
-        public DMEntities(DbContextOptions<DMEntities> options)
+        public DMEntities(DbContextOptions<NetStandardContext> options)
             : base(options)
         {
 
@@ -88,22 +90,6 @@ namespace MediaStreamer.DataAccess.NetStandard
                 } 
             }
         }
-
-        public virtual List<Administrator> Administrators { get; set; }
-        public virtual List<Album> Albums { get; set; }
-        public virtual List<AlbumGenre> AlbumGenres { get; set; }
-        public virtual List<Artist> Artists { get; set; }
-        public virtual List<ArtistGenre> ArtistGenres { get; set; }
-        public virtual List<Composition> Compositions { get; set; }
-        public virtual List<CompositionVideo> CompositionVideos { get; set; }
-        public virtual List<Genre> Genres { get; set; }
-        public virtual List<ListenedComposition> ListenedCompositions { get; set; }
-        public virtual List<Moderator> Moderators { get; set; }
-        public virtual List<Picture> Pictures { get; set; }
-        public virtual List<User> Users { get; set; }
-        public virtual List<Video> Videos { get; set; }
-
-        public string DBPath { get; set; } = "";
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -239,6 +225,9 @@ namespace MediaStreamer.DataAccess.NetStandard
                 entity.HasKey(e => e.GenreID);
                 entity.Property(e => e.GenreID).IsRequired();
                 entity.ToTable("Genre");
+                entity.HasOne(e => e.Style)
+                .WithMany(s => s.Genres)
+                .HasForeignKey(e => e.StyleId);
             });
 
             modelBuilder.Entity<ListenedComposition>(entity =>
@@ -346,6 +335,16 @@ namespace MediaStreamer.DataAccess.NetStandard
                 .HasColumnType("NUMERIC");
             });
 
+            modelBuilder.Entity<Style>(entity =>
+            {
+                entity.ToTable("Style");
+
+                entity.Property(e => e.StyleId)
+                    .HasColumnName("StyleId");
+
+                entity.Property(e => e.StyleName).IsRequired();
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
@@ -383,8 +382,6 @@ namespace MediaStreamer.DataAccess.NetStandard
 
         public IQueryable<IComposition> GetICompositions() { return Compositions.AsQueryable(); }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
-        public IQueryable<CompositionVideo> GetCompositionVideos() { return CompositionVideos.AsQueryable(); }
-        void IDMDBContext.Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
         public IQueryable<Genre> GetGenres() { return Genres.AsQueryable(); }
         void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
 
@@ -398,8 +395,8 @@ namespace MediaStreamer.DataAccess.NetStandard
         void IDMDBContext.Add(Picture picture) => Pictures.Add(picture);
         public IQueryable<User> GetUsers() { return Users.AsQueryable(); }
         void IDMDBContext.Add(User user) => Users.Add(user);
-        public IQueryable<Video> GetVideos() { return Videos.AsQueryable(); }
-        void IDMDBContext.Add(Video video) => Videos.Add(video);
+        public IQueryable<MediaStreamer.Domain.Models.Style> GetStyles() { return Styles.AsQueryable(); }
+        void IDMDBContext.Add(MediaStreamer.Domain.Models.Style style) => Styles.Add(style);
 
         void IDMDBContext.UpdateAndSaveChanges<TEntity>(TEntity entity)
         {
@@ -414,19 +411,17 @@ namespace MediaStreamer.DataAccess.NetStandard
         public bool ClearTable(string tableName)
         {
             switch (tableName) {
-                case nameof(Administrators): Administrators.Clear(); break;
-                case nameof(Albums): Albums.Clear(); break;
-                case nameof(AlbumGenres): AlbumGenres.Clear(); break;
-                case nameof(Artists): Artists.Clear(); break;
-                case nameof(ArtistGenres): ArtistGenres.Clear(); break;
-                case nameof(Compositions): Compositions.Clear(); break;
-                case nameof(CompositionVideos): CompositionVideos.Clear(); break;
-                case nameof(Genres): Genres.Clear(); break;
-                case nameof(ListenedCompositions): ListenedCompositions.Clear(); break;
-                case nameof(Moderators): Moderators.Clear(); break;
-                case nameof(Pictures): Pictures.Clear(); break;
-                case nameof(Users): Users.Clear(); break;
-                case nameof(Videos): Videos.Clear(); break;
+                case nameof(Administrators): Administrators.RemoveRange(Administrators); break;
+                case nameof(Albums): Albums.RemoveRange(Albums); break;
+                case nameof(AlbumGenres): AlbumGenres.RemoveRange(AlbumGenres); break;
+                case nameof(Artists): Artists.RemoveRange(Artists); break;
+                case nameof(ArtistGenres): ArtistGenres.RemoveRange(ArtistGenres); break;
+                case nameof(Compositions): Compositions.RemoveRange(Compositions); break;
+                case nameof(Genres): Genres.RemoveRange(Genres); break;
+                case nameof(ListenedCompositions): ListenedCompositions.RemoveRange(ListenedCompositions); break;
+                case nameof(Moderators): Moderators.RemoveRange(Moderators); break;
+                case nameof(Pictures): Pictures.RemoveRange(Pictures); break;
+                case nameof(Users): Users.RemoveRange(Users); break;
             }
             SaveChanges();
             return false;
@@ -435,6 +430,21 @@ namespace MediaStreamer.DataAccess.NetStandard
         public string GetContainingFolderPath()
         {
             return Filename;
+        }
+
+        public Task<List<Composition>> GetCompositionsAsync(int skip, int take)
+        {
+            return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
+        }
+
+        public Task<List<IComposition>> GetICompositionsAsync(int skip, int take)
+        {
+            return Task.Factory
+                .StartNew(() => Compositions
+                .Skip(skip)
+                .Take(take)
+                .Select(c => c as IComposition)
+                .ToList());
         }
     }
 }

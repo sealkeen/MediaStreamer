@@ -34,15 +34,15 @@ namespace MediaStreamer.DataAccess.Net40
         public virtual DbSet<Composition> Compositions { get; set; }
         public virtual DbSet<CompositionVideo> CompositionVideos { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<GroupMember> GroupMembers { get; set; }
-        public virtual DbSet<GroupRole> GroupRoles { get; set; }
-        public virtual DbSet<ListenedAlbum> ListenedAlbums { get; set; }
-        public virtual DbSet<ListenedArtist> ListenedArtists { get; set; }
+        //public virtual DbSet<GroupMember> GroupMembers { get; set; }
+        //public virtual DbSet<GroupRole> GroupRoles { get; set; }
+        //public virtual DbSet<ListenedAlbum> ListenedAlbums { get; set; }
+        //public virtual DbSet<ListenedArtist> ListenedArtists { get; set; }
         public virtual DbSet<ListenedComposition> ListenedCompositions { get; set; }
-        public virtual DbSet<ListenedGenre> ListenedGenres { get; set; }
+        //public virtual DbSet<ListenedGenre> ListenedGenres { get; set; }
         public virtual DbSet<Moderator> Moderators { get; set; }
-        public virtual DbSet<Musician> Musicians { get; set; }
-        public virtual DbSet<MusicianRole> MusicianRoles { get; set; }
+        //public virtual DbSet<Musician> Musicians { get; set; }
+        //public virtual DbSet<MusicianRole> MusicianRoles { get; set; }
         public virtual DbSet<Picture> Pictures { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }

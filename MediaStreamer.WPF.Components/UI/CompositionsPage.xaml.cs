@@ -13,6 +13,7 @@ using Sealkeen.Linq.Extensions;
 using MediaStreamer.RAMControl;
 using System.Threading;
 using MediaStreamer.Logging;
+using System.Windows.Documents;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -21,6 +22,8 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class CompositionsPage : FirstFMPage
     {
+        private int _skipRecordsCount { get; set; } = 0;
+        private int _takeRecordsCount { get; set; } = 10;
         protected Control CurrentListView { get; set; }
         public CompositionsPage()
         {
@@ -84,14 +87,32 @@ namespace MediaStreamer.WPF.Components
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
-        public virtual List<IComposition> GetICompositions()
+#if !NET40
+        public async virtual Task<List<IComposition>>
+#else
+        public virtual List<IComposition> 
+#endif
+        GetICompositions()
         {
             try {
                 //DBAccess.Update();
                 Dispatcher.BeginInvoke(new Action(() => Selector.MainPage.SetFrameContent(Selector.CompositionsPage)));
-                var result = Program.DBAccess.DB.GetICompositions().ToList();
+                var result =
+#if !NET40
+                    await 
+#endif
+                    Program.DBAccess.DB.GetICompositionsAsync(_skipRecordsCount, 10);
+#if NET40
+                result.Wait();
+#endif
                 ListInitialized = true;
-                return result;
+                return 
+                    result
+#if NET40
+                    .Result
+#endif
+
+                    ;
             } catch (Exception ex) {
                 Program.SetCurrentStatus("GetICompositions: " + ex.Message);
                 return new List<IComposition>();
@@ -127,22 +148,18 @@ namespace MediaStreamer.WPF.Components
 
         public override async Task ListAsync()
         {
-            try
-            {
-#if !NET40
-                //var tsk = await listCompsTask;
-
-                Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync();
-#else
-                Session.CompositionsVM.CompositionsStore.Compositions = GetICompositions();
-#endif
+            try {
+                GetICompositions();
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
                 lastDataLoadWasPartial = false;
             } catch {
                 Session.CompositionsVM.CompositionsStore.Compositions = new List<IComposition>();
                 try {
-                    Session.CompositionsVM.CompositionsStore.Compositions = GetICompositions();
-                } catch (Exception ex) {
+                    GetICompositions();
+                    lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+                    lastDataLoadWasPartial = false;
+                }
+                catch (Exception ex) {
                     Program.SetCurrentStatus("ListAsync: " + ex.Message);
                 }
             }
@@ -595,6 +612,13 @@ namespace MediaStreamer.WPF.Components
         public override void Rerender()
         {
             this.InitializeComponent();
+        }
+
+        private async void btnNext_Click(object sender, RoutedEventArgs e)
+        {
+            _skipRecordsCount += _takeRecordsCount;
+            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync(_skipRecordsCount, _takeRecordsCount);
+            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
     }
 }

@@ -42,7 +42,6 @@ namespace MediaStreamer.WPF.NetCore3_1
             }
         }
 
-
         public async Task InitializeDataConnections()
         {
             if (Program.DBAccess == null)

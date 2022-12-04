@@ -10,13 +10,15 @@
 namespace MediaStreamer.DataAccess.Net40
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
     using System.Threading.Tasks;
     using MediaStreamer.Domain;
-    
-    public partial class DMEntities : DbContext, IDMDBContext
+    using MediaStreamer.Domain.Models;
+
+    public partial class DMEntities : DbContext, IPagedDMDBContext
     {
         public DMEntities()
             : base("name=DMEntities")
@@ -37,15 +39,15 @@ namespace MediaStreamer.DataAccess.Net40
         public virtual DbSet<Composition> Compositions { get; set; }
         public virtual DbSet<CompositionVideo> CompositionVideos { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<GroupMember> GroupMembers { get; set; }
-        public virtual DbSet<GroupRole> GroupRoles { get; set; }
-        public virtual DbSet<ListenedAlbum> ListenedAlbums { get; set; }
-        public virtual DbSet<ListenedArtist> ListenedArtists { get; set; }
+        //public virtual DbSet<GroupMember> GroupMembers { get; set; }
+        //public virtual DbSet<GroupRole> GroupRoles { get; set; }
+        //public virtual DbSet<ListenedAlbum> ListenedAlbums { get; set; }
+        //public virtual DbSet<ListenedArtist> ListenedArtists { get; set; }
         public virtual DbSet<ListenedComposition> ListenedCompositions { get; set; }
-        public virtual DbSet<ListenedGenre> ListenedGenres { get; set; }
+        //public virtual DbSet<ListenedGenre> ListenedGenres { get; set; }
         public virtual DbSet<Moderator> Moderators { get; set; }
-        public virtual DbSet<Musician> Musicians { get; set; }
-        public virtual DbSet<MusicianRole> MusicianRoles { get; set; }
+        //public virtual DbSet<Musician> Musicians { get; set; }
+        //public virtual DbSet<MusicianRole> MusicianRoles { get; set; }
         public virtual DbSet<Picture> Pictures { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
@@ -97,24 +99,24 @@ namespace MediaStreamer.DataAccess.Net40
         public void Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
         public IQueryable<Genre> GetGenres() { return Genres; }
         public void Add(Genre genre) => Genres.Add(genre);
-        public IQueryable<GroupMember> GetGroupMembers() { return GroupMembers; }
-        public void Add(GroupMember groupMember) => GroupMembers.Add(groupMember);
-        public IQueryable<GroupRole> GetGroupRoles() { return GroupRoles; }
-        public void Add(GroupRole groupRole) => GroupRoles.Add(groupRole);
-        public IQueryable<ListenedAlbum> GetListenedAlbums() { return ListenedAlbums; }
-        public void Add(ListenedAlbum listenedAlbum) => ListenedAlbums.Add(listenedAlbum);
-        public IQueryable<ListenedArtist> GetListenedArtists() { return ListenedArtists; }
-        public void Add(ListenedArtist listenedArtist) => ListenedArtists.Add(listenedArtist);
+        //public IQueryable<GroupMember> GetGroupMembers() { return GroupMembers; }
+        //public void Add(GroupMember groupMember) => GroupMembers.Add(groupMember);
+        //public IQueryable<GroupRole> GetGroupRoles() { return GroupRoles; }
+        //public void Add(GroupRole groupRole) => GroupRoles.Add(groupRole);
+        //public IQueryable<ListenedAlbum> GetListenedAlbums() { return ListenedAlbums; }
+        //public void Add(ListenedAlbum listenedAlbum) => ListenedAlbums.Add(listenedAlbum);
+        //public IQueryable<ListenedArtist> GetListenedArtists() { return ListenedArtists; }
+        //public void Add(ListenedArtist listenedArtist) => ListenedArtists.Add(listenedArtist);
         public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions; }
         public void Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
-        public IQueryable<ListenedGenre> GetListenedGenres() { return ListenedGenres; }
-        public void Add(ListenedGenre listenedGenre) => ListenedGenres.Add(listenedGenre);
+        //public IQueryable<ListenedGenre> GetListenedGenres() { return ListenedGenres; }
+        //public void Add(ListenedGenre listenedGenre) => ListenedGenres.Add(listenedGenre);
         public IQueryable<Moderator> GetModerators() { return Moderators; }
         public void Add(Moderator moderator) => Moderators.Add(moderator);
-        public IQueryable<Musician> GetMusicians() { return Musicians; }
-        public void Add(Musician musician) => Musicians.Add(musician);
-        public IQueryable<MusicianRole> GetMusicianRoles() { return MusicianRoles; }
-        public void Add(MusicianRole musicianRole) => MusicianRoles.Add(musicianRole);
+        //public IQueryable<Musician> GetMusicians() { return Musicians; }
+        //public void Add(Musician musician) => Musicians.Add(musician);
+        //public IQueryable<MusicianRole> GetMusicianRoles() { return MusicianRoles; }
+        //public void Add(MusicianRole musicianRole) => MusicianRoles.Add(musicianRole);
         public IQueryable<Picture> GetPictures() { return Pictures; }
         public void Add(Picture picture) => Pictures.Add(picture);
         public IQueryable<User> GetUsers() { return Users; }
@@ -135,6 +137,46 @@ namespace MediaStreamer.DataAccess.Net40
         public void DisableLazyLoading()
         {
 
+        }
+
+        public bool ClearTable(string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetContainingFolderPath()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<Style> GetStyles()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<Composition>> IDMDBContext.GetCompositionsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<IComposition>> GetICompositionsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(Style style)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Composition>> GetCompositionsAsync(int skip, int take)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<IComposition>> GetICompositionsAsync(int skip, int take)
+        {
+            throw new NotImplementedException();
         }
     }
 }

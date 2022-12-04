@@ -7,17 +7,15 @@ using MediaStreamer.Domain;
 using Sealkeen.CSCourse2016.JSONParser.Core;
 using Sealkeen.Linq.Extensions;
 using System.Collections.Concurrent;
+using MediaStreamer.Domain.Models;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
-    public class JSONDataContext : IDMDBContext
+    public class JSONDataContext : IPagedDMDBContext
     {
         Action<string> _log;
 
-        public JSONDataContext() : this (null)
-        {
-
-        }
+        public JSONDataContext() : this (null) {  }
 
         public JSONDataContext(Action<string> log = null)
         {
@@ -25,7 +23,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 _log = log;
             else
                 _log = Console.WriteLine;
-            //FolderName = Path.Combine(Environment.CurrentDirectory, "Compositions");
             FolderName = PathResolver.GetStandardDatabasePath();
             TableInfo = new ConcurrentDictionary<string, long>();
 
@@ -51,13 +48,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public virtual List<Composition> Compositions { get; set; }
         public virtual List<Administrator> Administrators { get; set; }
         public virtual List<Moderator> Moderators { get; set; }
+        public virtual List<Style> Styles { get; set; }
         public virtual List<User> Users { get; set; }
-        //public virtual List<CompositionVideo> CompositionVideos { get; set; }
         public virtual List<Genre> Genres { get; set; }
         public virtual List<ListenedComposition> ListenedCompositions { get; set; }
 
-        //public virtual List<Picture> Pictures { get; set; }
-        //public virtual List<Video> Videos { get; set; }
 
         public string FolderName { get; set; } = "Compositions";
         public string GetContainingFolderPath() => FolderName;
@@ -796,6 +791,82 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             {
                 //ListenedCompositions.
             }
+        }
+
+        public IQueryable<Style> GetStyles()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Composition>> GetCompositionsAsync(int skip, int take)
+        {
+            if (!Table.SizeChanged(TableInfo, FolderName, nameof(Compositions)))
+                return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
+
+            var jCompositions = Table.LoadInMemory(FolderName, "Compositions.json");
+
+            Compositions = new List<Composition>();
+            foreach (var jComposition in jCompositions)
+            {
+                Composition received = new Composition();
+                var fields = jComposition.DescendantPairs();
+                foreach (var kv in fields)
+                {
+                    switch (kv.Key.ToString().Trim('\"'))
+                    {
+                        case Key.CompositionID:
+                            Table.SetProperty(received, Key.CompositionID, Guid.Parse(kv.Value.AsUnquoted()));
+                            break;
+                        case Key.CompositionName:
+                            Table.SetProperty(received, Key.CompositionName, kv.GetPairedValue().AsUnquoted());
+                            break;
+                        case Key.ArtistID:
+                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
+                            break;
+                        case Key.AlbumID:
+                            Table.SetProperty(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
+                            break;
+                        case Key.Duration:
+                            Table.SetProperty(received, Key.Duration, kv.GetIntegerValueOrReturnNull());
+                            break;
+                        case Key.FilePath:
+                            Table.SetProperty(received, Key.FilePath, kv.GetPairedValue().AsUnquoted());
+                            break;
+                        case Key.Lyrics:
+                            Table.SetProperty(received, Key.Lyrics, kv.GetPairedValue().AsUnquoted());
+                            break;
+                        case Key.About:
+                            Table.SetProperty(received, Key.About, kv.GetPairedValue().AsUnquoted());
+                            break;
+                    }
+                }
+                if (Artists.Count == 0)
+                    GetArtists();
+                received.Artist = Table.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
+                Compositions.Add(received);
+            }
+
+            Task.Factory.StartNew(() => TableInfo[nameof(Compositions)] = Table.GetTableSize(Path.Combine(FolderName, "Compositions.json")));
+
+            return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
+        }
+
+        public async Task<List<IComposition>> GetICompositionsAsync(int skip, int take)
+        {
+#if !NET40
+            var result =
+                (await GetCompositionsAsync(skip, take));
+            return 
+                result
+                .Select(c => c as IComposition).ToList();
+#else
+    throw new NotImplementedException();
+#endif
+        }
+
+        public void Add(Style style)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace MediaStreamer.RAMControl
 {
-    public class CompositionsViewModel : ICompositionsPage
+    public class CompositionsViewModel : ICompositionsViewModel
     {
         protected Guid _lastPartialArtistID = Guid.Empty;
         protected Guid _lastPartialAlbumID = Guid.Empty;
         protected bool _orderByDescending = false;
+        public CompositionStorage CompositionsStore { get; set; }
         public bool ListInitialized = false;
         public int LastCompositionIndex = -1;
-        public CompositionStorage CompositionsStore { get; set; }
+        private int _skip = 0;
+        private int _take = 10;
         public CompositionsViewModel()
         {
             Session.CompositionsVM = this;
@@ -124,6 +126,11 @@ namespace MediaStreamer.RAMControl
         public void SwitchToPreviousSelected()
         {
 
+        }
+
+        public void MovePageNext(int count)
+        {
+            _skip += count;
         }
     }
 }

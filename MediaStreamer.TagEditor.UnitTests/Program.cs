@@ -2,6 +2,7 @@
 using MediaStreamer.IO;
 using System;
 using MediaStreamer;
+using MediaStreamer.DataAccess.NetStandard;
 
 namespace MediaStreamer.TagEditor.UnitTests
 {
@@ -11,13 +12,13 @@ namespace MediaStreamer.TagEditor.UnitTests
         {
             Console.WriteLine("Creating repository, initializing DBContext...");
             MediaStreamer.RAMControl.Program.DBAccess = new DBRepository()
-            { DB = new MediaStreamer.DMEntities() }; //);
+            { DB = new DMEntities() }; //);
 
             Console.WriteLine("Creating filemanipulator in RAM memory, initializing ...");
             MediaStreamer.RAMControl.Program.FileManipulator = 
-                new MediaStreamer.IO.FileManipulator(MediaStreamer.RAMControl.Program.DBAccess);
+                new MediaStreamer.IO.FileManipulator(MediaStreamer.RAMControl.Program.DBAccess, null);
 
-            Console.WriteLine("Decomposing local .mpe file ...");
+            Console.WriteLine("Decomposing local .mp3 file ...");
             MediaStreamer
                 .RAMControl
                 .Program

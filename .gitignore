@@ -19,6 +19,7 @@ _backup
 _LinqExtensions
 _ObjectModelExtensions
 MediaStreamer.DataAccess.NetStandard/Migrations
+MediaStreamer.Xamarin
 
 # User-specific files
 *.rsuser

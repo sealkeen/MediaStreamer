@@ -7,10 +7,11 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
 using Sealkeen.Linq.Extensions;
+using MediaStreamer.Domain.Models;
 
 namespace MediaStreamer.DataAccess.RawSQL
 {
-    public class ReadonlyDBContext : IDMDBContext
+    public class ReadonlyDBContext : IPagedDMDBContext
     {
         private readonly ILogger _logger;
 
@@ -326,6 +327,39 @@ namespace MediaStreamer.DataAccess.RawSQL
                 reader.Close();
             }
             return false;
+        }
+
+        public IQueryable<Style> GetStyles()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(Style style)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Composition>> GetCompositionsAsync(int skip, int take)
+        {
+            if (Compositions == null || Compositions.Count < 0)
+            {
+                GetCompositions();
+            }
+            return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
+        }
+
+        public Task<List<IComposition>> GetICompositionsAsync(int skip, int take)
+        {
+            if (Compositions == null || Compositions.Count < 0)
+            {
+                GetCompositions();
+            }
+            return Task.Factory
+                .StartNew(() => Compositions
+                .Skip(skip)
+                .Take(take)
+                .Select(c => c as IComposition)
+                .ToList());
         }
     }
 }

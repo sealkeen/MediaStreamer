@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp3.1; netstandard2.1; netstandard2.0; net40; net472</TargetFrameworks>
+  </PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
+	</ItemGroup>
+
+</Project>
