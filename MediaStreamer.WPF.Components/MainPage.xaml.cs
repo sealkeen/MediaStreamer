@@ -573,9 +573,8 @@ namespace MediaStreamer.WPF.Components
         public void UpdateBindingExpression()
         {
             this.Dispatcher.BeginInvoke(new Action(() =>
-            
-            BindingOperations.GetBindingExpression(lblPager, Label.ContentProperty).UpdateTarget())
-                );
+                BindingOperations.GetBindingExpression(lblPager, Label.ContentProperty).UpdateTarget())
+            );
         }
 
         //public event RoutedEventHandler DataBaseClick;

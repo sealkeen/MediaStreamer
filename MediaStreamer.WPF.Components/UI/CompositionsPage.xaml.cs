@@ -614,7 +614,13 @@ namespace MediaStreamer.WPF.Components
             Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
                 (Session.MainPageVM.GetSkip(), Session.MainPageVM.GetTake());
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-            Session.MainPageVM.UpdateBindingExpression();
+
+            _ = Task.Factory.StartNew(() =>
+                {
+                    Session.MainPageVM.SetTotal(Program.DBAccess.DB.GetCompositions().Count());
+                    Session.MainPageVM.UpdateBindingExpression();
+                }
+            );
         }
 
         private async void btnBack_Click(object sender, RoutedEventArgs e)
@@ -626,7 +632,13 @@ namespace MediaStreamer.WPF.Components
             Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
                 (Session.MainPageVM.GetSkip(), Session.MainPageVM.GetTake());
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-            Session.MainPageVM.UpdateBindingExpression();
+
+            _ = Task.Factory.StartNew(() =>
+                {
+                    Session.MainPageVM.SetTotal(Program.DBAccess.DB.GetCompositions().Count());
+                    Session.MainPageVM.UpdateBindingExpression();
+                }
+            );
         }
     }
 }
