@@ -11,6 +11,7 @@ namespace MediaStreamer.RAMControl
     {
         public static IDBRepository DBAccess;
         public static StatusPage MainPage { get; set; }
+        public static MainPageViewModel MainPageVM {get; set; }
         public static CompositionsViewModel CompositionsVM { get; set; }
         public static AlbumsViewModel AlbumsVM { get; set; }
         public static ArtistsViewModel ArtistsVM { get; set; }

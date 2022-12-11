@@ -1,4 +1,9 @@
-﻿using System;
+﻿using MediaStreamer.Domain;
+using MediaStreamer.Logging;
+using MediaStreamer.RAMControl;
+using Sealkeen.Linq.Extensions;
+using StringExtensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,13 +12,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MediaStreamer.Domain;
-using StringExtensions;
-using Sealkeen.Linq.Extensions;
-using MediaStreamer.RAMControl;
-using System.Threading;
-using MediaStreamer.Logging;
-using System.Windows.Documents;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -22,8 +20,6 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class CompositionsPage : FirstFMPage
     {
-        private int _skipRecordsCount { get; set; } = 0;
-        private int _takeRecordsCount { get; set; } = 10;
         protected Control CurrentListView { get; set; }
         public CompositionsPage()
         {
@@ -101,7 +97,7 @@ namespace MediaStreamer.WPF.Components
 #if !NET40
                     await 
 #endif
-                    Program.DBAccess.DB.GetICompositionsAsync(_skipRecordsCount, 10);
+                    Program.DBAccess.DB.GetICompositionsAsync(Session.MainPageVM.GetSkip(), 10);
 #if NET40
                 result.Wait();
 #endif
@@ -571,8 +567,6 @@ namespace MediaStreamer.WPF.Components
         }
         // <-- GridSplitter 
 
-
-
         // lstQuery -->
         private void lstQuery_Drop(object sender, DragEventArgs e)
         {
@@ -616,19 +610,23 @@ namespace MediaStreamer.WPF.Components
 
         private async void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            _skipRecordsCount += _takeRecordsCount;
-            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync(_skipRecordsCount, _takeRecordsCount);
+            Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() + Session.MainPageVM.GetTake(), Program._logger.LogInfo);
+            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
+                (Session.MainPageVM.GetSkip(), Session.MainPageVM.GetTake());
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+            Session.MainPageVM.UpdateBindingExpression();
         }
 
         private async void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            _skipRecordsCount = _skipRecordsCount - _takeRecordsCount;
-            if (_skipRecordsCount < 0)
-                _skipRecordsCount = 0;
+            Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() - Session.MainPageVM.GetTake(), Program._logger.LogInfo);
+            if (Session.MainPageVM.GetSkip() < 0)
+                Session.MainPageVM.SetSkip(0, Program._logger.LogInfo);
 
-            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync(_skipRecordsCount, _takeRecordsCount);
+            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
+                (Session.MainPageVM.GetSkip(), Session.MainPageVM.GetTake());
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+            Session.MainPageVM.UpdateBindingExpression();
         }
     }
 }
