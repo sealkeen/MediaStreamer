@@ -25,8 +25,8 @@ namespace MediaStreamer.WPF.NetCore3_1
             InitializeComponent();
             try
             {
-                InitializeDataConnections().Wait();
                 Selector.MainWindow = this;
+                InitializeDataConnections().Wait();
 
                 Program.DBAccess.DB.EnsureCreated();
                 Program.ApplicationsSettingsContext.EnsureCreated();

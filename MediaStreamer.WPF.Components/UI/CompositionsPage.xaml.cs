@@ -69,7 +69,6 @@ namespace MediaStreamer.WPF.Components
             DataContext = Session.CompositionsVM;
         }
 
-
         public async override void ListByID(Guid albumID)
         {
             if (!Program.DBAccess.DB.GetCompositions().Where(a => a.AlbumID == albumID).Any())
@@ -167,20 +166,6 @@ namespace MediaStreamer.WPF.Components
             Session.CompositionsVM.CompositionsStore.Compositions = compositions;
             Session.CompositionsVM.PartialListCompositions();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-        }
-
-        protected async void buttonNewComp_Click(object sender, RoutedEventArgs e)
-        {
-            var tsk = await Program.FileManipulator.OpenAudioFileCrossPlatform();
-
-            Program.FileManipulator.DecomposeAudioFile(tsk, Program._logger?.GetLogErorrOrReturnNull());
-            ReList();
-        }
-
-        protected void buttonNewRange_Click(object sender, RoutedEventArgs e)
-        {
-            Program.FileManipulator.DecomposeAudioFiles(Program.FileManipulator.OpenAudioFilesCrossPlatform(), Program.SetCurrentStatus);
-            ReList();
         }
 
         public bool HasNextInList()
@@ -427,8 +412,6 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-
-
         protected void ReList()
         {
             if (lastDataLoadWasPartial != true)
@@ -566,79 +549,10 @@ namespace MediaStreamer.WPF.Components
             //}
         }
         // <-- GridSplitter 
-
-        // lstQuery -->
-        private void lstQuery_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(LinkedList<object>)))
-            {
-                // Note that you can have more than one file.
-                LinkedList<object> comps = (LinkedList<object>)e.Data.GetData(typeof(LinkedList<object>));
-
-                // Assuming you have one file that you care about, pass it off to whatever
-                // handling code you have defined.
-                //HandleFileOpen(files[0]);
-                foreach(var c in comps)
-                    Session.CompositionsVM.CompositionsStore.Queue.AddLast(c as Composition);
-                ReList();
-            }
-            if(e.Data.GetDataPresent(DataFormats.FileDrop))
-                lstItems_Drop(sender, e);
-        }
-        private void queOpenLocation_Click(object sender, RoutedEventArgs e)
-        {
-            int currentIndex = lstQuery.SelectedIndex/* + i*/;
-            if (currentIndex != -1)
-            {
-                IComposition currentComp = lstQuery.SelectedItem as Composition;
-                if (currentComp.FilePath.FileExists())
-                {
-                    currentComp.FilePath.SelectInExplorer();
-                }
-            }
-        }
-
-        private void lstQuery_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            CurrentListView = sender as Control;
-        }
-        // <-- lstQuery
         public override void Rerender()
         {
             this.InitializeComponent();
         }
 
-        private async void btnNext_Click(object sender, RoutedEventArgs e)
-        {
-            Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() + Session.MainPageVM.GetTake(), Program._logger.LogInfo);
-            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
-                (Session.MainPageVM.GetSkip(), Session.MainPageVM.GetTake());
-            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-
-            _ = Task.Factory.StartNew(() =>
-                {
-                    Session.MainPageVM.SetTotal(Program.DBAccess.DB.GetCompositions().Count());
-                    Session.MainPageVM.UpdateBindingExpression();
-                }
-            );
-        }
-
-        private async void btnBack_Click(object sender, RoutedEventArgs e)
-        {
-            Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() - Session.MainPageVM.GetTake(), Program._logger.LogInfo);
-            if (Session.MainPageVM.GetSkip() < 0)
-                Session.MainPageVM.SetSkip(0, Program._logger.LogInfo);
-
-            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
-                (Session.MainPageVM.GetSkip(), Session.MainPageVM.GetTake());
-            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-
-            _ = Task.Factory.StartNew(() =>
-                {
-                    Session.MainPageVM.SetTotal(Program.DBAccess.DB.GetCompositions().Count());
-                    Session.MainPageVM.UpdateBindingExpression();
-                }
-            );
-        }
     }
 }
