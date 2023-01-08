@@ -76,7 +76,7 @@ namespace MediaStreamer.WPF.Components
 #if !NET40
             await Session.CompositionsVM.PartialListCompositions(albumID, Guid.Empty);
 #else
-            Session.CompositionsVM.PartialListCompositions(albumID, Guid.Empty);
+            Session.CompositionsVM.PartialListCompositions(albumID, Guid.Empty).Wait();
 #endif
             //Session.CompositionsVM.GetPartOfCompositions();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
@@ -362,7 +362,6 @@ namespace MediaStreamer.WPF.Components
                 Program.SetCurrentStatus($"Error to double click PlayTarget(): {ex?.Message}");
             }
         }
-
 
         public void PlaySelectedTarget()
         {
