@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace MediaStreamer.RAMControl
 {
-    interface ICompositionsPage
+    interface ICompositionsViewModel
     {
         IComposition GetCurrentComposition();
 

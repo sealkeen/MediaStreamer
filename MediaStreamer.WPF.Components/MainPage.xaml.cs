@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
@@ -13,13 +15,17 @@ namespace MediaStreamer.WPF.Components
 {
     public partial class MainPage : StatusPage
     {
-
         public MainPage(bool async = false)
         {
+            Session.MainPageVM = new MainPageViewModel();
+            Session.MainPageVM.UpdateBindingExpression = this.UpdateBindingExpression;
+            //DataContext = Session.MainPageVM;
+
             InitializeComponent();
             if(!async)
                 InitializeData();
 
+            lblPager.DataContext = Session.MainPageVM;
             //LoggerPage.GetInstance();
         }
 
@@ -564,6 +570,12 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
+        public void UpdateBindingExpression()
+        {
+            this.Dispatcher.BeginInvoke(new Action(() =>
+                BindingOperations.GetBindingExpression(lblPager, Label.ContentProperty).UpdateTarget())
+            );
+        }
 
         //public event RoutedEventHandler DataBaseClick;
         //private void btnDatabase_Click(object sender, RoutedEventArgs e)

@@ -1,4 +1,9 @@
-﻿using System;
+﻿using MediaStreamer.Domain;
+using MediaStreamer.Logging;
+using MediaStreamer.RAMControl;
+using Sealkeen.Linq.Extensions;
+using StringExtensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,12 +12,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MediaStreamer.Domain;
-using StringExtensions;
-using LinqExtensions;
-using MediaStreamer.RAMControl;
-using System.Threading;
-using MediaStreamer.Logging;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -70,7 +69,6 @@ namespace MediaStreamer.WPF.Components
             DataContext = Session.CompositionsVM;
         }
 
-
         public async override void ListByID(Guid albumID)
         {
             if (!Program.DBAccess.DB.GetCompositions().Where(a => a.AlbumID == albumID).Any())
@@ -78,20 +76,38 @@ namespace MediaStreamer.WPF.Components
 #if !NET40
             await Session.CompositionsVM.PartialListCompositions(albumID, Guid.Empty);
 #else
-            Session.CompositionsVM.PartialListCompositions(albumID, Guid.Empty);
+            Session.CompositionsVM.PartialListCompositions(albumID, Guid.Empty).Wait();
 #endif
             //Session.CompositionsVM.GetPartOfCompositions();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
-        public virtual List<IComposition> GetICompositions()
+#if !NET40
+        public async virtual Task<List<IComposition>>
+#else
+        public virtual List<IComposition> 
+#endif
+        GetICompositions()
         {
             try {
                 //DBAccess.Update();
                 Dispatcher.BeginInvoke(new Action(() => Selector.MainPage.SetFrameContent(Selector.CompositionsPage)));
-                var result = Program.DBAccess.DB.GetICompositions().ToList();
+                var result =
+#if !NET40
+                    await 
+#endif
+                    Program.DBAccess.DB.GetICompositionsAsync(Session.MainPageVM.GetSkip(), 10);
+#if NET40
+                result.Wait();
+#endif
                 ListInitialized = true;
-                return result;
+                return 
+                    result
+#if NET40
+                    .Result
+#endif
+
+                    ;
             } catch (Exception ex) {
                 Program.SetCurrentStatus("GetICompositions: " + ex.Message);
                 return new List<IComposition>();
@@ -127,22 +143,18 @@ namespace MediaStreamer.WPF.Components
 
         public override async Task ListAsync()
         {
-            try
-            {
-#if !NET40
-                //var tsk = await listCompsTask;
-
-                Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync();
-#else
-                Session.CompositionsVM.CompositionsStore.Compositions = GetICompositions();
-#endif
+            try {
+                GetICompositions();
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
                 lastDataLoadWasPartial = false;
             } catch {
                 Session.CompositionsVM.CompositionsStore.Compositions = new List<IComposition>();
                 try {
-                    Session.CompositionsVM.CompositionsStore.Compositions = GetICompositions();
-                } catch (Exception ex) {
+                    GetICompositions();
+                    lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+                    lastDataLoadWasPartial = false;
+                }
+                catch (Exception ex) {
                     Program.SetCurrentStatus("ListAsync: " + ex.Message);
                 }
             }
@@ -154,20 +166,6 @@ namespace MediaStreamer.WPF.Components
             Session.CompositionsVM.CompositionsStore.Compositions = compositions;
             Session.CompositionsVM.PartialListCompositions();
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
-        }
-
-        protected async void buttonNewComp_Click(object sender, RoutedEventArgs e)
-        {
-            var tsk = await Program.FileManipulator.OpenAudioFileCrossPlatform();
-
-            Program.FileManipulator.DecomposeAudioFile(tsk, Program._logger?.GetLogErorrOrReturnNull());
-            ReList();
-        }
-
-        protected void buttonNewRange_Click(object sender, RoutedEventArgs e)
-        {
-            Program.FileManipulator.DecomposeAudioFiles(Program.FileManipulator.OpenAudioFilesCrossPlatform(), Program.SetCurrentStatus);
-            ReList();
         }
 
         public bool HasNextInList()
@@ -365,7 +363,6 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-
         public void PlaySelectedTarget()
         {
             if (lstItems.SelectedIndex < 0)
@@ -413,8 +410,6 @@ namespace MediaStreamer.WPF.Components
                 Program.SetCurrentStatus(ex.Message, error: true);
             }
         }
-
-
 
         protected void ReList()
         {
@@ -553,48 +548,10 @@ namespace MediaStreamer.WPF.Components
             //}
         }
         // <-- GridSplitter 
-
-
-
-        // lstQuery -->
-        private void lstQuery_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(LinkedList<object>)))
-            {
-                // Note that you can have more than one file.
-                LinkedList<object> comps = (LinkedList<object>)e.Data.GetData(typeof(LinkedList<object>));
-
-                // Assuming you have one file that you care about, pass it off to whatever
-                // handling code you have defined.
-                //HandleFileOpen(files[0]);
-                foreach(var c in comps)
-                    Session.CompositionsVM.CompositionsStore.Queue.AddLast(c as Composition);
-                ReList();
-            }
-            if(e.Data.GetDataPresent(DataFormats.FileDrop))
-                lstItems_Drop(sender, e);
-        }
-        private void queOpenLocation_Click(object sender, RoutedEventArgs e)
-        {
-            int currentIndex = lstQuery.SelectedIndex/* + i*/;
-            if (currentIndex != -1)
-            {
-                IComposition currentComp = lstQuery.SelectedItem as Composition;
-                if (currentComp.FilePath.FileExists())
-                {
-                    currentComp.FilePath.SelectInExplorer();
-                }
-            }
-        }
-
-        private void lstQuery_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            CurrentListView = sender as Control;
-        }
-        // <-- lstQuery
         public override void Rerender()
         {
             this.InitializeComponent();
         }
+
     }
 }

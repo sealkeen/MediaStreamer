@@ -143,10 +143,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj">
-      <Project>{92aa9ff7-3187-4aa8-b3d4-cf2604d32b72}</Project>
-      <Name>LinqExtensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj">
       <Project>{f4469d6c-4105-4525-bbb1-3430966888a6}</Project>
       <Name>MediaStreamer.DataAccess.CrossPlatform</Name>

@@ -9,6 +9,8 @@
       xmlns:VM="clr-namespace:MediaStreamer.RAMControl;assembly=MediaStreamer.RAMControl"
       mc:Ignorable="d"        
       Title="Compositions" 
+    MinWidth="340"
+    MinHeight="220"
                 >
     <!--MaxWidth="{Binding ElementName=pageControl,Path=ActualWidth}"-->
     <Grid VerticalAlignment="Stretch"  x:Name="mainGrid" ><!--Background="White"-->
@@ -19,11 +21,13 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="75"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <!--<ScrollViewer>-->
-        <ListView VerticalAlignment="Stretch" Name="lstItems" Grid.Row="0" HorizontalAlignment="Stretch"
-                  ItemsSource="{Binding Compositions}" Grid.Column="0"
+        <ListView VerticalAlignment="Stretch" Name="lstItems" 
+                  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding Compositions}"
                   MouseDoubleClick="lstItems_MouseDoubleClick"
                   GridViewColumnHeader.Click="lstItems_OnColumnClick"
                   PreviewMouseLeftButtonDown="lstItems_PreviewMouseLeftButtonDown"
@@ -64,6 +68,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button x:Name="btnBack" Grid.Row="1" Grid.Column="0" Click="btnBack_Click">Back page</Button>
+        <Button x:Name="btnNext" Grid.Row="1" Grid.Column="2" Click="btnNext_Click">Next page</Button>
         <!--</ScrollViewer>-->
         <GridSplitter Grid.Column ="1" Grid.Row="0" 
                       HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"
@@ -93,7 +99,7 @@
                     </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"  VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"  VerticalAlignment="Bottom" HorizontalAlignment="Stretch" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="35" MinWidth="70" x:Name="firstColumn"/>
                 <ColumnDefinition Width="70" MinWidth="70" x:Name="secondColumn"/>
@@ -106,17 +112,17 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Name="lblArtistName" Content="Artist name"></Label>
-            <TextBox  Height="28" Grid.Row="1" Grid.Column="0" Name="txtArtistName" Text="Artist name" ></TextBox>
+            <TextBox  Height="28" Grid.Row="2" Grid.Column="0" Name="txtArtistName" Text="Artist name" ></TextBox>
             <Label Grid.Row="0" Grid.Column="1" Name="lblAlbum" Content="Album"  IsEnabled="False" ></Label>
-            <TextBox Height="28" Grid.Row="1" Grid.Column="1" Name="txtAlbumName" Text="Album" ></TextBox>
+            <TextBox Height="28" Grid.Row="2" Grid.Column="1" Name="txtAlbumName" Text="Album" ></TextBox>
                 <!--<Button Grid.Column="0" IsEnabled="False" Visibility="Visible"  x:Name="buttonListen" Content="Add listen" 
                 Click="buttonListen_Click" Height="21" />-->
-            <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Bottom" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
+            <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
                
                     Click="cmiDelete_Click"/> <!--Background="AliceBlue"-->
-            <Button Grid.Row="1" Grid.Column="3" VerticalAlignment="Bottom" x:Name="buttonNew" Content="Add New Song"
+            <Button Grid.Row="2" Grid.Column="3" VerticalAlignment="Bottom" x:Name="buttonNew" Content="Add New Song"
                 Click="buttonNewComp_Click" Height="21" /><!--Background="AliceBlue"-->
-            <Button Grid.Row="1" Grid.Column="4" VerticalAlignment="Bottom" x:Name="buttonNewRange" Content="Add Range"
+            <Button Grid.Row="2" Grid.Column="4" VerticalAlignment="Bottom" x:Name="buttonNewRange" Content="Add Range"
                 Click="buttonNewRange_Click" Height="21"/><!--Background="AliceBlue"-->
         </Grid>
     </Grid>

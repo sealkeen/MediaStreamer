@@ -1,4 +1,3 @@
-using LinqExtensions;
 using MediaStreamer.Domain;
 using MediaStreamer.RAMControl;
 using System;
@@ -10,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Sealkeen.Linq.Extensions;
+using StringExtensions;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -188,5 +189,38 @@ namespace MediaStreamer.WPF.Components
                 Program._logger?.LogError(ex.Message);
             }
         }
+
+        // lstQuery -->
+        private void lstQuery_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(LinkedList<object>)))
+            {
+                // Note that you can have more than one file.
+                LinkedList<object> comps = (LinkedList<object>)e.Data.GetData(typeof(LinkedList<object>));
+
+                // Assuming you have one file that you care about, pass it off to whatever
+                // handling code you have defined.
+                //HandleFileOpen(files[0]);
+                foreach (var c in comps)
+                    Session.CompositionsVM.CompositionsStore.Queue.AddLast(c as Composition);
+                ReList();
+            }
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                lstItems_Drop(sender, e);
+        }
+        private void queOpenLocation_Click(object sender, RoutedEventArgs e)
+        {
+            int currentIndex = lstQuery.SelectedIndex/* + i*/;
+            if (currentIndex != -1)
+            {
+                IComposition currentComp = lstQuery.SelectedItem as Composition;
+                if (currentComp.FilePath.FileExists())
+                {
+                    currentComp.FilePath.SelectInExplorer();
+                }
+            }
+        }
+
+        // <-- lstQuery
     }
 }

@@ -77,7 +77,7 @@ namespace MediaStreamer.TagEditing
                 var tagv2 = tagFile.GetTag(TagLib.TagTypes.Id3v2);
                 //check if the title isn't null
                 if (!string.IsNullOrEmpty(title)) {
-                    if (tagv2 == null || tagv2.Title == null)
+                    if (tagv2 == null)
                         return;
                     string titleFromFile = tagv2.Title;
                     if (titleFromFile == null || !title.ToLower().Contains(titleFromFile.ToLower())) {

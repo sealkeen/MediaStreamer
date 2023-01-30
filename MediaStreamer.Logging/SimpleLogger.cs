@@ -17,7 +17,7 @@ namespace MediaStreamer.Logging
             catch (IOException)
             {
                 filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MediaStreamer.WPF.NetCore3_1", "Logs"
-                    , DateTime.Now.ToString("log_dd-mm-yyyy_hh-mm-ss.fff") + ".txt"
+                    , $"log_{DateTime.Now.ToString("dd-mm-yyyy_hh-mm-ss.fff")}.txt"
                     );
                 _sw = new StreamWriter(filepath, true);
             }

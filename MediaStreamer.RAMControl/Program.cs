@@ -1,4 +1,4 @@
-﻿using LinqExtensions;
+﻿using Sealkeen.Linq.Extensions;
 using MediaStreamer.Domain;
 using MediaStreamer.IO;
 using Sealkeen.Abstractions;
@@ -20,7 +20,7 @@ namespace MediaStreamer.RAMControl
             _logger = logger;
         }
         // static interfaces:
-        public static IDBRepository DBAccess;
+        public static IPagedDBRepository DBAccess;
         public static IComposition currentComposition;
         public static IApplicationsSettingsContext ApplicationsSettingsContext;
         public static ILogger _logger { get; set; }

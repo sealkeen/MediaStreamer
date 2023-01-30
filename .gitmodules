@@ -13,3 +13,9 @@
 [submodule "ObjectModelExtensions"]
 	path = ObjectModelExtensions
 	url = https://github.com/sealkeen/ObjectModelExtensions
+[submodule "Sealkeen.Linq.Extensions"]
+	path = Sealkeen.Linq.Extensions
+	url = https://github.com/sealkeen/Sealkeen.Linq.Extensions
+[submodule "Sealkeen.ObjectModel.Extensions"]
+	path = Sealkeen.ObjectModel.Extensions
+	url = https://github.com/sealkeen/Sealkeen.ObjectModel.Extensions

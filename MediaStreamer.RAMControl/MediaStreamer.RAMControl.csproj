@@ -6,7 +6,7 @@
 	  </PropertyGroup>
 
 	  <ItemGroup>
-		<ProjectReference Include="..\LinqExtensions\LinqExtensions.csproj" />
+		<ProjectReference Include="..\Sealkeen.Linq.Extensions\Sealkeen.Linq.Extensions.csproj" />
 		<ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
 		<ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
 		<ProjectReference Include="..\MediaStreamer.Logging\MediaStreamer.Logging.csproj" />

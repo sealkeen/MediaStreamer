@@ -25,8 +25,8 @@ namespace MediaStreamer.WPF.NetCore3_1
             InitializeComponent();
             try
             {
-                InitializeDataConnections().Wait();
                 Selector.MainWindow = this;
+                InitializeDataConnections().Wait();
 
                 Program.DBAccess.DB.EnsureCreated();
                 Program.ApplicationsSettingsContext.EnsureCreated();
@@ -36,22 +36,20 @@ namespace MediaStreamer.WPF.NetCore3_1
                 ResolveCMDParamFilePaths();
 
                 this.windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
-
-                //Session.MainPage.DataBaseClick += this.btnDatabase_Click;
-                //Session.MainPage.btnClose.Click += this.btnClose_Click;
-                //Session.MainPage.btnMinimize.Click += this.btnMinimize_Click;
             }
             catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
             }
         }
 
-
         public async Task InitializeDataConnections()
         {
             if (Program.DBAccess == null)
             {
-                Program.DBAccess = await DBRepository.GetInstanceAsync(new JSONDataContext(Program.SetCurrentStatus));
+                DMEntitiesContext.UseSQLServer = true;
+                var context = //new DMEntitiesContext();
+                    new JSONDataContext(Program.SetCurrentStatus);
+                Program.DBAccess = new DBRepository() { DB = context };
 
             }
             if (Program.ApplicationsSettingsContext == null)

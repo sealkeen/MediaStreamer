@@ -5,19 +5,26 @@ using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using MediaStreamer.Domain.Models;
 
 namespace MediaStreamer.DataAccess.NetStandard
 {
-    public partial class DMEntitiesContext : DbContext, IDMDBContext
+    public partial class DMEntitiesContext : NetStandardContext, IPagedDMDBContext
     {
         public static bool UseSQLServer = false;
-        public string DBPath { get; set; } = "";
         public static string Filename { get; set; }
         public static string LocalSource { get; set; } = @"O:/DB/09.06.2021-2.db3";
 
+        private int _skipComps = -1;
+        private int _takeComps = -1;
         public DMEntitiesContext()
         {
             this.ChangeTracker.LazyLoadingEnabled = false;
+        }
+
+        public DMEntitiesContext(bool useSQLServer)
+        {
+            UseSQLServer = useSQLServer;
         }
 
         public void EnsureCreated()
@@ -35,12 +42,8 @@ namespace MediaStreamer.DataAccess.NetStandard
             Database.EnsureDeleted();
             Database.EnsureCreated();
         }
-        //public async Task ClearAsync()
-        //{
-        //    await Database.EnsureDeleted();
-        //    await Database.EnsureCreated();
-        //}
-        public DMEntitiesContext(DbContextOptions<DMEntitiesContext> options)
+
+        public DMEntitiesContext(DbContextOptions<NetStandardContext> options)
             : base(options)
         {
 
@@ -65,20 +68,6 @@ namespace MediaStreamer.DataAccess.NetStandard
             }
         }
 
-        public virtual DbSet<Administrator> Administrators { get; set; }
-        public virtual DbSet<Album> Albums { get; set; }
-        public virtual DbSet<AlbumGenre> AlbumGenres { get; set; }
-        public virtual DbSet<Artist> Artists { get; set; }
-        public virtual DbSet<ArtistGenre> ArtistGenres { get; set; }
-        public virtual DbSet<Composition> Compositions { get; set; }
-        public virtual DbSet<CompositionVideo> CompositionVideos { get; set; }
-        public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<ListenedComposition> ListenedCompositions { get; set; }
-        public virtual DbSet<Moderator> Moderators { get; set; }
-        public virtual DbSet<Picture> Pictures { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Video> Videos { get; set; }
-        public virtual DbSet<PlayerState> PlayerStates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -107,7 +96,6 @@ namespace MediaStreamer.DataAccess.NetStandard
                 entity.Property(e => e.AlbumName).IsRequired();
 
                 entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
-
 
                 entity.HasOne(d => d.Artist)
                     .WithMany(p => p.Albums)
@@ -216,6 +204,9 @@ namespace MediaStreamer.DataAccess.NetStandard
                     entity.HasKey(e => e.GenreID);
                     entity.Property(e => e.GenreID).IsRequired();
                     entity.ToTable("Genre");
+                    entity.HasOne(e => e.Style)
+                    .WithMany(s => s.Genres)
+                    .HasForeignKey(e => e.StyleId);
                 });
             }
             else
@@ -229,7 +220,7 @@ namespace MediaStreamer.DataAccess.NetStandard
 
             modelBuilder.Entity<ListenedComposition>(entity =>
             {
-                entity.HasKey(e => new { e.ListenedCompositionID });
+                entity.HasKey(e => new { e.UserID, e.CompositionID });
 
                 entity.ToTable("ListenedComposition");
 
@@ -239,12 +230,13 @@ namespace MediaStreamer.DataAccess.NetStandard
 
                 entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
 
+                entity.Property(e => e.StoppedAt).HasColumnName("StoppedAt");
+
+                entity.Property(e => e.CountOfPlays).HasColumnName("CountOfPlays");
 
                 entity.HasOne(d => d.Composition)
                     .WithMany(p => p.ListenedCompositions)
-                    .HasForeignKey(d => d.CompositionID)
                     .OnDelete(DeleteBehavior.ClientSetNull);
-
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ListenedCompositions)
@@ -295,12 +287,10 @@ namespace MediaStreamer.DataAccess.NetStandard
                     .HasColumnType("DATETIME");
 
                 entity.Property(e => e.Email).IsRequired();
-
                 entity.Property(e => e.Password).IsRequired();
-
                 entity.Property(e => e.UserName).IsRequired();
-
                 entity.Property(e => e.VKLink).HasColumnName("VKLink");
+                entity.Property(e => e.AspNetUserId).HasColumnName("AspNetUserId");
             });
 
             modelBuilder.Entity<Video>(entity =>
@@ -335,6 +325,19 @@ namespace MediaStreamer.DataAccess.NetStandard
                 .HasColumnType("NUMERIC");
             });
 
+            modelBuilder.Entity<Style>(entity =>
+            {
+                entity.ToTable("Style");
+
+                entity.Property(e => e.StyleId)
+                    .HasColumnName("StyleId");
+
+                entity.HasMany(s => s.Genres)
+                .WithOne(g => g.Style);
+
+                entity.Property(e => e.StyleName).IsRequired();
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
@@ -362,21 +365,25 @@ namespace MediaStreamer.DataAccess.NetStandard
 
         public async Task<List<Composition>> GetCompositionsAsync()
         {
-            return await GetCompositions().ToListAsync();
+            if(_skipComps != -1 && _takeComps != -1)
+                return await GetCompositions().ToListAsync();
+            else
+                return await GetCompositionsAsync(_skipComps, _takeComps);
         }
 
         public async Task<List<IComposition>> GetICompositionsAsync()
         {
-            return await GetICompositions().ToListAsync();
+            if (_skipComps != -1 && _takeComps != -1)
+                return await GetICompositions().ToListAsync();
+            else
+                return await GetICompositionsAsync(_skipComps, _takeComps);
         }
 
         public IQueryable<IComposition> GetICompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist); }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
-        public IQueryable<CompositionVideo> GetCompositionVideos() { return CompositionVideos; }
-        void IDMDBContext.Add(CompositionVideo compositionVideo) => CompositionVideos.Add(compositionVideo);
         public IQueryable<Genre> GetGenres() { return Genres; }
         void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
-        public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions.Include(c => c.Composition); }
+        public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions; }
         void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
         public IQueryable<Moderator> GetModerators() { return Moderators; }
         void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);
@@ -384,8 +391,8 @@ namespace MediaStreamer.DataAccess.NetStandard
         void IDMDBContext.Add(Picture picture) => Pictures.Add(picture);
         public IQueryable<User> GetUsers() { return Users; }
         void IDMDBContext.Add(User user) => Users.Add(user);
-        public IQueryable<Video> GetVideos() { return Videos; }
-        void IDMDBContext.Add(Video video) => Videos.Add(video);
+        public IQueryable<Style> GetStyles() { return Styles; }
+        void IDMDBContext.Add(Style style) => Styles.Add(style);
 
         void IDMDBContext.UpdateAndSaveChanges<TEntity>(TEntity entity)
         {
@@ -411,21 +418,19 @@ namespace MediaStreamer.DataAccess.NetStandard
                     case nameof(Artists): if ((cnt = Artists.Count()) > 0) Artists.RemoveRange(Artists); break;
                     case nameof(ArtistGenres): if ((cnt = ArtistGenres.Count()) > 0) ArtistGenres.RemoveRange(ArtistGenres); break;
                     case nameof(Compositions): if ((cnt = Compositions.Count()) > 0) Compositions.RemoveRange(Compositions); break;
-                    case nameof(CompositionVideos):
-                        if ((cnt = CompositionVideos.Count()) > 0) CompositionVideos.RemoveRange(CompositionVideos); break;
                     case nameof(Genres): if ((cnt = Genres.Count()) > 0) Genres.RemoveRange(Genres); break;
                     case nameof(ListenedCompositions):
                         if ((cnt = ListenedCompositions.Count()) > 0) ListenedCompositions.RemoveRange(ListenedCompositions); break;
                     case nameof(Moderators): if ((cnt = Moderators.Count()) > 0) Moderators.RemoveRange(Moderators); break;
                     case nameof(Pictures): if ((cnt = Pictures.Count()) > 0) Pictures.RemoveRange(Pictures); break;
                     case nameof(Users): if ((cnt = Users.Count()) > 0) Users.RemoveRange(Users); break;
-                    case nameof(Videos): if ((cnt = Videos.Count()) > 0) Videos.RemoveRange(Videos); break;
                     case nameof(PlayerStates): if ((cnt = PlayerStates.Count()) > 0) PlayerStates.RemoveRange(PlayerStates); break;
                 }
                 if (cnt > 0)
                     SaveChanges();
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ue) { 
+
             }
             return false;
         }
@@ -435,5 +440,19 @@ namespace MediaStreamer.DataAccess.NetStandard
             return Filename;
         }
 
+        public Task<List<Composition>> GetCompositionsAsync(int skip, int take)
+        {
+            return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
+        }
+
+        public Task<List<IComposition>> GetICompositionsAsync(int skip, int take)
+        {
+            return Task.Factory
+                .StartNew(() => Compositions
+                .Skip(skip)
+                .Take(take)
+                .Select(c => c as IComposition)
+                .ToList());
+        }
     }
 }
