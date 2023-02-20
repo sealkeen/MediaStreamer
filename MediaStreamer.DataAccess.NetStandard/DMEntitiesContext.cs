@@ -56,7 +56,7 @@ namespace MediaStreamer.DataAccess.NetStandard
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
                     if (UseSQLServer) {
-                        optionsBuilder.UseSqlServer(@"Server=.\SQLExpress;initial catalog=CompositionsDB;user id=sys_admin;password=s0m3P4ssw0rdT3xt;MultipleActiveResultSets=True;");
+                        optionsBuilder.UseSqlServer(@"Server=.\SQLExpress;initial catalog=CompositionsDB;user id=sys_admin;password=s0m3P4ssw0rdT3xt;MultipleActiveResultSets=True;TrustServerCertificate=True;");
                     }
                     else
                         optionsBuilder.UseSqlite(@$"DataSource={PathResolver.GetStandardDatabasePath()}");
@@ -351,17 +351,17 @@ namespace MediaStreamer.DataAccess.NetStandard
             Remove(item);
         }
 
-        public IQueryable<Administrator> GetAdministrators() { return Administrators; }
+        public IQueryable<Administrator> GetAdministrators() { return Administrators.AsNoTracking(); }
         void IDMDBContext.Add(Administrator administrator) => Administrators.Add(administrator);
-        public IQueryable<Album> GetAlbums() { return Albums.Include(a => a.Artist); }
+        public IQueryable<Album> GetAlbums() { return Albums.Include(a => a.Artist).AsNoTracking(); }
         void IDMDBContext.Add(Album album) => Albums.Add(album);
-        public IQueryable<AlbumGenre> GetAlbumGenres() { return AlbumGenres; }
+        public IQueryable<AlbumGenre> GetAlbumGenres() { return AlbumGenres.AsNoTracking(); }
         void IDMDBContext.Add(AlbumGenre albumGenre) => AlbumGenres.Add(albumGenre);
-        public IQueryable<Artist> GetArtists() { return Artists; }
+        public IQueryable<Artist> GetArtists() { return Artists.AsNoTracking(); }
         void IDMDBContext.Add(Artist artist) => Artists.Add(artist);
-        public IQueryable<ArtistGenre> GetArtistGenres() { return ArtistGenres; }
+        public IQueryable<ArtistGenre> GetArtistGenres() { return ArtistGenres.AsNoTracking(); }
         void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
-        public IQueryable<Composition> GetCompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist); }
+        public IQueryable<Composition> GetCompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist).AsNoTracking(); }
 
         public async Task<List<Composition>> GetCompositionsAsync()
         {
@@ -383,7 +383,7 @@ namespace MediaStreamer.DataAccess.NetStandard
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
         public IQueryable<Genre> GetGenres() { return Genres; }
         void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
-        public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions; }
+        public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions.AsNoTracking(); }
         void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
         public IQueryable<Moderator> GetModerators() { return Moderators; }
         void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);

@@ -24,7 +24,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             else
                 _log = Console.WriteLine;
             FolderName = PathResolver.GetStandardDatabasePath();
-            TableInfo = new ConcurrentDictionary<string, long>();
+            TableInfo = new ConcurrentDictionary<string, DateTime>();
 
             Genres = new List<Genre>();
             Artists = new List<Artist>();
@@ -40,7 +40,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             FolderName = dbPath;
         }
 
-        public virtual ConcurrentDictionary<string, long> TableInfo { get; set; }
+        public virtual ConcurrentDictionary<string, DateTime> TableInfo { get; set; }
         public virtual List<Album> Albums { get; set; }
         public virtual List<AlbumGenre> AlbumGenres { get; set; }
         public virtual List<Artist> Artists { get; set; }
@@ -71,7 +71,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             foreach (var pair in paths)
             { 
-                TableInfo[pair.Key] = Table.GetTableSize(pair.Value);
+                TableInfo[pair.Key] = Table.GetTableUpdateTime(pair.Value);
             }
         }
 
@@ -93,16 +93,17 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             JObject jAlbum = new JObject(itemsCollection);
 
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-
-            //Properties
-            list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(album.AlbumID).ToSingleValue(), jAlbum));
-            list.Add(new JKeyValuePair(Key.AlbumName, DataBase.Coalesce(album.AlbumName), jAlbum));
-            list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(album.ArtistID).ToSingleValue(), jAlbum));
-            list.Add(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(album.GenreID).ToSingleValue(), jAlbum));
-            list.Add(new JKeyValuePair(Key.Year, DataBase.Coalesce(album.Year), jAlbum));
-            list.Add(new JKeyValuePair(Key.Type, DataBase.Coalesce(album.Type), jAlbum));
-            list.Add(new JKeyValuePair(Key.Label, DataBase.Coalesce(album.Label), jAlbum));
+            List<JKeyValuePair> list = new List<JKeyValuePair>
+            {
+                //Properties
+                new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(album.AlbumID).ToSingleValue(), jAlbum),
+                new JKeyValuePair(Key.AlbumName, DataBase.Coalesce(album.AlbumName), jAlbum),
+                new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(album.ArtistID).ToSingleValue(), jAlbum),
+                new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(album.GenreID).ToSingleValue(), jAlbum),
+                new JKeyValuePair(Key.Year, DataBase.Coalesce(album.Year), jAlbum),
+                new JKeyValuePair(Key.Type, DataBase.Coalesce(album.Type), jAlbum),
+                new JKeyValuePair(Key.Label, DataBase.Coalesce(album.Label), jAlbum)
+            };
 
             // Already Exists, return 
             if (Albums.Where(
@@ -447,7 +448,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<AlbumGenre> GetAlbumGenres()
         {
-            if (!Table.SizeChanged(TableInfo, FolderName, nameof(AlbumGenres)))
+            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(AlbumGenres)))
                 return AlbumGenres.AsQueryable();
 
             var jAlbums = Table.LoadInMemory(FolderName, "AlbumGenres.json");
@@ -472,13 +473,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 AlbumGenres.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(AlbumGenres)] = Table.GetTableSize(Path.Combine(FolderName, "AlbumGenres.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(AlbumGenres)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "AlbumGenres.json")));
             return AlbumGenres.AsQueryable();
         }
 
         public IQueryable<Album> GetAlbums()
         {
-            if (!Table.SizeChanged(TableInfo, FolderName, nameof(Albums)))
+            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Albums)))
                 return Albums.AsQueryable();
 
             var jAlbums = Table.LoadInMemory(FolderName, "Albums.json");
@@ -521,13 +522,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Albums.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Albums)] = Table.GetTableSize(Path.Combine(FolderName, "Albums.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Albums)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "Albums.json")));
             return Albums.AsQueryable();
         }
 
         public IQueryable<ArtistGenre> GetArtistGenres()
         {
-            if (!Table.SizeChanged(TableInfo, FolderName, nameof(ArtistGenres)))
+            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(ArtistGenres)))
                 return ArtistGenres.AsQueryable();
 
             var jArtists = Table.LoadInMemory(FolderName, "ArtistGenres.json");
@@ -552,13 +553,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 ArtistGenres.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(ArtistGenres)] = Table.GetTableSize(Path.Combine(FolderName, "ArtistGenres.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(ArtistGenres)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "ArtistGenres.json")));
             return ArtistGenres.AsQueryable();
         }
 
         public IQueryable<Artist> GetArtists()
         {
-            if (!Table.SizeChanged(TableInfo, FolderName, nameof(Artists)))
+            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Artists)))
                 return Artists.AsQueryable();
 
             var jArtists = Table.LoadInMemory(FolderName, "Artists.json");
@@ -583,13 +584,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Artists.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Artists)] = Table.GetTableSize(Path.Combine(FolderName, "Artists.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Artists)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "Artists.json")));
             return Artists.AsQueryable();
         }
 
         public IQueryable<Composition> GetCompositions()
         {
-            if (!Table.SizeChanged(TableInfo, FolderName, nameof(Compositions)))
+            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Compositions)))
                 return Compositions.AsQueryable();
 
             var jCompositions = Table.LoadInMemory(FolderName, "Compositions.json");
@@ -635,7 +636,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Compositions.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Compositions)] = Table.GetTableSize(Path.Combine(FolderName, "Compositions.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Compositions)] = 
+                Table.GetTableUpdateTime(Path.Combine(FolderName, "Compositions.json")));
             return Compositions.AsQueryable();
         }
 #if !NET40
@@ -659,7 +661,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<Genre> GetGenres()
         {
-            if (!Table.SizeChanged(TableInfo, FolderName, nameof(Genres)))
+            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Genres)))
                 return Genres.AsQueryable();
 
             var jGenres = Table.LoadInMemory(FolderName, "Genres.json");
@@ -684,7 +686,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Genres.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Genres)] = Table.GetTableSize(Path.Combine(FolderName, "Genres.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Genres)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "Genres.json")));
             return Genres.AsQueryable();
         }
 
@@ -695,7 +697,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<ListenedComposition> GetListenedCompositions()
         {
-            if (!Table.SizeChanged(TableInfo, FolderName, nameof(ListenedCompositions)))
+            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(ListenedCompositions)))
                 return ListenedCompositions.AsQueryable();
 
             var jCompositions = Table.LoadInMemory(FolderName, "ListenedCompositions.json");
@@ -726,7 +728,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 ListenedCompositions.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(ListenedCompositions)] = Table.GetTableSize(Path.Combine(FolderName, "ListenedCompositions.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(ListenedCompositions)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "ListenedCompositions.json")));
             return ListenedCompositions.AsQueryable();
         }
 
@@ -800,7 +802,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public Task<List<Composition>> GetCompositionsAsync(int skip, int take)
         {
-            if (!Table.SizeChanged(TableInfo, FolderName, nameof(Compositions)))
+            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Compositions)))
                 return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
 
             var jCompositions = Table.LoadInMemory(FolderName, "Compositions.json");
@@ -846,7 +848,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Compositions.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Compositions)] = Table.GetTableSize(Path.Combine(FolderName, "Compositions.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Compositions)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "Compositions.json")));
 
             return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
         }
