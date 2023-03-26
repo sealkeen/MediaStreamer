@@ -734,8 +734,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             return ListenedCompositions.AsQueryable();
         }
 
-
-
         public IQueryable<Moderator> GetModerators()
         {
             return new List<Moderator>().AsQueryable();
@@ -871,6 +869,21 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public void Add(Style style)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<ListenedComposition> GetListenedCompositions(bool includeCompositions)
+        {
+            if (Table.UpdateOccured(TableInfo, FolderName, nameof(ListenedCompositions)))
+                ListenedCompositions = (List<ListenedComposition>)GetListenedCompositions();
+
+            var lComps = GetListenedCompositions();
+            if ( Compositions.Any() && lComps.Any() ) {
+                foreach (var lComp in lComps)
+                {
+                    lComp.Composition = Compositions.FirstOrDefault(c => c.CompositionID == lComp.CompositionID);
+                }
+            }
+            return lComps;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MediaStreamer.DataAccess.NetStandard
@@ -13,6 +14,11 @@ namespace MediaStreamer.DataAccess.NetStandard
             : base(options)
         {
 
+        }
+
+        public IQueryable<ListenedComposition> GetListenedCompositions(bool includeCompositions)
+        {
+            return ListenedCompositions.Include(c => c.Composition);
         }
         public virtual DbSet<Administrator> Administrators { get; set; }
         public virtual DbSet<Album> Albums { get; set; }

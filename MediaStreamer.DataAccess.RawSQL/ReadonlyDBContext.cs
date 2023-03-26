@@ -361,5 +361,11 @@ namespace MediaStreamer.DataAccess.RawSQL
                 .Select(c => c as IComposition)
                 .ToList());
         }
+
+        public IQueryable<ListenedComposition> GetListenedCompositions(bool includeCompositions)
+        {
+            throw new NotImplementedException();
+            return new List<ListenedComposition>().AsQueryable();
+        }
     }
 }
