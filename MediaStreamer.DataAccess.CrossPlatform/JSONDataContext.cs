@@ -333,7 +333,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             //Properties
             List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.ListenDate.ToString(), listenedComposition.ListenDate.ToString(), jLS));
+            list.Add(new JKeyValuePair(Key.ListenDate.ToString(), listenedComposition.ListenDate.ToString("dd.MM.yyyy H:mm:ss"), jLS));
             list.Add(new JKeyValuePair(Key.CompositionID.ToString(), listenedComposition.CompositionID.ToString(), jLS));
             list.Add(new JKeyValuePair(Key.UserID.ToString(), listenedComposition.UserID.ToString(), jLS));
             list.Add(new JKeyValuePair(Key.StoppedAt.ToString(), listenedComposition.StoppedAt.ToString(), jLS));
@@ -709,19 +709,21 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 var fields = jComposition.DescendantPairs();
                 foreach (var kv in fields)
                 {
-                    switch (kv.Key.ToString().Trim('\"'))
+                    var key = kv.Key.ToString().Trim('\"');
+                    var value = kv.Value.AsUnquoted();
+                    switch (key)
                     {
                         case Key.ListenDate:
-                            Table.SetProperty(received, Key.ListenDate, DateTime.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.ListenDate, DateTime.ParseExact(kv.Value.AsUnquoted().ToString(), "dd.MM.yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture));
                             break;
                         case Key.CompositionID:
-                            Table.SetProperty(received, Key.CompositionID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.CompositionID, Guid.Parse(value));
                             break;
                         case Key.UserID:
-                            Table.SetProperty(received, Key.UserID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.UserID, Guid.Parse(value));
                             break;
                         case Key.StoppedAt:
-                            Table.SetProperty(received, Key.StoppedAt, double.Parse(kv.Value.AsUnquoted()));
+                            Table.SetProperty(received, Key.StoppedAt, double.Parse(value));
                             break;
                     }
                 }

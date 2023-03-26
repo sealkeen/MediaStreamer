@@ -54,8 +54,7 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-        private double volumeSliderValue = 0.025;
-        private double volumeKeyValue = 0.0125;
+        private double volumeKeyPercent = 5;
         private bool userIsDraggingSlider = false;
         private bool canExecute = false;
 
@@ -67,9 +66,7 @@ namespace MediaStreamer.WPF.Components
         /// <summary> Load Page Event </summary>
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //if(Program.DBAccess.LoadingTask != null)
-            //    await Program.DBAccess.LoadingTask;
-            
+            //if(Program.DBAccess.LoadingTask != null) await Program.DBAccess.LoadingTask; 
             buttonCompositions_Click(buttonCompositions, new RoutedEventArgs());
 
             if (!Program.startupFromCommandLine)
@@ -77,8 +74,7 @@ namespace MediaStreamer.WPF.Components
                 var savedQuery = Program.OnOpen();
                 Selector.CompositionsPage.QueueSelected(savedQuery);
                 Program.mePlayer.Position = Program.NewPosition;
-                if (savedQuery != null && savedQuery.Count > 0)
-                {
+                if (savedQuery != null && savedQuery.Count > 0) {
                     Program.currentComposition = savedQuery[0] as IComposition;
                     Selector.CompositionsPage.lstItems_TryToSelectItem(Program.currentComposition);
                 }
@@ -88,6 +84,41 @@ namespace MediaStreamer.WPF.Components
                 Selector.CompositionsPage?.PlayTarget(Selector.CompositionsPage.GetNextComposition());
                 Program.startupFromCommandLine = false;
             }
+        }
+        private void Header_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var shiftIncrease = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+            if (e.Delta > 0)
+            {
+                VolumeUp("Mouse Wheel", shiftIncrease);
+            }
+            else
+            {
+                VolumeDown("Mouse Wheel", shiftIncrease);
+            }
+        }
+        private void StatusPage_HandleArrows(object sender, KeyEventArgs e)
+        {
+            if (!Selector.CompositionsPage.lstItems_OwnsFocus())
+            {
+                var shiftIncrease = Keyboard.Modifiers == ModifierKeys.Shift;
+                if (e.Key == Key.Up) VolumeUp("Up Arrow", shiftIncrease);
+                if (e.Key == Key.Down) VolumeDown("Down Arrow", shiftIncrease);
+            }
+        }
+        private void VolumeDown(string key, bool shiftIncrease)
+        {
+            double volumeAdjustment = mePlayer.Volume * volumeKeyPercent / 100.0;
+            if (shiftIncrease) { volumeAdjustment *= 5; }
+            mePlayer.Volume -= volumeAdjustment;
+            Program.SetCurrentStatus($"{key}: volume down.");
+        }
+        private void VolumeUp(string key, bool shiftIncrease)
+        {
+            double volumeAdjustment = mePlayer.Volume * volumeKeyPercent / 100.0;
+            if (shiftIncrease) { volumeAdjustment *= 5; }
+            mePlayer.Volume += volumeAdjustment;
+            Program.SetCurrentStatus($"{key}: volume up.");
         }
 
         public void StatusPage_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -100,14 +131,6 @@ namespace MediaStreamer.WPF.Components
                     if(Session.MainPage.GetFrame().Content is CompositionsPage &&
                         Selector.CompositionsPage.lstItems.SelectedIndex >= 0)
                         Selector.CompositionsPage.PlaySelectedTarget(); break;
-            }
-        }
-        private void StatusPage_HandleArrows(object sender, KeyEventArgs e)
-        {
-            if (!Selector.CompositionsPage.lstItems_OwnsFocus())
-            {
-                if (e.Key == Key.Up) VolumeUp("Up Arrow", volumeKeyValue);
-                if (e.Key == Key.Down) VolumeDown("Down Arrow", volumeKeyValue);
             }
         }
 
@@ -297,7 +320,7 @@ namespace MediaStreamer.WPF.Components
                         txtStatus.Text = "Enter your password.";
                         return;
                     case LogStatus.LoginPasswordPairIsIncorrect:
-                        txtStatus.Text = "Username/Password combination is not found.";
+                        txtStatus.Text = "Username/Password combination was not found.";
                         return;
                     case LogStatus.Logged:
                         lblLogin.Content = "Logged in as: \n" +
@@ -310,6 +333,7 @@ namespace MediaStreamer.WPF.Components
                         EnableUserPages();
                         return;
                     case LogStatus.PasswordIsIncorrect:
+                        txtStatus.Text = "Username/Password combination was not found.";
                         return;
                 }
             }
@@ -489,40 +513,6 @@ namespace MediaStreamer.WPF.Components
                     Program.SetCurrentStatus("No items selected to play.");
                 }
             }
-        }
-
-        private void Header_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (e.Delta > 0)
-            {
-                VolumeUp("Mouse Wheel");
-            }
-            else
-            {
-                VolumeDown("Mouse Wheel");
-            }
-        }
-
-        private void VolumeDown(string key, double amount = 0.0)
-        {
-            if (amount == 0.0)
-            {
-                mePlayer.Volume -= volumeSliderValue;
-            }
-            else
-                mePlayer.Volume -= amount;
-            Program.SetCurrentStatus($"{key}: volume down.");
-        }
-
-        private void VolumeUp(string key, double amount = 0.0)
-        {
-            if (amount == 0.0)
-            {
-                mePlayer.Volume += volumeSliderValue;
-            }
-            else
-                mePlayer.Volume += amount;
-            Program.SetCurrentStatus($"{key}: volume up.");
         }
 
         private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
