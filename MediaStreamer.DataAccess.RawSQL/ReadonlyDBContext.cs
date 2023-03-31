@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
+using Sealkeen.Linq.Extensions;
 using MediaStreamer.Domain.Models;
 
 namespace MediaStreamer.DataAccess.RawSQL
@@ -359,6 +360,12 @@ namespace MediaStreamer.DataAccess.RawSQL
                 .Take(take)
                 .Select(c => c as IComposition)
                 .ToList());
+        }
+
+        public IQueryable<ListenedComposition> GetListenedCompositions(bool includeCompositions)
+        {
+            throw new NotImplementedException();
+            return new List<ListenedComposition>().AsQueryable();
         }
     }
 }

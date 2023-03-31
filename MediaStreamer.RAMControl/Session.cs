@@ -89,7 +89,7 @@ namespace MediaStreamer.RAMControl
             var users = from u in Program.DBAccess.DB.GetUsers()
                         where u.UserName == login
                         select u;
-            if (users.Count() == 0)
+            if (!users.Any())
             {
                 //we don't reveal that it's incorrect username to keep
                 //the existing logins secret 

@@ -142,8 +142,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (PlayerStates == null || PlayerStates.Count <= 0
                 )
                 return null;
+            // Volume level is double from 0 to 1
+            var level = PlayerStates.Last().VolumeLevel;
 
-            return PlayerStates.Last().VolumeLevel; 
+            return level > 1 ? 1 : level; 
         }
 
         public IQueryable<string> GetDataSources()

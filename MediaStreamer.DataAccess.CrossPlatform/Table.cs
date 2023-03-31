@@ -18,6 +18,27 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             return sizes[tableName] != GetTableSize(Path.Combine(directory, tableName + ".json"));
         }
 
+        /// <returns>True if Table modify date has changed since the last data load. False otherwise.</returns>
+        public static bool UpdateOccured(ConcurrentDictionary<string, DateTime> dates, string directory, string tableName)
+        {
+            if (!dates.Keys.Any(t => t == tableName))
+                return true;
+
+            return dates[tableName] != GetTableUpdateTime(Path.Combine(directory, tableName + ".json"));
+        }
+
+        public static DateTime GetTableUpdateTime(string path)
+        {
+            try
+            {
+                return new System.IO.FileInfo(path).LastWriteTime;
+            }
+            catch
+            {
+                return DateTime.MinValue;
+            }
+        }
+
         public static long GetTableSize(string path)
         {
             try {

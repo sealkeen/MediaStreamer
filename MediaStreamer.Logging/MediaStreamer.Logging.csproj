@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sealkeen.Linq.Extensions\Sealkeen.Linq.Extensions.csproj" />
     <ProjectReference Include="..\Sealkeen.Abstractions\Sealkeen.Abstractions.csproj" />
     <ProjectReference Include="..\StringExtensions\StringExtensions.csproj" />
   </ItemGroup>
