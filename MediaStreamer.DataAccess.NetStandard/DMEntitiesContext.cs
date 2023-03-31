@@ -387,7 +387,6 @@ namespace MediaStreamer.DataAccess.NetStandard
         public IQueryable<Genre> GetGenres() { return Genres; }
         void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
         public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions.AsNoTracking(); }
-        public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions; }
         void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
         public IQueryable<Moderator> GetModerators() { return Moderators; }
         void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);
