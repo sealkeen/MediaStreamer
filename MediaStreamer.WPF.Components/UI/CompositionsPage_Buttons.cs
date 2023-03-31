@@ -19,9 +19,12 @@ namespace MediaStreamer.WPF.Components
     {
         private async void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() - Session.MainPageVM.GetTake(), Program._logger.LogInfo);
+            Action<string> log = null;
+            if(Program._logger != null) log = Program._logger.LogInfo;
+
+            Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() - Session.MainPageVM.GetTake(), log);
             if (Session.MainPageVM.GetSkip() < 0)
-                Session.MainPageVM.SetSkip(0, Program._logger.LogInfo);
+                Session.MainPageVM.SetSkip(0, log);
 
             Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
                 (Session.MainPageVM.GetSkip(), Session.MainPageVM.GetTake());

@@ -56,7 +56,7 @@ namespace MediaStreamer.DataAccess.NetStandard
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
                     if (UseSQLServer) {
-                        optionsBuilder.UseSqlServer(@"Server=.\SQLExpress;initial catalog=CompositionsDB;user id=sys_admin;password=s0m3P4ssw0rdT3xt;MultipleActiveResultSets=True;");
+                        optionsBuilder.UseSqlServer(@"server=localhost;initial catalog=CompositionsDb;Integrated Security=SSPI; MultipleActiveResultSets=true;");
                     }
                     else
                         optionsBuilder.UseSqlite(@$"DataSource={PathResolver.GetStandardDatabasePath()}");
