@@ -5,21 +5,31 @@ using Sealkeen.CSCourse2016.JSONParser.Core;
 using MediaStreamer.Domain;
 using MediaStreamer.DataAccess.RawSQL;
 using MediaStreamer.Logging;
+using Xunit;
+using Xunit.Sdk;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
 {
-    public class Program
+    public class JSONDbContextTests
     {
+#if NOT
         public static void Main(string[] args)
+#else
+        [Theory, InlineData( null )]
+        public void NotMain(string[] args)
+#endif
         {
             var logFile = Path.Combine(Environment.CurrentDirectory + "log.txt");
             ReadonlyDBContext context = new ReadonlyDBContext(@"O:\DB\26.10.2021-3.db3", new SimpleLogger());
             var comps = context.GetCompositions();
 
-           // GetCompositions();
+            //GetCompositions();
         }
 
-        public static void GetCompositions()
+        [Fact]
+        public void GetCompositions()
         {
             JSONDataContext context = new JSONDataContext();
             //var comps = context.GetCompositions();
@@ -30,7 +40,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
         }
 
         // ok / not ok (not all cases checked)
-        public static void GetNewID()
+        [Fact]
+        public void GetNewID()
         {
             JSONDataContext context = new JSONDataContext();
             var genres = context.GetGenres();
@@ -39,33 +50,35 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
         }
 
         //OK
-        public static void TestGetGenres()
+        [Fact]
+        public void TestGetGenres()
         {
             JSONDataContext context = new JSONDataContext();
+            context.EnsureCreated();
             var genres = context.GetGenres();
 
+            Assert.NotNull(genres);
             foreach (var g in genres)
-            {
-                Console.WriteLine(g.GenreID + " " + g.GenreName);
-            }
-            Console.ReadKey();
+                Debug.WriteLine(g.GenreID + " " + g.GenreName);
+            
+            Assert.True(context.TableInfo.Count > 0);
         }
 
         //OK
-        public static void TestAddGenre()
+        [Fact] //(Skip = "No add for the production DB")]
+        public void TestAddGenre()
         {
-            JSONDataContext dc = new JSONDataContext();
+            JSONDataContext dc = new JSONDataContext(null, PathResolver.GetStandardDatabasePath_Debug());
             dc.EnsureCreated();
 
-            Genre g = new Genre();
-            g.GenreID = Guid.NewGuid();
-            g.GenreName = "newGenre";
+            Genre g = new Genre() { GenreID = Guid.NewGuid(), GenreName = "newGenre"};
 
             dc.AddEntity(g);
         }
 
         //OK
-        public static void TestLoadingDB()
+        [Fact]
+        public void TestLoadingDB()
         {
             JSONParser jSONParser = new JSONParser("Compositions/Genres.json");
             JItem jItem = jSONParser.Parse();

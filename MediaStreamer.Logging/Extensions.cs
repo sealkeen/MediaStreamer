@@ -7,6 +7,12 @@ namespace MediaStreamer.Logging
 {
     public static class Extensions
     {
+        public static void LogInConsoleAndDebug(string message)
+        {
+            Console.WriteLine(message);
+            System.Diagnostics.Debug.WriteLine(message);
+        }
+
         public static void LogStatically(this string message)
         {
             new SimpleLogger().LogInfo(message);

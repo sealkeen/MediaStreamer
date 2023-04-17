@@ -178,5 +178,10 @@ namespace MediaStreamer.DataAccess.Net40
         {
             throw new NotImplementedException();
         }
+
+        public IQueryable<ListenedComposition> GetListenedCompositions(bool includeCompositions)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

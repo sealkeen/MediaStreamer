@@ -13,5 +13,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
                     "MediaStreamer.WPF.NetCore3_1");
         }
+        public static string GetStandardDatabasePath_Debug()
+        {
+            return Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "MediaStreamer.WPF.NetCore3_1_Debug");
+        }
     }
 }
