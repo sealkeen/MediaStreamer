@@ -1,14 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Sealkeen.CSCourse2016.JSONParser.Core;
+﻿using Sealkeen.CSCourse2016.JSONParser.Core;
 using MediaStreamer.Domain;
 using MediaStreamer.DataAccess.RawSQL;
 using MediaStreamer.Logging;
 using Xunit;
-using Xunit.Sdk;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
 {
