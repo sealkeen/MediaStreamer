@@ -17,7 +17,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public JSONDataContext(Action<string> log = null)
         {
             if (log != null) _log = log;
-            else _log = MediaStreamer.Logging.Extensions.LogInConsoleAndDebug;
+            else _log = MediaStreamer.Logging.Extensions.LogStatically;
             FolderName = PathResolver.GetStandardDatabasePath();
             TableInfo = new ConcurrentDictionary<string, DateTime>();
 

@@ -238,14 +238,6 @@ namespace MediaStreamer.DataAccess.NetStandard
 
                 entity.Property(e => e.CountOfPlays).HasColumnName("CountOfPlays");
 
-                entity.HasOne(d => d.Composition)
-                    .WithMany(p => p.ListenedCompositions)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.ListenedCompositions)
-                    .HasForeignKey(d => d.UserID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Moderator>(entity =>
@@ -409,7 +401,7 @@ namespace MediaStreamer.DataAccess.NetStandard
 
         void UpdateLC(ListenedComposition lc)
         {
-            this.DetachLocal(lc, lc.GetId());
+            this.DetachLocal(lc, lc.CompositionID.ToString());
             Update(lc);
             SaveChanges();
         }
