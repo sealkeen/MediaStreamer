@@ -8,21 +8,17 @@ using Sealkeen.CSCourse2016.JSONParser.Core;
 using Sealkeen.Linq.Extensions;
 using System.Collections.Concurrent;
 using MediaStreamer.Domain.Models;
+using MediaStreamer.DataAccess.CrossPlatform.Extensions;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
     public class JSONDataContext : IPagedDMDBContext
     {
-        Action<string> _log;
-
         public JSONDataContext() : this (null) {  }
-
         public JSONDataContext(Action<string> log = null)
         {
-            if (log != null)
-                _log = log;
-            else
-                _log = Console.WriteLine;
+            if (log != null) _log = log;
+            else _log = MediaStreamer.Logging.Extensions.LogInConsoleAndDebug;
             FolderName = PathResolver.GetStandardDatabasePath();
             TableInfo = new ConcurrentDictionary<string, DateTime>();
 
@@ -33,7 +29,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             ArtistGenres = new List<ArtistGenre>();
             AlbumGenres = new List<AlbumGenre>();
             ListenedCompositions = new List<ListenedComposition>();
+            SaveDelayed = false;
         }
+        private Action<string> _log;
+        
+        public bool SaveDelayed { get; set; }
 
         public JSONDataContext(Action<string> log = null, string dbPath = null) : this(log)
         {
@@ -53,7 +53,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public virtual List<Genre> Genres { get; set; }
         public virtual List<ListenedComposition> ListenedCompositions { get; set; }
 
-
         public string FolderName { get; set; } = "Compositions";
         public string GetContainingFolderPath() => FolderName;
 
@@ -71,7 +70,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
             foreach (var pair in paths)
             { 
-                TableInfo[pair.Key] = Table.GetTableUpdateTime(pair.Value);
+                TableInfo[pair.Key] = CrossTable.GetTableUpdateTime(pair.Value);
             }
         }
 
@@ -82,205 +81,106 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void Add(Album album)
         {
-            string AlbumsDB = Path.Combine(FolderName, "Albums.json");
-
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("Albums".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
-
-            JObject jAlbum = new JObject(itemsCollection);
-
-            List<JKeyValuePair> list = new List<JKeyValuePair>
-            {
-                //Properties
-                new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(album.AlbumID).ToSingleValue(), jAlbum),
-                new JKeyValuePair(Key.AlbumName, DataBase.Coalesce(album.AlbumName), jAlbum),
-                new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(album.ArtistID).ToSingleValue(), jAlbum),
-                new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(album.GenreID).ToSingleValue(), jAlbum),
-                new JKeyValuePair(Key.Year, DataBase.Coalesce(album.Year), jAlbum),
-                new JKeyValuePair(Key.Type, DataBase.Coalesce(album.Type), jAlbum),
-                new JKeyValuePair(Key.Label, DataBase.Coalesce(album.Label), jAlbum)
-            };
-
-            // Already Exists, return 
-            if (Albums.Where(
-                    c =>
+            if (SaveDelayed) { 
+                Albums.Add(album); return;
+            }
+            if (Albums.Where(c =>
                     c.AlbumName == album.AlbumName &&
-                    c.ArtistID == album.ArtistID).Count() != 0)
+                    c.ArtistID == album.ArtistID).Any())
                 return;
 
-            jAlbum.AddPairs(list);
-            itemsCollection.Add(jAlbum);
-            root.ToFile(AlbumsDB);
+            var alTable = CrossTable.Load(FolderName, "Albums");
+            CrossTable.AddNewObjectToCollection(album.GetPropList(), alTable.Items);
+            alTable.Root.ToFile(Path.Combine(FolderName, "Albums.json"));
         }
 
         public void Add(AlbumGenre albumGenre)
         {
-            string AlbumGenresDB = Path.Combine(FolderName, "AlbumGenres.json");
-
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "AlbumGenres.json");
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("AlbumGenres".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
-            JObject jAlbum = new JObject(itemsCollection);
-
-            //Properties
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(albumGenre.AlbumID).ToSingleValue(), jAlbum));
-            list.Add(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(albumGenre.GenreID).ToSingleValue(), jAlbum));
-
-            // Already Exists, return 
-            if (AlbumGenres.Where(
-                    c =>
+            if (SaveDelayed) {
+                AlbumGenres.Add(albumGenre);
+                return;
+            }
+            if (AlbumGenres.Where(c =>
                     c.AlbumID == albumGenre.AlbumID &&
-                    c.GenreID == albumGenre.GenreID).Count() != 0)
+                    c.GenreID == albumGenre.GenreID).Any())
                 return;
 
-            jAlbum.AddPairs(list);
-
-            itemsCollection.Add(jAlbum);
-            root.ToFile(AlbumGenresDB);
+            var agTable = CrossTable.Load(FolderName, "AlbumGenres");
+            CrossTable.AddNewObjectToCollection(albumGenre.GetPropList(), agTable.Items);
+            agTable.Root.ToFile(agTable.FilePath);
         }
 
         public void Add(Artist artist)
         {
-            string AlbumGenresDB = Path.Combine(FolderName, "Artists.json");
-
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("Artists".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
-
-            JObject jArtist = new JObject(itemsCollection);
-
-            //Properties
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(artist.ArtistID).ToSingleValue(), jArtist));
-            list.Add(new JKeyValuePair(Key.ArtistName, DataBase.Coalesce(artist.ArtistName), jArtist));
-
-            // Already Exists, return 
+            if (SaveDelayed) {
+                Artists.Add(artist); return;
+            }
             if (Artists.Where(
                     c => c.ArtistName == artist.ArtistName).Count() != 0)
                 return;
 
-            jArtist.AddPairs(list);
-            itemsCollection.Add(jArtist);
-            root.ToFile(AlbumGenresDB);
+            var arTable = CrossTable.Load(FolderName, "Artists");
+            CrossTable.AddNewObjectToCollection(artist.GetPropList(), arTable.Items);
+            arTable.Root.ToFile(arTable.FilePath);
         }
 
         public void Add(ArtistGenre artistGenre)
         {
-            string ArtistGenresDB = Path.Combine(FolderName, "ArtistGenres.json");
-
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistGenres.json");
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("ArtistGenres".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
-
-            JObject jAG = new JObject(itemsCollection);
-
-            //Properties
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(artistGenre.ArtistID).ToSingleValue(), jAG));
-            list.Add(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(artistGenre.GenreID).ToSingleValue(), jAG));
-
-            // Already Exists, return 
+            if (SaveDelayed) {
+                ArtistGenres.Add(artistGenre); return;
+            }
             if (ArtistGenres.Where(
                     c => c.ArtistID == artistGenre.ArtistID &&
                     c.GenreID == artistGenre.GenreID
                     ).Count() != 0)
                 return;
 
-            jAG.AddPairs(list);
-            itemsCollection.Add(jAG);
-            root.ToFile(ArtistGenresDB);
+            var agTable = CrossTable.Load(FolderName, "ArtistGenres");
+            CrossTable.AddNewObjectToCollection(artistGenre.GetPropList(), agTable.Items);
+            agTable.Root.ToFile(agTable.FilePath);
         }
 
         public void Add(Composition composition)
         {
-            if (composition == null)
-                return;
-            string CompositionsDB = Path.Combine(FolderName, "Compositions.json");
-
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("Compositions".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
-
-            JObject jComposition = new JObject(itemsCollection);
-
-            //Properties
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.CompositionID.ToJString(), DataBase.Coalesce(composition.CompositionID).ToSingleValue(), jComposition));
-            list.Add(new JKeyValuePair(Key.CompositionName, DataBase.Coalesce(composition.CompositionName), jComposition));
-            list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(composition.ArtistID).ToSingleValue(), jComposition));
-            list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(composition.AlbumID).ToSingleValue(), jComposition));
-            list.Add(new JKeyValuePair(Key.Duration.ToJString(), DataBase.Coalesce(composition.Duration).ToSingleValue(), jComposition));
-            list.Add(new JKeyValuePair(Key.FilePath, DataBase.Coalesce(composition.FilePath), jComposition));
-            list.Add(new JKeyValuePair(Key.Lyrics, DataBase.Coalesce(composition.Lyrics), jComposition));
-            list.Add(new JKeyValuePair(Key.About, DataBase.Coalesce(composition.About), jComposition));
-
-            // Already Exists, return 
+            if (SaveDelayed) {
+                Compositions.Add(composition); return;    
+            }
             if (Compositions.Where(
                     c =>
                     c.CompositionName == composition.CompositionName &&
                     c.FilePath == composition.FilePath).Count() != 0)
                 return;
 
-            jComposition.AddPairs(list);
-            itemsCollection.Add(jComposition);
-            root.ToFile(CompositionsDB);
+            var cTable = CrossTable.Load(FolderName, "Compositions");
+            CrossTable.AddNewObjectToCollection(composition.GetPropList(), cTable.Items);
+            cTable.Root.ToFile(cTable.FilePath);
         }
 
         public void AddRange(IEnumerable<Composition> newCompositions)
         {
-            string CompositionsDB = Path.Combine(FolderName, "Compositions.json");
+            if (SaveDelayed) { 
+                foreach(var cmp in newCompositions) Compositions.Add(cmp);
+                return;
+            }
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("Compositions".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
+            var cTable = CrossTable.Load(FolderName, "Compositions");
+
             foreach (var comp in newCompositions)
             {
                 if (comp == null)
                     continue;
-                JObject jComposition = new JObject(itemsCollection);
-                //Properties
-                List<JKeyValuePair> list = new List<JKeyValuePair>();
-                list.Add(new JKeyValuePair(Key.CompositionID.ToJString(), DataBase.Coalesce(comp.CompositionID).ToSingleValue(), jComposition));
-                list.Add(new JKeyValuePair(Key.CompositionName, DataBase.Coalesce(comp.CompositionName), jComposition));
-                list.Add(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(comp.ArtistID).ToSingleValue(), jComposition));
-                list.Add(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(comp.AlbumID).ToSingleValue(), jComposition));
-                list.Add(new JKeyValuePair(Key.Duration.ToJString(), DataBase.Coalesce(comp.Duration).ToSingleValue(), jComposition));
-                list.Add(new JKeyValuePair(Key.FilePath, DataBase.Coalesce(comp.FilePath), jComposition));
-                list.Add(new JKeyValuePair(Key.Lyrics, DataBase.Coalesce(comp.Lyrics), jComposition));
-                list.Add(new JKeyValuePair(Key.About, DataBase.Coalesce(comp.About), jComposition));
 
                 // Already Exists, return 
-                if (Compositions.Where(
-                        c =>
+                if (Compositions.Where( c =>
                         c.CompositionName == comp.CompositionName &&
                         c.FilePath == comp.FilePath).Count() != 0)
                     continue;
 
-                jComposition.AddPairs(list);
-                itemsCollection.Add(jComposition);
+                CrossTable.AddNewObjectToCollection(comp.GetPropList(), cTable.Items);
                 Compositions.Add(comp);
             }
-            root.ToFile(CompositionsDB);
+
+            cTable.Root.ToFile(cTable.FilePath);
         }
 
         public void Add(CompositionVideo compositionVideo)
@@ -288,67 +188,35 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             throw new NotImplementedException();
         }
 
-
         public void Add(Genre genre)
         {
-            string genresDB = Path.Combine(FolderName, "Genres.json");
-
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json");
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("Genres".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
-
-            JObject jAG = new JObject(itemsCollection);
-
-            //Properties
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(genre.GenreID).ToSingleValue(), jAG));
-            list.Add(new JKeyValuePair(Key.GenreName, DataBase.Coalesce(genre.GenreName), jAG));
-
-            // Already Exists, return 
+            if (SaveDelayed) {
+                Genres.Add(genre); return;
+            }
             if (Genres.Where(
                     c => c.GenreName == genre.GenreName).Count() != 0)
                 return;
 
-            jAG.AddPairs(list);
-            itemsCollection.Add(jAG);
-            root.ToFile(genresDB);
+            var genresDB = CrossTable.Load(FolderName, "Genres");
+            CrossTable.AddNewObjectToCollection(genre.GetPropList(), genresDB.Items);
+            genresDB.Root.ToFile(genresDB.FilePath);
         }
 
         public void Add(ListenedComposition listenedComposition)
         {
-            string listenedDB = Path.Combine(FolderName, "ListenedCompositions.json");
+            if (SaveDelayed) {
+                ListenedCompositions.Add(listenedComposition); return;
+            }
+            var listenedDB = CrossTable.Load(FolderName, "ListenedCompositions");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ListenedCompositions.json");
-
-            JItem itemsCollection = null;
-            if (root != null)
-                itemsCollection = root.FindPairByKey("ListenedCompositions".ToJString()).GetPairedValue();
-            else
-                itemsCollection = new JArray(root);
-
-            JObject jLS = new JObject(itemsCollection);
-
-            //Properties
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-            list.Add(new JKeyValuePair(Key.ListenDate.ToString(), listenedComposition.ListenDate.ToString("dd.MM.yyyy H:mm:ss"), jLS));
-            list.Add(new JKeyValuePair(Key.CompositionID.ToString(), listenedComposition.CompositionID.ToString(), jLS));
-            list.Add(new JKeyValuePair(Key.UserID.ToString(), listenedComposition.UserID.ToString(), jLS));
-            list.Add(new JKeyValuePair(Key.StoppedAt.ToString(), listenedComposition.StoppedAt.ToString(), jLS));
-
-            jLS.AddPairs(list);
-            itemsCollection.Add(jLS);
-            root.ToFile(listenedDB);
+            CrossTable.AddNewObjectToCollection(listenedComposition.GetPropList(), listenedDB.Items);
+            listenedDB.Root.ToFile(listenedDB.FilePath);
         }
-
 
         public void Add(Moderator moderator)
         {
             //throw new NotImplementedException();
         }
-
 
         public void Add(Picture picture)
         {
@@ -370,22 +238,22 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             if (typeof(T) == typeof(Composition)) {
                 //var id = DataBase.GetMaxID<Composition, Guid>(Compositions.AsQueryable(), "CompositionID") + 1;
                 //id++;
-                //Table.SetProperty(entity, "CompositionID", id);
+                //Property.SetProperty(entity, "CompositionID", id);
                 Add(entity as Composition);
             } else if (typeof(T) == typeof(Artist)) {
                 //var id = DataBase.GetMaxID<Artist, Guid>(Artists.AsQueryable(), "ArtistID");
                 //id++;
-                //Table.SetProperty(entity, "ArtistID", id);
+                //Property.SetProperty(entity, "ArtistID", id);
                 Add(entity as Artist);
             } else if (typeof(T) == typeof(Album)) {
                 //var id = DataBase.GetMaxID<Album, Guid>(Albums.AsQueryable(), "AlbumID");
                 //id++;
-                //Table.SetProperty(entity, "AlbumID", id);
+                //Property.SetProperty(entity, "AlbumID", id);
                 Add(entity as Album);
             } else if (typeof(T) == typeof(Genre)) {
                 //var id = DataBase.GetMaxID<Genre, Guid>(Genres.AsQueryable(), "GenreID");
                 //id++;
-                //Table.SetProperty(entity, "GenreID", id);
+                //Property.SetProperty(entity, "GenreID", id);
                 Add(entity as Genre);
             } else if (typeof(T) == typeof(ListenedComposition))
                 Add(entity as ListenedComposition);
@@ -432,6 +300,14 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public void EnsureCreated()
         {
+            GenresExtensions.EnsureCreated(FolderName);
+            ArtistsExtensions.EnsureCreated(FolderName);
+            AlbumsExtensions.EnsureCreated(FolderName);
+            CompositionsExtensions.EnsureCreated(FolderName);
+            ArtistGenresExtensions.EnsureCreated(FolderName);
+            AlbumGenresExtensions.EnsureCreated(FolderName);
+            ListenedCompositionsExtensions.EnsureCreated(FolderName);
+
             Genres = GetGenres().ToList();
             Artists = GetArtists().ToList();
             Albums = GetAlbums().ToList();
@@ -448,10 +324,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<AlbumGenre> GetAlbumGenres()
         {
-            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(AlbumGenres)))
+            if (!CrossTable.UpdateOccured(TableInfo, FolderName, nameof(AlbumGenres)))
                 return AlbumGenres.AsQueryable();
 
-            var jAlbums = Table.LoadInMemory(FolderName, "AlbumGenres.json");
+            var jAlbums = CrossTable.LoadAllEntities(FolderName, "AlbumGenres.json");
 
             AlbumGenres = new List<AlbumGenre>();
             foreach (var jAlbum in jAlbums)
@@ -463,26 +339,26 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.AlbumID:
-                            Table.SetProperty(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                     }
                 }
                 AlbumGenres.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(AlbumGenres)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "AlbumGenres.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(AlbumGenres)] = CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "AlbumGenres.json")));
             return AlbumGenres.AsQueryable();
         }
 
         public IQueryable<Album> GetAlbums()
         {
-            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Albums)))
+            if (!CrossTable.UpdateOccured(TableInfo, FolderName, nameof(Albums)))
                 return Albums.AsQueryable();
 
-            var jAlbums = Table.LoadInMemory(FolderName, "Albums.json");
+            var jAlbums = CrossTable.LoadAllEntities(FolderName, "Albums.json");
 
             Albums = new List<Album>();
             foreach (var jAlbum in jAlbums)
@@ -494,44 +370,44 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.AlbumID:
-                            Table.SetProperty(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.AlbumName:
-                            Table.SetProperty(received, Key.AlbumName, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.AlbumName, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.Year:
-                            Table.SetProperty(received, Key.Year, kv.GetIntegerValueOrReturnNull());
+                            Reflection.MapValue(received, Key.Year, kv.GetIntegerValueOrReturnNull());
                             break;
                         case Key.Type:
-                            Table.SetProperty(received, Key.Type, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.Type, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.Label:
-                            Table.SetProperty(received, Key.Label, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.Label, kv.GetPairedValue().AsUnquoted());
                             break;
                     }
                 }
                 if (Artists.Count == 0)
                     GetArtists();
-                received.Artist = Table.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
+                received.Artist = CrossTable.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
                 Albums.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Albums)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "Albums.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Albums)] = CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "Albums.json")));
             return Albums.AsQueryable();
         }
 
         public IQueryable<ArtistGenre> GetArtistGenres()
         {
-            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(ArtistGenres)))
+            if (!CrossTable.UpdateOccured(TableInfo, FolderName, nameof(ArtistGenres)))
                 return ArtistGenres.AsQueryable();
 
-            var jArtists = Table.LoadInMemory(FolderName, "ArtistGenres.json");
+            var jArtists = CrossTable.LoadAllEntities(FolderName, "ArtistGenres.json");
 
             ArtistGenres = new List<ArtistGenre>();
             foreach (var jArtist in jArtists)
@@ -543,26 +419,26 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                     }
                 }
                 ArtistGenres.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(ArtistGenres)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "ArtistGenres.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(ArtistGenres)] = CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "ArtistGenres.json")));
             return ArtistGenres.AsQueryable();
         }
 
         public IQueryable<Artist> GetArtists()
         {
-            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Artists)))
+            if (!CrossTable.UpdateOccured(TableInfo, FolderName, nameof(Artists)))
                 return Artists.AsQueryable();
 
-            var jArtists = Table.LoadInMemory(FolderName, "Artists.json");
+            var jArtists = CrossTable.LoadAllEntities(FolderName, "Artists.json");
 
             Artists = new List<Artist>();
             foreach (var jArtist in jArtists)
@@ -574,26 +450,26 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.ArtistName:
-                            Table.SetProperty(received, Key.ArtistName, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.ArtistName, kv.GetPairedValue().AsUnquoted());
                             break;
                     }
                 }
                 Artists.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Artists)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "Artists.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Artists)] = CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "Artists.json")));
             return Artists.AsQueryable();
         }
 
         public IQueryable<Composition> GetCompositions()
         {
-            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Compositions)))
+            if (!CrossTable.UpdateOccured(TableInfo, FolderName, nameof(Compositions)))
                 return Compositions.AsQueryable();
 
-            var jCompositions = Table.LoadInMemory(FolderName, "Compositions.json");
+            var jCompositions = CrossTable.LoadAllEntities(FolderName, "Compositions.json");
 
             Compositions = new List<Composition>();
             foreach (var jComposition in jCompositions)
@@ -605,39 +481,39 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.CompositionID:
-                            Table.SetProperty(received, Key.CompositionID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.CompositionID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.CompositionName:
-                            Table.SetProperty(received, Key.CompositionName, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.CompositionName, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.AlbumID:
-                            Table.SetProperty(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.Duration:
-                            Table.SetProperty(received, Key.Duration, kv.GetIntegerValueOrReturnNull());
+                            Reflection.MapValue(received, Key.Duration, kv.GetIntegerValueOrReturnNull());
                             break;
                         case Key.FilePath:
-                            Table.SetProperty(received, Key.FilePath, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.FilePath, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.Lyrics:
-                            Table.SetProperty(received, Key.Lyrics, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.Lyrics, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.About:
-                            Table.SetProperty(received, Key.About, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.About, kv.GetPairedValue().AsUnquoted());
                             break;
                     }
                 }
                 if (Artists.Count == 0)
                     GetArtists();
-                received.Artist = Table.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
+                received.Artist = CrossTable.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
                 Compositions.Add(received);
             }
 
             Task.Factory.StartNew(() => TableInfo[nameof(Compositions)] = 
-                Table.GetTableUpdateTime(Path.Combine(FolderName, "Compositions.json")));
+                CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "Compositions.json")));
             return Compositions.AsQueryable();
         }
 #if !NET40
@@ -661,10 +537,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<Genre> GetGenres()
         {
-            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Genres)))
+            if (!CrossTable.UpdateOccured(TableInfo, FolderName, nameof(Genres)))
                 return Genres.AsQueryable();
 
-            var jGenres = Table.LoadInMemory(FolderName, "Genres.json");
+            var jGenres = CrossTable.LoadAllEntities(FolderName, "Genres.json");
 
             Genres = new List<Genre>();
             foreach (var jGenre in jGenres)
@@ -676,17 +552,17 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.GenreID:
-                            Table.SetProperty(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.GenreID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.GenreName:
-                            Table.SetProperty(received, Key.GenreName, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.GenreName, kv.GetPairedValue().AsUnquoted());
                             break;
                     }
                 }
                 Genres.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Genres)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "Genres.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Genres)] = CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "Genres.json")));
             return Genres.AsQueryable();
         }
 
@@ -697,10 +573,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<ListenedComposition> GetListenedCompositions()
         {
-            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(ListenedCompositions)))
+            if (!CrossTable.UpdateOccured(TableInfo, FolderName, nameof(ListenedCompositions)))
                 return ListenedCompositions.AsQueryable();
 
-            var jCompositions = Table.LoadInMemory(FolderName, "ListenedCompositions.json");
+            var jCompositions = CrossTable.LoadAllEntities(FolderName, "ListenedCompositions.json");
 
             ListenedCompositions = new List<ListenedComposition>();
             foreach (var jComposition in jCompositions)
@@ -714,23 +590,39 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (key)
                     {
                         case Key.ListenDate:
-                            Table.SetProperty(received, Key.ListenDate, DateTime.ParseExact(kv.Value.AsUnquoted().ToString(), "dd.MM.yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture));
+                            Reflection.MapValue(received, Key.ListenDate,
+                                DateTime.ParseExact(kv.Value.AsUnquoted().ToString(), "dd.MM.yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture));
                             break;
                         case Key.CompositionID:
-                            Table.SetProperty(received, Key.CompositionID, Guid.Parse(value));
+                            Guid compositionIDValue;
+                            if (Guid.TryParse(value, out compositionIDValue)) {
+                                Reflection.MapValue(received, Key.CompositionID, compositionIDValue);
+                            } else {
+                                // TODO: handle the case where the value could not be parsed as a Guid
+                            }
                             break;
                         case Key.UserID:
-                            Table.SetProperty(received, Key.UserID, Guid.Parse(value));
+                            Guid userIDValue;
+                            if (Guid.TryParse(value, out userIDValue)) {
+                                Reflection.MapValue(received, Key.UserID, userIDValue);
+                            } else {
+                                // TODO: handle the case where the value could not be parsed as a Guid
+                            }
                             break;
                         case Key.StoppedAt:
-                            Table.SetProperty(received, Key.StoppedAt, double.Parse(value));
+                            double stoppedAtValue;
+                            if (double.TryParse(value, out stoppedAtValue)) {
+                                Reflection.MapValue(received, Key.StoppedAt, stoppedAtValue);
+                            } else {
+                                // TODO: handle the case where the value could not be parsed as a double
+                            }
                             break;
                     }
                 }
                 ListenedCompositions.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(ListenedCompositions)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "ListenedCompositions.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(ListenedCompositions)] = CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "ListenedCompositions.json")));
             return ListenedCompositions.AsQueryable();
         }
 
@@ -762,14 +654,12 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 string CompositionsDB = Path.Combine(FolderName, "Compositions.json");
 
                 var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
-                JItem itemsCollection = null;
-                if (root != null)
-                    itemsCollection = root.FindPairByKey("Compositions".ToJString()).GetPairedValue();
-                else
-                    itemsCollection = new JArray(root);
+                JItem itemsCollection = (root == null) ? new JArray(root)
+                : root.FindPairByKey("Compositions".ToJString()).GetPairedValue();
 
-                List<JKeyValuePair> lst = new List<JKeyValuePair>();
-                lst.Add(new JKeyValuePair(Key.CompositionID.ToJString(), new JSingleValue((o as Composition).CompositionID.ToString())));
+                List<JKeyValuePair> lst = new List<JKeyValuePair> {
+                    new JKeyValuePair(Key.CompositionID.ToJString(), new JSingleValue((o as Composition).CompositionID.ToString()))
+                };
 
                 var pair = itemsCollection.HasThesePairsRecursive(lst);
                 if (pair != null)
@@ -783,8 +673,18 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public int SaveChanges()
         {
+            if (SaveDelayed)
+            {
+                GenresExtensions.SaveToFile(Genres, FolderName);
+                ArtistsExtensions.SaveToFile(Artists, FolderName);
+                AlbumsExtensions.SaveToFile(Albums, FolderName);
+                CompositionsExtensions.SaveToFile(Compositions, FolderName);
+                ArtistGenresExtensions.SaveToFile(ArtistGenres, FolderName);
+                AlbumGenresExtensions.SaveToFile(AlbumGenres, FolderName);
+                ListenedCompositionsExtensions.SaveToFile(ListenedCompositions, FolderName);
+            }
+
             return 1;
-            //throw new NotImplementedException();
         }
 
         public void UpdateAndSaveChanges<TEntity>(TEntity entity) where TEntity : class
@@ -802,10 +702,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public Task<List<Composition>> GetCompositionsAsync(int skip, int take)
         {
-            if (!Table.UpdateOccured(TableInfo, FolderName, nameof(Compositions)))
+            if (!CrossTable.UpdateOccured(TableInfo, FolderName, nameof(Compositions)))
                 return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
 
-            var jCompositions = Table.LoadInMemory(FolderName, "Compositions.json");
+            var jCompositions = CrossTable.LoadAllEntities(FolderName, "Compositions.json");
 
             Compositions = new List<Composition>();
             foreach (var jComposition in jCompositions)
@@ -817,38 +717,38 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.CompositionID:
-                            Table.SetProperty(received, Key.CompositionID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.CompositionID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.CompositionName:
-                            Table.SetProperty(received, Key.CompositionName, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.CompositionName, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.ArtistID:
-                            Table.SetProperty(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.ArtistID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.AlbumID:
-                            Table.SetProperty(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.AlbumID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.Duration:
-                            Table.SetProperty(received, Key.Duration, kv.GetIntegerValueOrReturnNull());
+                            Reflection.MapValue(received, Key.Duration, kv.GetIntegerValueOrReturnNull());
                             break;
                         case Key.FilePath:
-                            Table.SetProperty(received, Key.FilePath, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.FilePath, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.Lyrics:
-                            Table.SetProperty(received, Key.Lyrics, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.Lyrics, kv.GetPairedValue().AsUnquoted());
                             break;
                         case Key.About:
-                            Table.SetProperty(received, Key.About, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.About, kv.GetPairedValue().AsUnquoted());
                             break;
                     }
                 }
                 if (Artists.Count == 0)
                     GetArtists();
-                received.Artist = Table.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
+                received.Artist = CrossTable.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
                 Compositions.Add(received);
             }
 
-            Task.Factory.StartNew(() => TableInfo[nameof(Compositions)] = Table.GetTableUpdateTime(Path.Combine(FolderName, "Compositions.json")));
+            Task.Factory.StartNew(() => TableInfo[nameof(Compositions)] = CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "Compositions.json")));
 
             return Task.Factory.StartNew(() => Compositions.Skip(skip).Take(take).ToList());
         }
@@ -873,14 +773,15 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<ListenedComposition> GetListenedCompositions(bool includeCompositions)
         {
-            if (Table.UpdateOccured(TableInfo, FolderName, nameof(ListenedCompositions)))
+            if (CrossTable.UpdateOccured(TableInfo, FolderName, nameof(ListenedCompositions)))
                 ListenedCompositions = (List<ListenedComposition>)GetListenedCompositions();
 
             var lComps = GetListenedCompositions();
             if ( Compositions.Any() && lComps.Any() ) {
                 foreach (var lComp in lComps)
                 {
-                    lComp.Composition = Compositions.FirstOrDefault(c => c.CompositionID == lComp.CompositionID);
+                    lComp.Composition = Compositions
+                        .FirstOrDefault(c => c.CompositionID == lComp.CompositionID);
                 }
             }
             return lComps;

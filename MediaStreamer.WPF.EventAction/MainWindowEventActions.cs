@@ -8,11 +8,12 @@ namespace MediaStreamer.WPF.EventAction
     {
         public MainWindowEventActions()
         {
-            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-            ofd.ShowDialog();
-
-            //Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+            //System.Windows.Forms.OpenFileDialog ofd = new 
+            //System.Windows.Forms.OpenFileDialog();
             //ofd.ShowDialog();
+
+            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+            ofd.ShowDialog();
 
             //var filedata = Plugin.FilePicker.CrossFilePicker.Current.PickFile();
             //filedata.Wait();

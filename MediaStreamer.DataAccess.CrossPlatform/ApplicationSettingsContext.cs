@@ -31,10 +31,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         {
             string genresDB = Path.Combine(FolderName, "DBPaths.json");
 
-            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Genres.json");
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "DBPaths");
             JItem itemsCollection = null;
             if (root != null)
-                itemsCollection = root.FindPairByKey("Genres".ToJString()).GetPairedValue();
+                itemsCollection = root.FindPairByKey("DBPaths".ToJString()).GetPairedValue();
             else
                 itemsCollection = new JArray(root);
 
@@ -82,7 +82,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<DBPath> GetDBPaths()
         {
-            var jCompositions = Table.LoadInMemory(FolderName, "DBPaths.json");
+            var jCompositions = CrossTable.LoadAllEntities(FolderName, "DBPaths.json");
 
             DBPaths = new List<DBPath>();
             foreach (var jComposition in jCompositions)
@@ -94,10 +94,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.DBPathID:
-                            Table.SetProperty(received, Key.DBPathID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.DBPathID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.DataSource:
-                            Table.SetProperty(received, Key.DataSource, kv.GetPairedValue().AsUnquoted());
+                            Reflection.MapValue(received, Key.DataSource, kv.GetPairedValue().AsUnquoted());
                             break;
                     }
                 }
@@ -109,7 +109,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
 
         public IQueryable<PlayerState> GetPlayerStates()
         {
-            var jCompositions = Table.LoadInMemory(FolderName, "PlayerStates.json");
+            var jCompositions = CrossTable.LoadAllEntities(FolderName, "PlayerStates.json");
 
             PlayerStates = new List<PlayerState>();
             foreach (var jComposition in jCompositions)
@@ -121,13 +121,13 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                     switch (kv.Key.ToString().Trim('\"'))
                     {
                         case Key.StateID:
-                            Table.SetProperty(received, Key.StateID, Guid.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.StateID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.StateTime:
-                            Table.SetProperty(received, Key.StateTime, DateTime.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.StateTime, DateTime.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.VolumeLevel:
-                            Table.SetProperty(received, Key.VolumeLevel, double.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.VolumeLevel, double.Parse(kv.Value.AsUnquoted()));
                             break;
                     }
                 }

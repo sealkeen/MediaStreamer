@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using MediaStreamer.Domain.Models;
+using MediaStreamer.DataAccess.NetStandard.Extensions;
 
 namespace MediaStreamer.DataAccess.NetStandard
 {
@@ -382,7 +383,7 @@ namespace MediaStreamer.DataAccess.NetStandard
                 return await GetICompositionsAsync(_skipComps, _takeComps);
         }
 
-        public IQueryable<IComposition> GetICompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist); }
+        public IQueryable<IComposition> GetICompositions() { DisableLazyLoading(); return Compositions.Include(c => c.Artist).AsNoTracking(); }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
         public IQueryable<Genre> GetGenres() { return Genres; }
         void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
@@ -399,7 +400,17 @@ namespace MediaStreamer.DataAccess.NetStandard
 
         void IDMDBContext.UpdateAndSaveChanges<TEntity>(TEntity entity)
         {
+            if (entity is ListenedComposition) {
+                UpdateLC(entity as ListenedComposition);
+            }
             Update(entity);
+            SaveChanges();
+        }
+
+        void UpdateLC(ListenedComposition lc)
+        {
+            this.DetachLocal(lc, lc.GetId());
+            Update(lc);
             SaveChanges();
         }
 
@@ -454,6 +465,7 @@ namespace MediaStreamer.DataAccess.NetStandard
                 .StartNew(() => Compositions
                 .Skip(skip)
                 .Take(take)
+                .AsNoTracking()
                 .Select(c => c as IComposition)
                 .ToList());
         }
