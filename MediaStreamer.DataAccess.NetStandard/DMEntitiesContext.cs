@@ -57,7 +57,7 @@ namespace MediaStreamer.DataAccess.NetStandard
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
                     if (UseSQLServer) {
-                        optionsBuilder.UseSqlServer(@"Server=.\SQLExpress;initial catalog=CompositionsDB;user id=sys_admin;password=s0m3P4ssw0rdT3xt;MultipleActiveResultSets=True;TrustServerCertificate=True;");
+                        optionsBuilder.UseSqlServer(@"server=localhost;initial catalog=CompositionsDb;Integrated Security=SSPI; MultipleActiveResultSets=true;");
                     }
                     else
                         optionsBuilder.UseSqlite(@$"DataSource={PathResolver.GetStandardDatabasePath()}");
@@ -234,15 +234,10 @@ namespace MediaStreamer.DataAccess.NetStandard
                 entity.Property(e => e.StoppedAt).HasColumnName("StoppedAt");
 
                 entity.Property(e => e.CountOfPlays).HasColumnName("CountOfPlays");
+                entity.Property(e => e.StoppedAt).HasColumnName("StoppedAt");
 
-                entity.HasOne(d => d.Composition)
-                    .WithMany(p => p.ListenedCompositions)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                entity.Property(e => e.CountOfPlays).HasColumnName("CountOfPlays");
 
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.ListenedCompositions)
-                    .HasForeignKey(d => d.UserID)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Moderator>(entity =>
@@ -406,7 +401,7 @@ namespace MediaStreamer.DataAccess.NetStandard
 
         void UpdateLC(ListenedComposition lc)
         {
-            this.DetachLocal(lc, lc.GetId());
+            this.DetachLocal(lc, lc.CompositionID.ToString());
             Update(lc);
             SaveChanges();
         }

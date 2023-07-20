@@ -225,12 +225,12 @@ namespace MediaStreamer.DataAccess.RawSQL
 
         public async Task<List<Composition>> GetCompositionsAsync()
         {
-            return await GetCompositions().CreateListAsync();
+            return await Task.Run(() => GetCompositions().ToList());
         }
 
         public async Task<List<IComposition>> GetICompositionsAsync()
         {
-            return await GetICompositions().CreateListAsync();
+            return await Task.Run(() => GetICompositions().ToList());
         }
 
 

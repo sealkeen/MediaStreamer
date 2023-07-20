@@ -388,14 +388,14 @@ namespace MediaStreamer.DataAccess.NetStandard
         public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
 
-        public IQueryable<Moderator> GetModerators() { return Moderators.AsQueryable(); }
+        public IQueryable<Moderator> GetModerators() { return Moderators.AsQueryable().AsNoTracking(); }
         void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);
 
-        public IQueryable<Picture> GetPictures() { return Pictures.AsQueryable(); }
+        public IQueryable<Picture> GetPictures() { return Pictures.AsQueryable().AsNoTracking(); }
         void IDMDBContext.Add(Picture picture) => Pictures.Add(picture);
-        public IQueryable<User> GetUsers() { return Users.AsQueryable(); }
+        public IQueryable<User> GetUsers() { return Users.AsQueryable().AsNoTracking(); }
         void IDMDBContext.Add(User user) => Users.Add(user);
-        public IQueryable<MediaStreamer.Domain.Models.Style> GetStyles() { return Styles.AsQueryable(); }
+        public IQueryable<MediaStreamer.Domain.Models.Style> GetStyles() { return Styles.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(MediaStreamer.Domain.Models.Style style) => Styles.Add(style);
 
         void IDMDBContext.UpdateAndSaveChanges<TEntity>(TEntity entity)

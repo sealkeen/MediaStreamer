@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaStreamer.Domain;
 using Sealkeen.CSCourse2016.JSONParser.Core;
-using Sealkeen.Linq.Extensions;
 using System.Collections.Concurrent;
 using MediaStreamer.Domain.Models;
 using MediaStreamer.DataAccess.CrossPlatform.Extensions;
@@ -18,7 +17,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         public JSONDataContext(Action<string> log = null)
         {
             if (log != null) _log = log;
-            else _log = MediaStreamer.Logging.Extensions.LogInConsoleAndDebug;
+            else _log = MediaStreamer.Logging.Extensions.LogStatically;
             FolderName = PathResolver.GetStandardDatabasePath();
             TableInfo = new ConcurrentDictionary<string, DateTime>();
 
@@ -517,8 +516,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             return Compositions.AsQueryable();
         }
 #if !NET40
-        public async Task<List<Composition>> GetCompositionsAsync() => await GetCompositions().CreateListAsync();
-        public async Task<List<IComposition>> GetICompositionsAsync() => await GetICompositions().CreateListAsync();
+        public async Task<List<Composition>> GetCompositionsAsync() => await Task.Run(() => GetCompositions().ToList());
+        public async Task<List<IComposition>> GetICompositionsAsync() => await Task.Run(() => GetICompositions().ToList());
 #else //Net Framework 4.0 doesn't support <await> until 4.5
         public async Task<List<Composition>> GetCompositionsAsync()
         { 

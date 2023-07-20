@@ -164,16 +164,16 @@ namespace MediaStreamer.WPF.NetCore3_1
         {
             Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
             DMEntitiesContext.UseSQLServer = true;
-            var tsk = Task.Factory.StartNew(new Action( delegate {
+            //var tsk = Task.Factory.StartNew(new Action( delegate {
                 Program.DBAccess = new DBRepository() { DB = new DMEntitiesContext() };
                 Program.DBAccess?.DB.EnsureCreated();
-            })
-            );
+            //})
+            //);
 
             UpdatePageViews();
-            await tsk;
+            //await tsk;
             Program.FileManipulator = new MediaStreamer.IO.FileManipulator(Program.DBAccess, Program._logger);
-            await Selector.CompositionsPage?.ListAsync();
+            //await Selector.CompositionsPage?.ListAsync();
         }
 
         private async void btnSQLJson_Click(object sender, RoutedEventArgs e)
