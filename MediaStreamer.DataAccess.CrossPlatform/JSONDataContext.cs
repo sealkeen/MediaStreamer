@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaStreamer.Domain;
 using Sealkeen.CSCourse2016.JSONParser.Core;
-using Sealkeen.Linq.Extensions;
 using System.Collections.Concurrent;
 using MediaStreamer.Domain.Models;
 using MediaStreamer.DataAccess.CrossPlatform.Extensions;

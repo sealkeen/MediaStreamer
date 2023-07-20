@@ -21,6 +21,7 @@ namespace MediaStreamer.WPF.Components
         {
             Action<string> log = null;
             if(Program._logger != null) log = Program._logger.LogInfo;
+            else log = MediaStreamer.Logging.Extensions.LogStatically;
 
             Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() - Session.MainPageVM.GetTake(), log);
             if (Session.MainPageVM.GetSkip() < 0)
@@ -31,10 +32,10 @@ namespace MediaStreamer.WPF.Components
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
 
             _ = Task.Factory.StartNew(() =>
-            {
-                Session.MainPageVM.SetTotal(Program.DBAccess.DB.GetCompositions().Count());
-                Session.MainPageVM.UpdateBindingExpression();
-            }
+                {
+                    Session.MainPageVM.SetTotal(Program.DBAccess.DB.GetCompositions().Count());
+                    Session.MainPageVM.UpdateBindingExpression();
+                }
             );
         }
 
@@ -45,7 +46,11 @@ namespace MediaStreamer.WPF.Components
 
         private async void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() + Session.MainPageVM.GetTake(), Program._logger.LogInfo);
+            Action<string> log = null;
+            if (Program._logger != null) log = Program._logger.LogInfo;
+            else log = MediaStreamer.Logging.Extensions.LogStatically;
+
+            Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() + Session.MainPageVM.GetTake(), log);
             Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
                 (Session.MainPageVM.GetSkip(), Session.MainPageVM.GetTake());
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
