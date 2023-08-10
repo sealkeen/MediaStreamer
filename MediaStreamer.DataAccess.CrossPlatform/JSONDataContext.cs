@@ -516,10 +516,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 CrossTable.GetTableUpdateTime(Path.Combine(FolderName, "Compositions.json")));
             return Compositions.AsQueryable();
         }
-#if !NET40
-        public async Task<List<Composition>> GetCompositionsAsync() => await GetCompositions().CreateListAsync();
-        public async Task<List<IComposition>> GetICompositionsAsync() => await GetICompositions().CreateListAsync();
-#else //Net Framework 4.0 doesn't support <await> until 4.5
         public async Task<List<Composition>> GetCompositionsAsync()
         { 
             return GetCompositions().ToList();
@@ -528,7 +524,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         { 
             return GetICompositions().ToList();
         }
-#endif
 
         public IQueryable<CompositionVideo> GetCompositionVideos()
         {
