@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sealkeen.CSCourse2016.JSONParser.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,22 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
 {
     public class JSONRepositoryTests
     {
+        [Fact]
+        public void CreateAndOpenJObjectFile()
+        {
+            // No parent element so first parameter is null
+            JObject jObject = new JObject(null, 
+                new JKeyValuePair(
+                    new JString("Key"), new JString("Value")
+                )
+            );
+
+            jObject.SaveToFileAndOpenInNotepad("jKeyValuePair.txt");
+        }
+
+        // Result in "jKeyValuePair.txt"
+        // {"Key":"Value"}
+
         [Fact]
         public async Task MoveProductionDataToDebugContext()
         {

@@ -11,8 +11,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform.Extensions
         {
             var result = new LinkedList<JKeyValuePair>();
             //Properties
-            result.AddLast(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(artistGenre.ArtistID).ToSingleValue()));
-            result.AddLast(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(artistGenre.GenreID).ToSingleValue()));
+            result.AddLast(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(artistGenre.ArtistID).ToJString()));
+            result.AddLast(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(artistGenre.GenreID).ToJString()));
             return result;
         }
 

@@ -156,33 +156,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             cTable.Root.ToFile(cTable.FilePath);
         }
 
-        public void AddRange(IEnumerable<Composition> newCompositions)
-        {
-            if (SaveDelayed) { 
-                foreach(var cmp in newCompositions) Compositions.Add(cmp);
-                return;
-            }
-
-            var cTable = CrossTable.Load(FolderName, "Compositions");
-
-            foreach (var comp in newCompositions)
-            {
-                if (comp == null)
-                    continue;
-
-                // Already Exists, return 
-                if (Compositions.Where( c =>
-                        c.CompositionName == comp.CompositionName &&
-                        c.FilePath == comp.FilePath).Count() != 0)
-                    continue;
-
-                CrossTable.AddNewObjectToCollection(comp.GetPropList(), cTable.Items);
-                Compositions.Add(comp);
-            }
-
-            cTable.Root.ToFile(cTable.FilePath);
-        }
-
         public void Add(CompositionVideo compositionVideo)
         {
             throw new NotImplementedException();

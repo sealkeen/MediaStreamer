@@ -86,9 +86,7 @@
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-            x:Name="windowFrame" 
-            Content="Frame">
+            x:Name="windowFrame">
         </UC:UserFrame>
-        <!--Background="AliceBlue"-->
     </Grid>
 </Window>

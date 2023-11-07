@@ -7,7 +7,6 @@ using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using MediaStreamer.DataAccess.NetStandard;
 using MediaStreamer.Domain.Models;
 
 #nullable disable

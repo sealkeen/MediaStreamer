@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net40; netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
 		<OutputType>Library</OutputType>
 		<UseWPF>true</UseWPF>
 		<Platforms>AnyCPU;x86</Platforms>

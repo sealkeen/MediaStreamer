@@ -10,7 +10,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform.Extensions
         public static LinkedList<JKeyValuePair> GetPropList(this Genre genre)
         {
             var result = new LinkedList<JKeyValuePair>();
-            result.AddLast(new JKeyValuePair(Key.GenreID.ToJString(), DataBase.Coalesce(genre.GenreID).ToSingleValue()));
+            result.AddLast(new JKeyValuePair(Key.GenreID.ToJString(), genre.GetMediaEntityIdValue()));
             result.AddLast(new JKeyValuePair(Key.GenreName, DataBase.Coalesce(genre.GenreName)));
             return result;
         }

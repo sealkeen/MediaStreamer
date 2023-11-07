@@ -25,37 +25,36 @@ namespace MediaStreamer.WPF.NetCore3_1
             InitializeComponent();
             try
             {
+                Task.Run(() => InitializeDataConnections(
+                    afterLoad : () => {
+                        windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
+                    }
+                ));
+
                 Selector.MainWindow = this;
-                InitializeDataConnections().Wait();
-
-                Program.DBAccess.DB.EnsureCreated();
-                Program.ApplicationsSettingsContext.EnsureCreated();
-
-                Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
 
                 ResolveCMDParamFilePaths();
-
-                this.windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
             }
             catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
             }
         }
 
-        public async Task InitializeDataConnections()
+        public async Task InitializeDataConnections(Action afterLoad)
         {
-            if (Program.DBAccess == null)
-            {
+            if (Program.DBAccess == null) {
                 DMEntitiesContext.UseSQLServer = true;
                 var context = //new DMEntitiesContext();
                     new JSONDataContext(Program.SetCurrentStatus);
                 Program.DBAccess = new DBRepository() { DB = context };
-
             }
-            if (Program.ApplicationsSettingsContext == null)
-            {
+            if (Program.ApplicationsSettingsContext == null) {
                 Program.ApplicationsSettingsContext = await ApplicationSettingsContext.GetInstanceAsync();
             }
+            Program.DBAccess.DB.EnsureCreated();
+            Program.ApplicationsSettingsContext.EnsureCreated();
+            Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
+            await this.Dispatcher.BeginInvoke( afterLoad );
         }
 
         private static void ResolveCMDParamFilePaths()

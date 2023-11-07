@@ -10,10 +10,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform.Extensions
         public static LinkedList<JKeyValuePair> GetPropList(this Composition composition)
         {
             var result = new LinkedList<JKeyValuePair>();
-            result.AddLast(new JKeyValuePair(Key.CompositionID.ToJString(), DataBase.Coalesce(composition.CompositionID).ToSingleValue()));
+            result.AddLast( new JKeyValuePair(Key.CompositionID.ToJString(), composition.GetMediaEntityIdValue()) );
             result.AddLast(new JKeyValuePair(Key.CompositionName, DataBase.Coalesce(composition.CompositionName)));
-            result.AddLast(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(composition.ArtistID).ToSingleValue()));
-            result.AddLast(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(composition.AlbumID).ToSingleValue()));
+            result.AddLast(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(composition.ArtistID).ToJString() ));
+            result.AddLast(new JKeyValuePair(Key.AlbumID.ToJString(), DataBase.Coalesce(composition.AlbumID).ToJString()));
             result.AddLast(new JKeyValuePair(Key.Duration.ToJString(), DataBase.Coalesce(composition.Duration).ToSingleValue()));
             result.AddLast(new JKeyValuePair(Key.FilePath, DataBase.Coalesce(composition.FilePath)));
             result.AddLast(new JKeyValuePair(Key.Lyrics, DataBase.Coalesce(composition.Lyrics)));

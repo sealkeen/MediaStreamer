@@ -10,10 +10,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform.Extensions
         public static LinkedList<JKeyValuePair> GetPropList(this Artist artist)
         {
             var result = new LinkedList<JKeyValuePair>();
+            
             //Properties
-            List<JKeyValuePair> list = new List<JKeyValuePair>();
-            result.AddLast(new JKeyValuePair(Key.ArtistID.ToJString(), DataBase.Coalesce(artist.ArtistID).ToSingleValue()));
-            result.AddLast(new JKeyValuePair(Key.ArtistName, DataBase.Coalesce(artist.ArtistName)));
+            result.AddLast(new JKeyValuePair(Key.ArtistID.ToJString(), artist.GetMediaEntityIdValue() ));
+            result.AddLast(new JKeyValuePair(Key.ArtistName.ToJString(), DataBase.Coalesce(artist.ArtistName).ToJString() ));
             //Properties
             return result;
         }
