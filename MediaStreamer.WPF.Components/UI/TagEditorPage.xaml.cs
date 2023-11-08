@@ -4,6 +4,7 @@ using System.Windows;
 using MediaStreamer.Domain;
 using MediaStreamer.TagEditing;
 using MediaStreamer.RAMControl;
+using TagLib;
 
 namespace MediaStreamer.WPF.Components
 {

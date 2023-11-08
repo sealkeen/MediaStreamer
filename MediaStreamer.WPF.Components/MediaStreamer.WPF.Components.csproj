@@ -24,13 +24,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="TagLibSharp" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Sealkeen.Linq.Extensions\Sealkeen.Linq.Extensions.csproj" />
     <ProjectReference Include="..\MediaStreamer.Domain\MediaStreamer.Domain.csproj" />
     <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
     <ProjectReference Include="..\MediaStreamer.RAMControl\MediaStreamer.RAMControl.csproj" />
     <ProjectReference Include="..\MediaStreamer.TagEditor\MediaStreamer.TagEditor.csproj" />
     <ProjectReference Include="..\StringExtensions\StringExtensions.csproj" />
-    <ProjectReference Include="..\taglib-sharp\src\TaglibSharp\TaglibSharp.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
