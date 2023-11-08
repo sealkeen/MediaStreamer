@@ -9,15 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.Domain", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.IO", "..\MediaStreamer.IO\MediaStreamer.IO.csproj", "{E3701804-DB44-4DDF-A0B7-AC9F6A6D05E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaStreamer.WPF.Net40", "..\MediaStreamer.WPF.Net40\MediaStreamer.WPF.Net40.csproj", "{E8832C35-876C-4776-BE27-1B034C5FCA3E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.TagEditor", "..\MediaStreamer.TagEditor\MediaStreamer.TagEditor.csproj", "{0F66C265-9312-4EBE-A624-295AE9178F67}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.WPF.Components", "MediaStreamer.WPF.Components.csproj", "{A2A51AFD-641C-4170-812D-A6E029772454}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DataAccess.NetStandard", "..\MediaStreamer.DataAccess.NetStandard\MediaStreamer.DataAccess.NetStandard.csproj", "{26D675D9-47A3-4C12-9995-D06D7D40759E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.FilePicker", "..\..\XamarinFilePicker\FilePicker-Plugin-for-Xamarin-and-Windows\src\Plugin.FilePicker\Plugin.FilePicker.csproj", "{A946E686-B0BF-46F4-B708-A04E38F18C05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.TagEditor.UnitTests", "..\MediaStreamer.TagEditor.UnitTests\MediaStreamer.TagEditor.UnitTests.csproj", "{FFB04D3E-3565-4353-972A-692876835AFC}"
 EndProject
@@ -26,8 +22,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DataAccess.CrossPlatform", "..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj", "{F4469D6C-4105-4525-BBB1-3430966888A6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StringExtensions", "..\StringExtensions\StringExtensions.csproj", "{B7EF8EB8-C7AA-4C9B-87F3-E82F7C76DB9F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaglibSharp", "..\taglib-sharp\src\TaglibSharp\TaglibSharp.csproj", "{B16E8142-005B-4A46-904D-E9D2866948D5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.DataAccess.CrossPlatform.UnitTest", "..\MediaStreamer.DataAccess.CrossPlatform.UnitTest\MediaStreamer.DataAccess.CrossPlatform.UnitTest.csproj", "{A9F67D75-44D2-4223-9690-8CF4730419C0}"
 EndProject
@@ -81,14 +75,6 @@ Global
 		{E3701804-DB44-4DDF-A0B7-AC9F6A6D05E7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3701804-DB44-4DDF-A0B7-AC9F6A6D05E7}.Release|x86.ActiveCfg = Release|Any CPU
 		{E3701804-DB44-4DDF-A0B7-AC9F6A6D05E7}.Release|x86.Build.0 = Release|Any CPU
-		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Debug|x86.Build.0 = Debug|Any CPU
-		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Release|x86.ActiveCfg = Release|Any CPU
-		{E8832C35-876C-4776-BE27-1B034C5FCA3E}.Release|x86.Build.0 = Release|Any CPU
 		{0F66C265-9312-4EBE-A624-295AE9178F67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F66C265-9312-4EBE-A624-295AE9178F67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F66C265-9312-4EBE-A624-295AE9178F67}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -113,14 +99,6 @@ Global
 		{26D675D9-47A3-4C12-9995-D06D7D40759E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26D675D9-47A3-4C12-9995-D06D7D40759E}.Release|x86.ActiveCfg = Release|Any CPU
 		{26D675D9-47A3-4C12-9995-D06D7D40759E}.Release|x86.Build.0 = Release|Any CPU
-		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Debug|x86.Build.0 = Debug|Any CPU
-		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Release|x86.ActiveCfg = Release|Any CPU
-		{A946E686-B0BF-46F4-B708-A04E38F18C05}.Release|x86.Build.0 = Release|Any CPU
 		{FFB04D3E-3565-4353-972A-692876835AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FFB04D3E-3565-4353-972A-692876835AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFB04D3E-3565-4353-972A-692876835AFC}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -153,14 +131,6 @@ Global
 		{B7EF8EB8-C7AA-4C9B-87F3-E82F7C76DB9F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7EF8EB8-C7AA-4C9B-87F3-E82F7C76DB9F}.Release|x86.ActiveCfg = Release|Any CPU
 		{B7EF8EB8-C7AA-4C9B-87F3-E82F7C76DB9F}.Release|x86.Build.0 = Release|Any CPU
-		{B16E8142-005B-4A46-904D-E9D2866948D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B16E8142-005B-4A46-904D-E9D2866948D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B16E8142-005B-4A46-904D-E9D2866948D5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B16E8142-005B-4A46-904D-E9D2866948D5}.Debug|x86.Build.0 = Debug|Any CPU
-		{B16E8142-005B-4A46-904D-E9D2866948D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B16E8142-005B-4A46-904D-E9D2866948D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B16E8142-005B-4A46-904D-E9D2866948D5}.Release|x86.ActiveCfg = Release|Any CPU
-		{B16E8142-005B-4A46-904D-E9D2866948D5}.Release|x86.Build.0 = Release|Any CPU
 		{A9F67D75-44D2-4223-9690-8CF4730419C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A9F67D75-44D2-4223-9690-8CF4730419C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9F67D75-44D2-4223-9690-8CF4730419C0}.Debug|x86.ActiveCfg = Debug|Any CPU

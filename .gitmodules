@@ -19,3 +19,6 @@
 [submodule "Sealkeen.ObjectModel.Extensions"]
 	path = Sealkeen.ObjectModel.Extensions
 	url = https://github.com/sealkeen/Sealkeen.ObjectModel.Extensions
+[submodule "MediaStreamer.Logging"]
+	path = MediaStreamer.Logging
+	url = https://github.com/sealkeen/MediaStreamer.Logging

@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\XamarinFilePicker\FilePicker-Plugin-for-Xamarin-and-Windows\src\Plugin.FilePicker\Plugin.FilePicker.csproj" />
+    <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.44-beta" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MediaStreamer.IO\MediaStreamer.IO.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,4 @@
-﻿#define netstandard2
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MediaStreamer.Domain;
 using System;
 using System.Linq;
@@ -79,8 +77,6 @@ namespace MediaStreamer.DataAccess.NetStandard
             {
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
-                    //optionsBuilder.UseSqlite($"DataSource=http://docs.google.com/uc?export=open&id=1TqCBUjhXeglQogUaIGaegu7TUf4-iiXA");
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkID=723263.
                     optionsBuilder.UseSqlite(@$"DataSource={Filename}");
                 }
                 else
@@ -94,29 +90,23 @@ namespace MediaStreamer.DataAccess.NetStandard
         {
             modelBuilder.Entity<Administrator>(entity =>
             {
-                entity.ToTable("Administrator");
-
                 entity.Property(e => e.AdministratorID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("AdministratorID");
+                    .ValueGeneratedNever();
 
-                entity.Property(e => e.ModeratorID).HasColumnName("ModeratorID");
+                entity.Property(e => e.ModeratorID);
 
-                entity.Property(e => e.UserID).HasColumnName("UserID");
+                entity.Property(e => e.UserID);
 
             });
 
             modelBuilder.Entity<Album>(entity =>
             {
-                entity.ToTable("Album");
-
                 entity.Property(e => e.AlbumID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("AlbumID");
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.AlbumName).IsRequired();
 
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
+                entity.Property(e => e.ArtistID);
 
 
                 entity.HasOne(d => d.Artist)
@@ -132,9 +122,7 @@ namespace MediaStreamer.DataAccess.NetStandard
             {
                 entity.HasKey(e => new { e.AlbumID, e.GenreID });
 
-                entity.ToTable("AlbumGenre");
-
-                entity.Property(e => e.AlbumID).HasColumnName("AlbumID");
+                entity.Property(e => e.AlbumID);
 
                 entity.HasOne(d => d.Album)
                     .WithMany(p => p.AlbumGenres)
@@ -149,11 +137,8 @@ namespace MediaStreamer.DataAccess.NetStandard
 
             modelBuilder.Entity<Artist>(entity =>
             {
-                entity.ToTable("Artist");
-
                 entity.Property(e => e.ArtistID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ArtistID");
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.ArtistName).IsRequired();
             });
@@ -162,9 +147,7 @@ namespace MediaStreamer.DataAccess.NetStandard
             {
                 entity.HasKey(e => new { e.ArtistID, e.GenreID });
 
-                entity.ToTable("ArtistGenre");
-
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
+                entity.Property(e => e.ArtistID);
 
                 entity.HasOne(d => d.Artist)
                     .WithMany(p => p.ArtistGenres)
@@ -179,15 +162,12 @@ namespace MediaStreamer.DataAccess.NetStandard
 
             modelBuilder.Entity<Composition>(entity =>
             {
-                entity.ToTable("Composition");
-
                 entity.Property(e => e.CompositionID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CompositionID");
+                    .ValueGeneratedNever();
 
-                entity.Property(e => e.AlbumID).HasColumnName("AlbumID");
+                entity.Property(e => e.AlbumID);
 
-                entity.Property(e => e.ArtistID).HasColumnName("ArtistID");
+                entity.Property(e => e.ArtistID);
 
                 entity.Property(e => e.CompositionName).IsRequired();
 
@@ -205,12 +185,9 @@ namespace MediaStreamer.DataAccess.NetStandard
             {
                 entity.HasKey(e => new { e.VideoID, e.CompositionID });
 
-                entity.ToTable("CompositionVideo");
+                entity.Property(e => e.VideoID);
 
-                entity.Property(e => e.VideoID).HasColumnName("VideoID");
-
-
-                entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
+                entity.Property(e => e.CompositionID);
 
                 entity.HasOne(d => d.Composition)
                     .WithMany(p => p.CompositionVideos)
@@ -223,7 +200,6 @@ namespace MediaStreamer.DataAccess.NetStandard
             {
                 entity.HasKey(e => e.GenreID);
                 entity.Property(e => e.GenreID).IsRequired();
-                entity.ToTable("Genre");
                 entity.HasOne(e => e.Style)
                 .WithMany(s => s.Genres)
                 .HasForeignKey(e => e.StyleId);
@@ -233,13 +209,11 @@ namespace MediaStreamer.DataAccess.NetStandard
             {
                 entity.HasKey(e => new { e.UserID, e.CompositionID });
 
-                entity.ToTable("ListenedComposition");
+                entity.Property(e => e.ListenDate);
 
-                entity.Property(e => e.ListenDate).HasColumnType("DATETIME");
+                entity.Property(e => e.UserID);
 
-                entity.Property(e => e.UserID).HasColumnName("UserID");
-
-                entity.Property(e => e.CompositionID).HasColumnName("CompositionID");
+                entity.Property(e => e.CompositionID);
 
                 entity.HasOne(d => d.Composition)
                     .WithMany(p => p.ListenedCompositions)
@@ -253,32 +227,24 @@ namespace MediaStreamer.DataAccess.NetStandard
 
             modelBuilder.Entity<Moderator>(entity =>
             {
-                entity.ToTable("Moderator");
-
                 entity.Property(e => e.ModeratorID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ModeratorID");
+                    .ValueGeneratedNever();
 
-                entity.Property(e => e.UserID).HasColumnName("UserID");
+                entity.Property(e => e.UserID);
             });
 
             modelBuilder.Entity<Picture>(entity =>
             {
-                entity.ToTable("Picture");
-
                 entity.Property(e => e.PictureID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("PictureID");
+                    .ValueGeneratedNever();
 
-                entity.Property(e => e.XResolution).HasColumnName("XResolution");
+                entity.Property(e => e.XResolution);
 
-                entity.Property(e => e.YResolution).HasColumnName("YResolution");
+                entity.Property(e => e.YResolution);
             });
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("User");
-
                 entity.HasIndex(e => e.Email, "IX_User_Email")
                     .IsUnique();
 
@@ -286,12 +252,10 @@ namespace MediaStreamer.DataAccess.NetStandard
                     .IsUnique();
 
                 entity.Property(e => e.UserID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("UserID");
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.DateOfSignUp)
-                    .IsRequired()
-                    .HasColumnType("DATETIME");
+                    .IsRequired();
 
                 entity.Property(e => e.Email).IsRequired();
 
@@ -299,26 +263,21 @@ namespace MediaStreamer.DataAccess.NetStandard
 
                 entity.Property(e => e.UserName).IsRequired();
 
-                entity.Property(e => e.VKLink).HasColumnName("VKLink");
+                entity.Property(e => e.VKLink);
             });
 
             modelBuilder.Entity<Video>(entity =>
             {
-                entity.ToTable("Video");
-
                 entity.Property(e => e.VideoID)
-                    .ValueGeneratedNever()
-                    .HasColumnName("VideoID");
+                    .ValueGeneratedNever();
 
-                entity.Property(e => e.FPS).HasColumnName("FPS");
+                entity.Property(e => e.FPS);
 
-                entity.Property(e => e.VariableFPS)
-                    .HasColumnType("BIT")
-                    .HasColumnName("VariableFPS");
+                entity.Property(e => e.VariableFPS);
 
-                entity.Property(e => e.XResolution).HasColumnName("XResolution");
+                entity.Property(e => e.XResolution);
 
-                entity.Property(e => e.YResolution).HasColumnName("YResolution");
+                entity.Property(e => e.YResolution);
             });
 
             modelBuilder.Entity<PlayerState>(entity =>
@@ -326,20 +285,15 @@ namespace MediaStreamer.DataAccess.NetStandard
                 entity.HasKey(e => e.StateID);
 
                 entity.Property(e => e.StateTime)
-                .IsRequired()
-                .HasColumnType("DATETIME");
+                .IsRequired();
 
                 entity.Property(e => e.VolumeLevel)
-                .IsRequired()
-                .HasColumnType("NUMERIC");
+                .IsRequired();
             });
 
             modelBuilder.Entity<Style>(entity =>
             {
-                entity.ToTable("Style");
-
-                entity.Property(e => e.StyleId)
-                    .HasColumnName("StyleId");
+                entity.Property(e => e.StyleId);
 
                 entity.Property(e => e.StyleName).IsRequired();
             });
