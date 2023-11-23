@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
-    public class ApplicationSettingsContext : IApplicationsSettingsContext
+    public class ApplicationSettingsContext : DbContext, IApplicationsSettingsContext
     {
-        public ApplicationSettingsContext()
+        public ApplicationSettingsContext(IConfigurationRoot configuration, DbContextOptions options)
+            : base(options)
         {
             FolderName = PathResolver.GetStandardDatabasePath();
             PlayerStates = new List<PlayerState>();
@@ -172,7 +175,11 @@ namespace MediaStreamer.DataAccess.CrossPlatform
         {
             if (_instance == null)
             {
-                _instance = new ApplicationSettingsContext();
+                _instance = new ApplicationSettingsContext(
+                    new ConfigurationBuilder().Build(), 
+                    new DbContextOptionsBuilder().UseInMemoryDatabase("ApplicationSettingsContext")
+                    .Options
+                );
             }
             return _instance;
         }

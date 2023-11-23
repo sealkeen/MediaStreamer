@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
@@ -15,15 +14,15 @@ namespace MediaStreamer.WPF.Components
 {
     public partial class MainPage : StatusPage
     {
-        public MainPage(bool async = false)
+        public MainPage()
         {
             Session.MainPageVM = new MainPageViewModel();
             Session.MainPageVM.UpdateBindingExpression = this.UpdateBindingExpression;
             //DataContext = Session.MainPageVM;
 
             InitializeComponent();
-            if(!async)
-                InitializeData();
+            
+            InitializeData();
 
             lblPager.DataContext = Session.MainPageVM;
             //LoggerPage.GetInstance();
@@ -136,7 +135,6 @@ namespace MediaStreamer.WPF.Components
 
         private void HandleSpacePressed(object sender, KeyEventArgs e)
         {
-
             var ok = mainFrame.Focus();
             if (Program.mePlayer.Source == null && Selector.CompositionsPage.HasNextInListOrQueue())
             {
@@ -188,20 +186,12 @@ namespace MediaStreamer.WPF.Components
                 Program.SetCurrentStatus("PlayNextIfExists: " + ex.Message);
             }
         }
-#if !NET40
         private async void buttonCompositions_Click(object sender, RoutedEventArgs e)
-#else
-        private void buttonCompositions_Click(object sender, RoutedEventArgs e)
-#endif
         {
             try
             {
                 Program._logger?.LogTrace("Started loading from context ");
-#if !NET40
                 await ListAsync();
-#else
-                ListAsync().Wait();
-#endif
             }
             catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
@@ -566,11 +556,5 @@ namespace MediaStreamer.WPF.Components
                 BindingOperations.GetBindingExpression(lblPager, Label.ContentProperty).UpdateTarget())
             );
         }
-
-        //public event RoutedEventHandler DataBaseClick;
-        //private void btnDatabase_Click(object sender, RoutedEventArgs e)
-        //{
-        //    DataBaseClick?.Invoke(sender, e);
-        //}
     }
 }

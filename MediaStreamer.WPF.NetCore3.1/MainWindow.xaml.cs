@@ -20,6 +20,7 @@ namespace MediaStreamer.WPF.NetCore3_1
     public partial class MainWindow : Window
     {
         //TODO: WPFNet40 / Core3.1 – Merge into single project WPF's
+        // ... Update : or leave as it is and fuck that shit (net40)
         public MainWindow()
         {
             InitializeComponent();
@@ -32,8 +33,6 @@ namespace MediaStreamer.WPF.NetCore3_1
                 ));
 
                 Selector.MainWindow = this;
-
-                ResolveCMDParamFilePaths();
             }
             catch (Exception ex) {
                 Program.SetCurrentStatus(ex.Message);
@@ -54,7 +53,10 @@ namespace MediaStreamer.WPF.NetCore3_1
             Program.DBAccess.DB.EnsureCreated();
             Program.ApplicationsSettingsContext.EnsureCreated();
             Program._logger?.LogTrace($"The new position is : {Program.NewPosition}");
+
             await this.Dispatcher.BeginInvoke( afterLoad );
+
+            ResolveCMDParamFilePaths();
         }
 
         private static void ResolveCMDParamFilePaths()

@@ -82,32 +82,15 @@ namespace MediaStreamer.WPF.Components
             lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
         }
 
-#if !NET40
-        public async virtual Task<List<IComposition>>
-#else
-        public virtual List<IComposition> 
-#endif
-        GetICompositions()
+        public async virtual Task<List<IComposition>> GetICompositions()
         {
             try {
                 //DBAccess.Update();
                 Dispatcher.BeginInvoke(new Action(() => Selector.MainPage.SetFrameContent(Selector.CompositionsPage)));
                 var result =
-#if !NET40
-                    await 
-#endif
-                    Program.DBAccess.DB.GetICompositionsAsync(Session.MainPageVM.GetSkip(), 10);
-#if NET40
-                result.Wait();
-#endif
+                    await Program.DBAccess.DB.GetICompositionsAsync(Session.MainPageVM.GetSkip(), 10);
                 ListInitialized = true;
-                return 
-                    result
-#if NET40
-                    .Result
-#endif
-
-                    ;
+                return result;
             } catch (Exception ex) {
                 Program.SetCurrentStatus("GetICompositions: " + ex.Message);
                 return new List<IComposition>();
@@ -144,13 +127,13 @@ namespace MediaStreamer.WPF.Components
         public override async Task ListAsync()
         {
             try {
-                GetICompositions();
+                Session.CompositionsVM.CompositionsStore.Compositions = await GetICompositions();
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
                 lastDataLoadWasPartial = false;
             } catch {
                 Session.CompositionsVM.CompositionsStore.Compositions = new List<IComposition>();
                 try {
-                    GetICompositions();
+                    await GetICompositions();
                     lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
                     lastDataLoadWasPartial = false;
                 }

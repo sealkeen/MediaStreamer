@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net6.0-windows</TargetFrameworks><!--netcoreapp3.1-->
+    <TargetFrameworks>net5.0-windows</TargetFrameworks><!--netcoreapp3.1-->
     <RootNamespace>MediaStreamer.WPF.NetCore3._1</RootNamespace>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86</Platforms>
