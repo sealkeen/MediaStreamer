@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sealkeen.CSCourse2016.JSONParser.Core" Version="1.0.0" />
+    <PackageReference Include="Sealkeen.CSCourse2016.JSONParser.Core" Version="1.0.2" />
   </ItemGroup>
 	<ItemGroup>
 		<!-- Reference to the xUnit framework -->

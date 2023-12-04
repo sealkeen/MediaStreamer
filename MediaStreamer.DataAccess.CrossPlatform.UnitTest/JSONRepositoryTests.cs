@@ -1,9 +1,4 @@
 ﻿using Sealkeen.CSCourse2016.JSONParser.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest

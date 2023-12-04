@@ -37,7 +37,6 @@ namespace MediaStreamer.RAMControl
             SetCurrentStatus(ex.Message);
         }
 
-
         [MTAThread]
         public static void SetCurrentStatus(string status)
         {
@@ -69,7 +68,6 @@ namespace MediaStreamer.RAMControl
                 Session.MainPage.SetAction(action);
             }));
         }
-
 
         public static LogStatus Log(string login, string password)
         {
@@ -131,18 +129,6 @@ namespace MediaStreamer.RAMControl
             }
         }
 
-        public static void Dispose()
-        {
-            foreach (System.Reflection.PropertyInfo property in _propertyCollection)
-            {
-                //TODO: page.Dispose()
-
-                //Debugging test //todo: remove
-                Page page = new Page();
-                property.GetValue(page, null);
-            }
-        }
-
         public IEnumerator GetEnumerator()
         {
             foreach (System.Reflection.PropertyInfo property in _propertyCollection)
@@ -153,5 +139,5 @@ namespace MediaStreamer.RAMControl
                 yield return page;
             }
         }
-    }
+    } // public class Session : IEnumerable
 } //namespace FirstFMCourse

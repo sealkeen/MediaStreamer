@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AssemblyAttribute Include="MediaStreamer.WPF.NetCore3_1.BuildDateTime">
+        <_Parameter1>$([System.DateTime]::Now.ToString("s"))</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Sealkeen.Linq.Extensions\Sealkeen.Linq.Extensions.csproj" />
     <ProjectReference Include="..\MediaStreamer.DataAccess.CrossPlatform\MediaStreamer.DataAccess.CrossPlatform.csproj" />
     <ProjectReference Include="..\MediaStreamer.DataAccess.NetStandard\MediaStreamer.DataAccess.NetStandard.csproj" />
@@ -19,18 +24,13 @@
     <ProjectReference Include="..\MediaStreamer.WPF.Resources\MediaStreamer.WPF.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <AssemblyAttribute Include="MediaStreamer.WPF.NetCore3_1.BuildDateTime">
-        <_Parameter1>$([System.DateTime]::Now.ToString("s"))</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
-  <ItemGroup>
     <!--<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.17" />-->
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-	<PackageReference Include="System.Diagnostics.EventLog" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+	<PackageReference Include="System.Diagnostics.EventLog" Version="8.0.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.17" />
   </ItemGroup>

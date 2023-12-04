@@ -14,7 +14,6 @@ namespace MediaStreamer.RAMControl
 {
     public class Program
     {
-        // ctor:
         public Program(ILogger logger)
         {
             _logger = logger;
@@ -119,22 +118,11 @@ namespace MediaStreamer.RAMControl
         {
             if (!(source.FileExistsOrValidURL()))
                 return;
-            //TagLib.File file = TagLib.File.Create(source);
 
-            //if (mePlayer == null)
-            //    mePlayer = new MediaElement();
-
-            //foreach (ICodec codec in file.Properties.Codecs)
-            //{
-            //    if (codec is TagLib.Mpeg.AudioFile)
-            //    {
             mePlayer.Source = new Uri(source);
             mePlayer.Play();
             Program.mediaPlayerIsPlaying = true;
             Program.PlayerStopped = false;
-            //return;
-            //    }
-            //}
         }
 
         [MTAThread]
@@ -172,6 +160,7 @@ namespace MediaStreamer.RAMControl
                 }));
             }
         }
+
         /// <summary>
         /// Also logs to <trace> 
         /// </summary>

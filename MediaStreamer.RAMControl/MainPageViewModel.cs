@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace MediaStreamer.RAMControl
 {
@@ -12,7 +10,7 @@ namespace MediaStreamer.RAMControl
         private int _takeRecordsCount { get; set; } = 30;
         private int _totalRecords { get; set; } = 0; 
 
-        public Action UpdateBindingExpression {get; set; }
+        public Action UpdateBindingExpression { get; set; }
 
         public void SetTotal(int total, Action<string> log = null) { _totalRecords = total; RecordEnumerator = $"{total}"; log?.Invoke($"Set total {total};"); }
         public void SetSkip(int skip, Action<string> log = null) { _skipRecordsCount = skip; RecordEnumerator = $"{skip}"; log?.Invoke($"Set skip {skip};"); }
