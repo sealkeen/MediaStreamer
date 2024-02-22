@@ -22,7 +22,7 @@ namespace MediaStreamer.WPF.Components
 
             InitializeComponent();
             
-            InitializeData();
+            InitializeData().Wait();
 
             lblPager.DataContext = Session.MainPageVM;
             //LoggerPage.GetInstance();

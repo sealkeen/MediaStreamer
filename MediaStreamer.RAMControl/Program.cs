@@ -17,6 +17,8 @@ namespace MediaStreamer.RAMControl
         public Program(ILogger logger)
         {
             _logger = logger;
+            if (_logger == null)
+                _logger = new Logging.SimpleLogger();
         }
         // static interfaces:
         public static IPagedDBRepository DBAccess;

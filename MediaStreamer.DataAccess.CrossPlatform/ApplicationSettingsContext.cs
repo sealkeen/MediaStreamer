@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
@@ -126,8 +127,9 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                         case Key.StateID:
                             Reflection.MapValue(received, Key.StateID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
-                        case Key.StateTime:
-                            Reflection.MapValue(received, Key.StateTime, DateTime.Parse(kv.Value.AsUnquoted()));
+                        case Key.StateTime:// e.g. format = "dd/MM/yyyy", dateString = "10/07/2017" 
+                            var time = DateTime.Parse(kv?.Value?.AsUnquoted(), CultureInfo.CreateSpecificCulture("ru-RU"));
+                            Reflection.MapValue(received, Key.StateTime, time);
                             break;
                         case Key.VolumeLevel:
                             Reflection.MapValue(received, Key.VolumeLevel, double.Parse(kv.Value.AsUnquoted()));

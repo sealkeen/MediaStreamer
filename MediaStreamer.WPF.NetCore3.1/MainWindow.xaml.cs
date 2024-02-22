@@ -1,6 +1,7 @@
 ﻿using MediaStreamer.DataAccess.CrossPlatform;
 using MediaStreamer.DataAccess.NetStandard;
 using MediaStreamer.Domain;
+using MediaStreamer.Logging;
 using MediaStreamer.RAMControl;
 using MediaStreamer.WPF.Components;
 using StringExtensions;
@@ -24,9 +25,9 @@ namespace MediaStreamer.WPF.NetCore3_1
         public MainWindow()
         {
             InitializeComponent();
-            try
-            {
-                Task.Run(() => InitializeDataConnections(
+            try {
+                new Program(new SimpleLogger());
+                Task.Run(async () => await InitializeDataConnections(
                     afterLoad : () => {
                         windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
                     }

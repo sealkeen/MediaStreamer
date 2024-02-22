@@ -1,18 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediaStreamer.DataAccess.NetStandard.Extensions;
 using MediaStreamer.Domain;
-using System;
-using System.Linq;
-using System.IO;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using MediaStreamer.Domain.Models;
-using MediaStreamer.DataAccess.NetStandard.Extensions;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MediaStreamer.DataAccess.NetStandard
 {
     public partial class DMEntitiesContext : NetStandardContext, IPagedDMDBContext
     {
         public static bool UseSQLServer = false;
+        public static bool UseOptions = false;
         public static string Filename { get; set; }
         public static string LocalSource { get; set; } = @"O:/DB/09.06.2021-2.db3";
 

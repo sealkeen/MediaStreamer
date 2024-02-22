@@ -11,7 +11,14 @@ namespace MediaStreamer.WPF.Components
     public static class Selector
     {
         public static Window MainWindow { get; set; }
-        public static MainPage MainPage { get; set; }
+        private static MainPage _mainPage;
+        public static MainPage MainPage { 
+            get {
+                if (_mainPage is null)
+                    _mainPage = new MainPage();
+                return _mainPage;
+            } set { _mainPage = value; }
+        }
         public static CompositionsPage CompositionsPage { get; set; }
         public static AlbumsPage AlbumsPage { get; set; }
         public static ArtistsPage ArtistsPage { get; set; }
@@ -30,7 +37,6 @@ namespace MediaStreamer.WPF.Components
         {
                
         }
-
 
         public static Style BlankStyle { get; private set; }
         private static List<FirstFMPage> lst = new List<FirstFMPage>() { CompositionsPage, AlbumsPage, ArtistsPage };

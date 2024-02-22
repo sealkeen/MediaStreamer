@@ -47,7 +47,6 @@ namespace MediaStreamer.WPF.NetCore3_1
                             .UseInMemoryDatabase("ApplicationDataContext")
                             .Options
                         ));
-
                     //services.AddSingleton(
                     //    (s) => GrpcChannel.ForAddress(serviceAddress)
                     //)
