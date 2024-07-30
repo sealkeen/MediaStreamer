@@ -302,11 +302,11 @@ namespace MediaStreamer.DataAccess.NetStandard
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-        public void AddEntity<T>(T item) where T : class
+        public void AddEntity<T>(T item) where T : MediaEntity
         {
             Add(item);
         }
-        public void RemoveEntity<T>(T item) where T : class
+        public void RemoveEntity<T>(T item, bool saveDelayed) where T : MediaEntity
         {
             Remove(item);
         }

@@ -9,6 +9,7 @@ using Sealkeen.Linq.Extensions;
 using System.Collections.Concurrent;
 using MediaStreamer.Domain.Models;
 using MediaStreamer.DataAccess.CrossPlatform.Extensions;
+using System.Reflection.Emit;
 
 namespace MediaStreamer.DataAccess.CrossPlatform
 {
@@ -206,7 +207,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             //throw new NotImplementedException();
         }
 
-        public void AddEntity<T>(T entity) where T : class
+        public void AddEntity<T>(T entity) where T : MediaEntity
         {
             if (typeof(T) == typeof(Composition)) {
                 //var id = DataBase.GetMaxID<Composition, Guid>(Compositions.AsQueryable(), "CompositionID") + 1;
@@ -614,42 +615,139 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             throw new NotImplementedException();
         }
 
-        public void RemoveEntity<T>(T o) where T : class
+        public void RemoveEntity<T>(T o, bool saveDelayed) where T : MediaEntity
         {
             var tp = o.GetType();
             if (tp == typeof(Composition))
             {
-                string CompositionsDB = Path.Combine(FolderName, "Compositions.json");
+                if (saveDelayed)
+                    Compositions.Remove(o as Composition);
+                else
+                    RemoveComposition(o);
+            }
+            else if (tp == typeof(Album))
+            {
+                if (saveDelayed)
+                    Albums.Remove(o as Album);
+                else
+                    RemoveAlbum(o);
+            }
+            else if (tp == typeof(Artist))
+            {
+                if (saveDelayed)
+                    Artists.Remove(o as Artist);
+                else
+                    RemoveArtist(o);
+            }
+            else if (tp == typeof(ArtistGenre))
+            {
+                if (saveDelayed)
+                    ArtistGenres.Remove(o as ArtistGenre);
+                else
+                    RemoveArtistGenre(o);
+            }
+        }
+        public void RemoveRange<T>(T o) where T : IEnumerable<MediaEntity>
+        {
+            var tp = o.GetType();
+            throw new NotImplementedException();
+        }
 
-                var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
-                JItem itemsCollection = (root == null) ? new JArray(root)
-                : root.FindPairByKey("Compositions".ToJString()).GetPairedValue();
+        private void RemoveArtist<T>(T o) where T : MediaEntity
+        {
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Artists.json");
+            JItem itemsCollection = (root == null) ? new JArray(root)
+            : root.FindPairByKey("Artists".ToJString()).GetPairedValue(); // Get array from JSON
+            List<JKeyValuePair> lst = new List<JKeyValuePair> {
+                new JKeyValuePair(Key.AlbumID.ToJString(), new JString(o.GetId()))
+            };
+            var pair = itemsCollection.HasThesePairsRecursive(lst);
+            TryRemoveNodeFromArrayAndSaveToFile(Path.Combine(FolderName, "Artists.json"), pair, root);
+        }
 
-                List<JKeyValuePair> lst = new List<JKeyValuePair> {
+        private void RemoveArtistGenre<T>(T o) where T : MediaEntity
+        {
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "ArtistsGenres.json");
+            JItem itemsCollection = (root == null) ? new JArray(root)
+            : root.FindPairByKey("ArtistsGenres".ToJString()).GetPairedValue(); // Get array from JSON
+            List<JKeyValuePair> lst = new List<JKeyValuePair> {
+                new JKeyValuePair(Key.AlbumID.ToJString(), new JString(o.GetId()))
+            };
+            var pair = itemsCollection.HasThesePairsRecursive(lst);
+            TryRemoveNodeFromArrayAndSaveToFile(Path.Combine(FolderName, "ArtistsGenres.json"), pair, root);
+        }
+
+        private void RemoveAlbum<T>(T o) where T : MediaEntity
+        {
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Albums.json");
+            JItem itemsCollection = (root == null) ? new JArray(root)
+            : root.FindPairByKey("Albums".ToJString()).GetPairedValue(); // Get array from JSON
+            List<JKeyValuePair> lst = new List<JKeyValuePair> {
+                new JKeyValuePair(Key.AlbumID.ToJString(), new JString(o.GetId()))
+            };
+            var pair = itemsCollection.HasThesePairsRecursive(lst);
+            TryRemoveNodeFromArrayAndSaveToFile(Path.Combine(FolderName, "Albums.json"), pair, root);
+        }
+
+        private void TryRemoveNodeFromArrayAndSaveToFile(string tableName, JItem pair, JItem root) {
+            if (pair != null && root != null) {
+                pair.Parent.Parent.Items.Remove(pair.Parent);
+                root.ToFile(tableName);
+            }
+        }
+
+        private void RemoveComposition<T>(T o) where T : class
+        {
+            var root = DataBase.LoadFromFileOrCreateRootObject(FolderName, "Compositions.json");
+            JItem itemsCollection = (root == null) ? new JArray(root)
+            : root.FindPairByKey("Compositions".ToJString()).GetPairedValue();
+            List<JKeyValuePair> lst = new List<JKeyValuePair> {
                     new JKeyValuePair(Key.CompositionID.ToJString(), new JSingleValue((o as Composition).CompositionID.ToString()))
                 };
-
-                var pair = itemsCollection.HasThesePairsRecursive(lst);
-                if (pair != null)
-                {
-                    pair.Parent.Parent.Items.Remove(pair.Parent);
-
-                    root.ToFile(CompositionsDB);
-                }
-            }
+            var pair = itemsCollection.HasThesePairsRecursive(lst);
+            TryRemoveNodeFromArrayAndSaveToFile(Path.Combine(FolderName, "Compositions.json"), pair, root);
         }
 
         public int SaveChanges()
         {
             if (SaveDelayed)
             {
+                AlbumsExtensions.SaveToFile(Albums, FolderName);
                 GenresExtensions.SaveToFile(Genres, FolderName);
                 ArtistsExtensions.SaveToFile(Artists, FolderName);
-                AlbumsExtensions.SaveToFile(Albums, FolderName);
                 CompositionsExtensions.SaveToFile(Compositions, FolderName);
                 ArtistGenresExtensions.SaveToFile(ArtistGenres, FolderName);
                 AlbumGenresExtensions.SaveToFile(AlbumGenres, FolderName);
                 ListenedCompositionsExtensions.SaveToFile(ListenedCompositions, FolderName);
+            }
+
+            return 1;
+        }
+
+        public int SaveChangesTo(string tableName)
+        {
+            switch (tableName) {
+                case "Albums":
+                    AlbumsExtensions.SaveToFile(Albums, FolderName);
+                break;
+                case "Genres":
+                    GenresExtensions.SaveToFile(Genres, FolderName);
+                break;
+                case "Artists":
+                    ArtistsExtensions.SaveToFile(Artists, FolderName);
+                break;
+                case "Compositions":
+                    CompositionsExtensions.SaveToFile(Compositions, FolderName);
+                break;
+                case "ArtistGenres":
+                    ArtistGenresExtensions.SaveToFile(ArtistGenres, FolderName);
+                break;
+                case "AlbumGenres":
+                    AlbumGenresExtensions.SaveToFile(AlbumGenres, FolderName);
+                break;
+                case "ListenedCompositions":
+                    ListenedCompositionsExtensions.SaveToFile(ListenedCompositions, FolderName);
+                break;
             }
 
             return 1;

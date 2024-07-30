@@ -1,11 +1,10 @@
-﻿using Sealkeen.CSCourse2016.JSONParser.Core;
+﻿using MediaStreamer.DataAccess.RawSQL;
 using MediaStreamer.Domain;
-using MediaStreamer.DataAccess.RawSQL;
 using MediaStreamer.Logging;
-using Xunit;
-using System.Diagnostics;
-using System.Data.Entity;
+using Sealkeen.CSCourse2016.JSONParser.Core;
 using Sealkeen.Linq.Extensions;
+using System.Diagnostics;
+using Xunit;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
 {
@@ -29,7 +28,6 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
         public async Task GetListenedCompositions_ShouldNot_BeEmpty()
         {
             JSONDataContext context = new JSONDataContext();
-            //var comps = context.GetCompositions();
             context.ClearTable("ListenedCompositions");
             ListenedComposition ls = new ListenedComposition() { ListenDate = DateTime.Now, CompositionID = Guid.Empty, UserID = Guid.Empty};
             context.Add(ls);
