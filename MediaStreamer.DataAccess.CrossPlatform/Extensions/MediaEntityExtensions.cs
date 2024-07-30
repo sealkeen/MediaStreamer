@@ -1,9 +1,6 @@
 ﻿using MediaStreamer.Domain;
 using Sealkeen.CSCourse2016.JSONParser.Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.Extensions
 {
