@@ -1,14 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Sealkeen.CSCourse2016.JSONParser.Core;
+﻿using Sealkeen.CSCourse2016.JSONParser.Core;
 using MediaStreamer.Domain;
 using MediaStreamer.DataAccess.RawSQL;
 using MediaStreamer.Logging;
 using Xunit;
-using Xunit.Sdk;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.Data.Entity;
+using Sealkeen.Linq.Extensions;
 
 namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
 {
@@ -18,25 +15,29 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
         public static void Main(string[] args)
 #else
         [Theory, InlineData( null )]
-        public void NotMain(string[] args)
+        public async Task NotMain(string[] args)
 #endif
         {
             var logFile = Path.Combine(Environment.CurrentDirectory + "log.txt");
             ReadonlyDBContext context = new ReadonlyDBContext(@"O:\DB\26.10.2021-3.db3", new SimpleLogger());
-            var comps = context.GetCompositions();
+            var comps = await context.GetCompositions().CreateListAsync();
 
-            //GetCompositions();
+            comps.FindLast( c => true );
         }
 
         [Fact]
-        public void GetCompositions()
+        public async Task GetListenedCompositions_ShouldNot_BeEmpty()
         {
             JSONDataContext context = new JSONDataContext();
             //var comps = context.GetCompositions();
             context.ClearTable("ListenedCompositions");
             ListenedComposition ls = new ListenedComposition() { ListenDate = DateTime.Now, CompositionID = Guid.Empty, UserID = Guid.Empty};
             context.Add(ls);
-            var comps = context.GetListenedCompositions();
+            var comps = await context.GetListenedCompositions().CreateListAsync();
+
+            comps.FindLast(c => true);
+
+            Assert.NotEmpty(comps);
         }
 
         // ok / not ok (not all cases checked)
