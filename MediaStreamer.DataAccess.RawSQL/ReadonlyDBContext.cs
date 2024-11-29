@@ -103,7 +103,7 @@ namespace MediaStreamer.DataAccess.RawSQL
             
         }
 
-        public void AddEntity<T>(T o) where T : class
+        public void AddEntity<T>(T o) where T : MediaEntity
         {
             
         }
@@ -292,7 +292,7 @@ namespace MediaStreamer.DataAccess.RawSQL
             return new List<Video>().AsQueryable();
         }
 
-        public void RemoveEntity<T>(T o) where T : class
+        public void RemoveEntity<T>(T o, bool saveDelayed = false) where T : MediaEntity
         {
             
         }

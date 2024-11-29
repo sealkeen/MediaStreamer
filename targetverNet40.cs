@@ -1,1 +1,0 @@
-#define net_framework_4_0

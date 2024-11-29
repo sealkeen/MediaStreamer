@@ -27,17 +27,20 @@ namespace MediaStreamer.WPF.NetCore3_1
             InitializeComponent();
             try {
                 new Program(new SimpleLogger());
-                Task.Run(async () => await InitializeDataConnections(
-                    afterLoad : () => {
-                        windowFrame.Content = new MediaStreamer.WPF.Components.MainPage();
-                    }
-                ));
+
+                InitializeDataConnections(() => {});
+                AfterLoad();
 
                 Selector.MainWindow = this;
             }
             catch (Exception ex) {
+                MessageBox.Show(ex.ToString() + ex.Message);
                 Program.SetCurrentStatus(ex.Message);
             }
+        }
+
+        public void AfterLoad() { 
+            windowFrame.Content = new MediaStreamer.WPF.Components.MainPage(); 
         }
 
         public async Task InitializeDataConnections(Action afterLoad)

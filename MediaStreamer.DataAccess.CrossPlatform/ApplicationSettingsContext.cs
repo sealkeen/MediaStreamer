@@ -128,11 +128,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             Reflection.MapValue(received, Key.StateID, Guid.Parse(kv.Value.AsUnquoted()));
                             break;
                         case Key.StateTime:// e.g. format = "dd/MM/yyyy", dateString = "10/07/2017" 
-                            var time = DateTime.Parse(kv?.Value?.AsUnquoted(), CultureInfo.CreateSpecificCulture("ru-RU"));
-                            Reflection.MapValue(received, Key.StateTime, time);
+                            Reflection.MapValue(received, Key.StateTime, TryParseStateTime(kv));
                             break;
                         case Key.VolumeLevel:
-                            Reflection.MapValue(received, Key.VolumeLevel, double.Parse(kv.Value.AsUnquoted()));
+                            Reflection.MapValue(received, Key.VolumeLevel, TryParseVolumeLevel(kv));
                             break;
                     }
                 }
@@ -140,6 +139,34 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             }
 
             return PlayerStates.AsQueryable();
+        }
+
+        private double TryParseVolumeLevel(JKeyValuePair kv)
+        {
+            double result;
+            var vl = kv.Value.AsUnquoted();
+            if (double.TryParse(vl.Replace(',', '.'), out result) || 
+                double.TryParse(vl.Replace('.', ','), out result)
+            )
+                return result;
+
+            result = 0.5;
+            return result;
+        }
+
+        private DateTime TryParseStateTime(JKeyValuePair kv)
+        {
+            DateTime result;
+            var dateString = kv?.Value?.AsUnquoted();
+
+            if (DateTime.TryParse(kv?.Value?.AsUnquoted(), out result) ||
+                DateTime.TryParse(dateString, CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
+                DateTime.TryParse(dateString, CultureInfo.CreateSpecificCulture("en-US"), DateTimeStyles.None, out result) ||
+                DateTime.TryParse(dateString, CultureInfo.CreateSpecificCulture("ru-RU"), DateTimeStyles.None, out result)
+            )
+                return result;
+
+            return DateTime.MinValue;
         }
 
         public double? GetCachedVolumeLevel()
