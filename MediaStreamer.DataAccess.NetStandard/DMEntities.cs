@@ -60,11 +60,7 @@ namespace MediaStreamer.DataAccess.NetStandard
             Database.EnsureDeleted();
             Database.EnsureCreated();
         }
-        //public async Task ClearAsync()
-        //{
-        //    await Database.EnsureDeleted();
-        //    await Database.EnsureCreated();
-        //}
+
         public DMEntities(DbContextOptions<NetStandardContext> options)
             : base(options)
         {
@@ -311,17 +307,21 @@ namespace MediaStreamer.DataAccess.NetStandard
             Remove(item);
         }
 
-        public IQueryable<Administrator> GetAdministrators() { return Administrators.AsQueryable(); }
+        public IQueryable<Administrator> GetAdministrators() { return Administrators.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(Administrator administrator) => Administrators.Add(administrator);
-        public IQueryable<Album> GetAlbums() { return Albums.AsQueryable(); }
+        public IQueryable<Album> GetAlbums() { return Albums.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(Album album) => Albums.Add(album);
-        public IQueryable<AlbumGenre> GetAlbumGenres() { return AlbumGenres.AsQueryable(); }
+        public IQueryable<AlbumGenre> GetAlbumGenres() { return AlbumGenres.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(AlbumGenre albumGenre) => AlbumGenres.Add(albumGenre);
-        public IQueryable<Artist> GetArtists() { return Artists.AsQueryable(); }
+        public IQueryable<Artist> GetArtists() { return Artists.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(Artist artist) => Artists.Add(artist);
-        public IQueryable<ArtistGenre> GetArtistGenres() { return ArtistGenres.AsQueryable(); }
+        public IQueryable<ArtistGenre> GetArtistGenres() { return ArtistGenres.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(ArtistGenre artistGenre) => ArtistGenres.Add(artistGenre);
-        public IQueryable<Composition> GetCompositions() { return Compositions.AsQueryable().Include(c => c.Artist); }
+        public IQueryable<Composition> GetCompositions() { return Compositions
+                .AsNoTracking()
+                .Include(c => c.Artist)
+                .AsQueryable();
+        }
 
         public async Task<List<Composition>> GetCompositionsAsync()
         {
@@ -333,22 +333,22 @@ namespace MediaStreamer.DataAccess.NetStandard
             return await GetICompositions().ToListAsync();
         }
 
-        public IQueryable<IComposition> GetICompositions() { return Compositions.AsQueryable(); }
+        public IQueryable<IComposition> GetICompositions() { return Compositions.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(Composition composition) => Compositions.Add(composition);
-        public IQueryable<Genre> GetGenres() { return Genres.AsQueryable(); }
+        public IQueryable<Genre> GetGenres() { return Genres.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(Genre genre) => Genres.Add(genre);
 
         public IQueryable<ListenedComposition> GetListenedCompositions() { return ListenedCompositions.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(ListenedComposition listenedComposition) => ListenedCompositions.Add(listenedComposition);
 
-        public IQueryable<Moderator> GetModerators() { return Moderators.AsQueryable(); }
+        public IQueryable<Moderator> GetModerators() { return Moderators.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(Moderator moderator) => Moderators.Add(moderator);
 
-        public IQueryable<Picture> GetPictures() { return Pictures.AsQueryable(); }
+        public IQueryable<Picture> GetPictures() { return Pictures.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(Picture picture) => Pictures.Add(picture);
-        public IQueryable<User> GetUsers() { return Users.AsQueryable(); }
+        public IQueryable<User> GetUsers() { return Users.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(User user) => Users.Add(user);
-        public IQueryable<MediaStreamer.Domain.Models.Style> GetStyles() { return Styles.AsQueryable(); }
+        public IQueryable<MediaStreamer.Domain.Models.Style> GetStyles() { return Styles.AsNoTracking().AsQueryable(); }
         void IDMDBContext.Add(MediaStreamer.Domain.Models.Style style) => Styles.Add(style);
 
         void IDMDBContext.UpdateAndSaveChanges<TEntity>(TEntity entity)
