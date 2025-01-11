@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Pictures] (
+    [PictureID]   UNIQUEIDENTIFIER NOT NULL,
+    [XResolution] UNIQUEIDENTIFIER NULL,
+    [YResolution] UNIQUEIDENTIFIER NULL,
+    [SizeKb]      UNIQUEIDENTIFIER NULL,
+    [FilePath]    NVARCHAR (512)   NULL,
+    CONSTRAINT [PK_Picture] PRIMARY KEY CLUSTERED ([PictureID] ASC)
+);
+

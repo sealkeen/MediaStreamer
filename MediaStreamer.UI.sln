@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sealkeen.ObjectModel.Extens
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaStreamer.Domain.Specialized", "MediaStreamer.Domain.Specialized\MediaStreamer.Domain.Specialized.csproj", "{2B2D1C94-EFCB-45D2-A383-78CAB4985B4F}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MediaStreamer.SQLServer", "MediaStreamer.SQLServer\MediaStreamer.SQLServer.sqlproj", "{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +203,18 @@ Global
 		{2B2D1C94-EFCB-45D2-A383-78CAB4985B4F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B2D1C94-EFCB-45D2-A383-78CAB4985B4F}.Release|x86.ActiveCfg = Release|Any CPU
 		{2B2D1C94-EFCB-45D2-A383-78CAB4985B4F}.Release|x86.Build.0 = Release|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Release|x86.Build.0 = Release|Any CPU
+		{D2C35784-3042-48AD-A6E8-FF8F8E9F27CA}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
