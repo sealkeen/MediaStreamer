@@ -32,7 +32,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             ListenedCompositions = new List<ListenedComposition>();
             SaveDelayed = false;
         }
-        private Action<string> _log;
+        private readonly Action<string> _log;
         
         public bool SaveDelayed { get; set; }
 
@@ -207,27 +207,15 @@ namespace MediaStreamer.DataAccess.CrossPlatform
             //throw new NotImplementedException();
         }
 
-        public void AddEntity<T>(T entity) where T : MediaEntity
+        public void AddEntity<T>(T entity/*, bool saveDelayed*/) where T : MediaEntity
         {
             if (typeof(T) == typeof(Composition)) {
-                //var id = DataBase.GetMaxID<Composition, Guid>(Compositions.AsQueryable(), "CompositionID") + 1;
-                //id++;
-                //Property.SetProperty(entity, "CompositionID", id);
                 Add(entity as Composition);
             } else if (typeof(T) == typeof(Artist)) {
-                //var id = DataBase.GetMaxID<Artist, Guid>(Artists.AsQueryable(), "ArtistID");
-                //id++;
-                //Property.SetProperty(entity, "ArtistID", id);
                 Add(entity as Artist);
             } else if (typeof(T) == typeof(Album)) {
-                //var id = DataBase.GetMaxID<Album, Guid>(Albums.AsQueryable(), "AlbumID");
-                //id++;
-                //Property.SetProperty(entity, "AlbumID", id);
                 Add(entity as Album);
             } else if (typeof(T) == typeof(Genre)) {
-                //var id = DataBase.GetMaxID<Genre, Guid>(Genres.AsQueryable(), "GenreID");
-                //id++;
-                //Property.SetProperty(entity, "GenreID", id);
                 Add(entity as Genre);
             } else if (typeof(T) == typeof(ListenedComposition))
                 Add(entity as ListenedComposition);
@@ -444,8 +432,10 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                 return Compositions.AsQueryable();
 
             var jCompositions = CrossTable.LoadAllEntities(FolderName, "Compositions.json");
-
+            int previousCount = Compositions?.Count ?? 0;
             Compositions = new List<Composition>();
+
+            GetArtists(); // Load if update occured
             foreach (var jComposition in jCompositions)
             {
                 Composition received = new Composition();
@@ -480,9 +470,8 @@ namespace MediaStreamer.DataAccess.CrossPlatform
                             break;
                     }
                 }
-                if (Artists.Count == 0)
-                    GetArtists();
                 received.Artist = CrossTable.GetLinkedEntity(received.ArtistID, Artists, "ArtistID");
+
                 Compositions.Add(received);
             }
 
