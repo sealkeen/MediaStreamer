@@ -5,7 +5,7 @@ namespace MediaStreamer.TagEditing
 {
     public static class DMTagExtractor
     {
-        private static string ResolveArtistTitleConflicts(string fileName, string titleFromMetaD, string artistFromMetaD, ref string artistName, ref string compositionName)
+        public static string ResolveArtistTitleConflicts(string fileName, string titleFromMetaD, string artistFromMetaD, ref string artistName, ref string compositionName)
         {
             string divider;
             if (fileName.Contains(divider = "-") || fileName.Contains(divider = "—"))
