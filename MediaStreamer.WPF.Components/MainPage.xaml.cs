@@ -287,7 +287,6 @@ namespace MediaStreamer.WPF.Components
             txtStatus.Text = status;
         }
 
-
         private void buttonLog_Click(object sender, RoutedEventArgs e)
         {
             try

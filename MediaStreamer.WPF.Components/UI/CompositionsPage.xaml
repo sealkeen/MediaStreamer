@@ -49,6 +49,7 @@
                     <Button x:Name="cmiPush" Click="cmiPush_Click">Push Selected</Button>
                     <Button x:Name="cmiOpenLocation" Click="cmiOpenLocation_Click">Open File Location</Button>
                     <Button x:Name="cmiUpdate" Click="cmiUpdate_Click">Update list</Button>
+                    <Button x:Name="cmiMoveToEnd" Click="cmiMoveToEnd_Click">Move to End</Button>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
@@ -68,8 +69,21 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="btnBack" Grid.Row="1" Grid.Column="0" Click="btnBack_Click">Back page</Button>
-        <Button x:Name="btnNext" Grid.Row="1" Grid.Column="2" Click="btnNext_Click">Next page</Button>
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="btnBegin" Grid.Row="1" Grid.Column="0" Click="btnBegin_Click">First page</Button>
+            <Button x:Name="btnBack" Grid.Row="1" Grid.Column="1" Click="btnBack_Click">Back page</Button>
+            <Button x:Name="btnNext" Grid.Row="1" Grid.Column="2" Click="btnNext_Click">Next page</Button>
+            <Button x:Name="btnEnd" Grid.Row="1" Grid.Column="3" Click="btnEnd_Click">Last page</Button>
+        </Grid>
         <!--</ScrollViewer>-->
         <GridSplitter Grid.Column ="1" Grid.Row="0" 
                       HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"
@@ -117,13 +131,15 @@
             <TextBox Height="28" Grid.Row="2" Grid.Column="1" Name="txtAlbumName" Text="Album" ></TextBox>
                 <!--<Button Grid.Column="0" IsEnabled="False" Visibility="Visible"  x:Name="buttonListen" Content="Add listen" 
                 Click="buttonListen_Click" Height="21" />-->
-            <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" IsEnabled="False" Visibility="Visible" Name="buttonDelete" Content="Delete Song" Height="21"
-               
+            <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" IsEnabled="False"
+                    Visibility="Visible"
+                    Name="buttonDelete"
+                    Content="Delete Song" Height="21"
                     Click="cmiDelete_Click"/> <!--Background="AliceBlue"-->
             <Button Grid.Row="2" Grid.Column="3" VerticalAlignment="Bottom" x:Name="buttonNew" Content="Add New Song"
-                Click="buttonNewComp_Click" Height="21" /><!--Background="AliceBlue"-->
+                Click="buttonNewComp_Click" Height="21" /> <!--Background="AliceBlue"-->
             <Button Grid.Row="2" Grid.Column="4" VerticalAlignment="Bottom" x:Name="buttonNewRange" Content="Add Range"
-                Click="buttonNewRange_Click" Height="21"/><!--Background="AliceBlue"-->
+                Click="buttonNewRange_Click" Height="21"/> <!--Background="AliceBlue"-->
         </Grid>
     </Grid>
 </VM:FirstFMPage>

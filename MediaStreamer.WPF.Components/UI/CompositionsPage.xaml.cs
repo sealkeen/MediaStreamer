@@ -155,6 +155,7 @@ namespace MediaStreamer.WPF.Components
         {
             return ((Session.CompositionsVM.LastCompositionIndex + 1) < Session.CompositionsVM.CompositionsStore.Compositions.Count());
         }
+
         public bool HasFirstElement()
         {
             return (Session.CompositionsVM.CompositionsStore.Compositions != null && Session.CompositionsVM.CompositionsStore.Compositions.Count > 1);
@@ -406,7 +407,6 @@ namespace MediaStreamer.WPF.Components
             }
         }
 
-
         protected void ApplyToSelectedItems(Action<List<IComposition>> action)
         {
             try
@@ -535,6 +535,5 @@ namespace MediaStreamer.WPF.Components
         {
             this.InitializeComponent();
         }
-
     }
 }

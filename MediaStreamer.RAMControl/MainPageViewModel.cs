@@ -17,6 +17,7 @@ namespace MediaStreamer.RAMControl
         public void SetTake(int take, Action<string> log = null) { _takeRecordsCount = take; RecordEnumerator = $"{take}"; log?.Invoke($"Set take {take};"); }
         public int GetSkip() => _skipRecordsCount;
         public int GetTake() => _takeRecordsCount;
+        public int GetLastPageIndex() => (int)Math.Round((double)_totalRecords / _takeRecordsCount, 2);
 
         public String RecordEnumerator
         {
