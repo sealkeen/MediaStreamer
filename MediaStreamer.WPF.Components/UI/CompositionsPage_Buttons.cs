@@ -45,6 +45,40 @@ namespace MediaStreamer.WPF.Components
             CurrentListView = sender as Control;
         }
 
+        private async void btnBegin_Click(object sender, RoutedEventArgs e)
+        {
+            Session.MainPageVM.SetSkip(0, Program._logger.LogInfo);
+
+            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
+                (0, Session.MainPageVM.GetTake());
+
+            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+
+            _ = Task.Factory.StartNew(() =>
+                {
+                    Session.MainPageVM.SetTotal(Program.DBAccess.DB.GetCompositions().Count());
+                    Session.MainPageVM.UpdateBindingExpression();
+                }
+            );
+        }
+
+        private async void btnEnd_Click(object sender, RoutedEventArgs e)
+        {
+            Session.MainPageVM.SetSkip(Session.MainPageVM.GetLastPageIndex() * Session.MainPageVM.GetTake(), Program._logger.LogInfo);
+            
+            Session.CompositionsVM.CompositionsStore.Compositions = await Program.DBAccess.DB.GetICompositionsAsync
+                (Session.MainPageVM.GetLastPageIndex(), Session.MainPageVM.GetTake());
+            
+            lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+
+            _ = Task.Factory.StartNew(() =>
+                {
+                    Session.MainPageVM.SetTotal(Program.DBAccess.DB.GetCompositions().Count());
+                    Session.MainPageVM.UpdateBindingExpression();
+                }
+            );
+        }
+
         private async void btnNext_Click(object sender, RoutedEventArgs e)
         {
             Session.MainPageVM.SetSkip(Session.MainPageVM.GetSkip() + Session.MainPageVM.GetTake(), Program._logger.LogInfo);

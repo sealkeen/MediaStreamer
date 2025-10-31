@@ -31,18 +31,40 @@ namespace MediaStreamer.WPF.Components
         //    cmiPlaySeveral_Click(sender, e);
         //}
 
-        protected void cmiOpenLocation_Click(object sender, RoutedEventArgs e)
+        protected void cmiMoveToEnd_Click(object sender, RoutedEventArgs e)
         {
-            var selectedIndex = CurrentListView == lstItems ? lstItems.SelectedIndex : lstQuery.SelectedIndex;
+            var selectedIndex = CurrentListView == lstItems
+                ? lstItems.SelectedIndex : lstQuery.SelectedIndex;
             if (selectedIndex >= 0)
             {
+                var selectedItem = (CurrentListView == lstItems ? lstItems.SelectedItem : lstQuery.SelectedItem) as IComposition;
 
-                var selectedItem = (CurrentListView == lstItems ? lstItems.SelectedItem : lstQuery.SelectedItem) as IComposition ; 
+                Program.DBAccess.MoveCompositionTo(selectedItem.CompositionID, Domain.Enums.EMoveDirection.End);
+            }
+        }
 
-                if (selectedItem.FilePath.FileExists())
+        protected void cmiOpenLocation_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedIndex = CurrentListView == lstItems ? lstItems.SelectedIndex : lstQuery.SelectedIndex;
+                if (selectedIndex >= 0)
                 {
-                    selectedItem.FilePath.SelectInExplorer();
+                    var selectedItem = (CurrentListView == lstItems ?
+                        lstItems.SelectedItem : lstQuery.SelectedItem) as IComposition;
+                    if (selectedItem.FilePath.FileExists())
+                    {
+                        selectedItem.FilePath.SelectInExplorer();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Program.SetCurrentStatus(ex.Message, true);
+            }
+            finally
+            {
+                ReList();
             }
         }
 
