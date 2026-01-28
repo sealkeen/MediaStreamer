@@ -1,9 +1,10 @@
-﻿using MediaStreamer.Domain;
-using ObjectModelExtensions;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using MediaStreamer.Domain;
+using ObjectModelExtensions;
 
 namespace MediaStreamer.RAMControl
 {
@@ -24,44 +25,60 @@ namespace MediaStreamer.RAMControl
 
         public void ChangeCompositionTags(IList selectedItems)
         {
-            IComposition currentComp;
-            List<Composition> compositions = new List<Composition>();
-            foreach (var song in selectedItems)
+            try
             {
-                currentComp = Compositions[selectedItems.IndexOf(song)];
-                string filePath = currentComp.FilePath;
-                if (filePath != null)
+                foreach (var song in selectedItems)
                 {
-                    compositions?.Add(currentComp.GetInstance());
-                }
-            }
+                    IComposition currentComp = (IComposition)selectedItems[selectedItems.IndexOf(song)];
 
-            FileInfo fileInfo;
-            foreach (var comp in compositions)
-            {
-                fileInfo = new FileInfo(comp.FilePath);
-                string newName = fileInfo?.DirectoryName + "\\" +
-                    comp.Artist.ArtistName + " – " + comp.CompositionName;
-                if (comp.Album.Year != null)
-                {
-                    if (comp?.Album?.Year < 2100 && comp.Album.Year > 1900)
-                        newName += $" ({comp?.Album?.Year})";
+                    RenameCompositionFile(currentComp);
                 }
 
-                //newName += fileInfo.Extension;
-                //if (fileInfo.FullName.FileExists())
-                //    System.IO.File.Move(fileInfo.FullName, newName);
-                //comp.FilePath = newName;
-
-                TimeSpan tS;
-                if (comp.Duration != null)
-                    tS = TimeSpan.FromSeconds(comp.Duration.Value);
-                else
-                    tS = TimeSpan.FromSeconds(int.MinValue);
-
-                Program.DBAccess.AddComposition(comp.Artist.ArtistName,
-                    comp.CompositionName, comp.Album.AlbumName, ((long)tS.TotalSeconds), comp.FilePath);
+                Program.DBAccess.DB.SaveChangesTo("Compositions");
             }
+            catch (Exception ex)
+            {
+                Program._logger?.LogError("RenameCompositionFiles" + ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// TODO: Instead of 1 do 2.
+        /// [1] Fix "Rename to Standard" check menu item button -> enable renaming the file to match pattern "Artist – Title (Year if exists)".
+        /// [2] The previous is foxed, test rename further.
+        /// </summary>
+        /// <param name="compositions"></param>
+        protected static void RenameCompositionFile(IComposition composition)
+        {
+            Artist artist = composition.Artist;
+
+            if (composition.Artist == null)
+            {
+                artist = Program.DBAccess.DB.GetArtists().Where(x => x.ArtistID == composition.ArtistID).First();
+            }
+
+            composition.FilePath = RenameFileKeepExtension(composition.FilePath,
+                artist.ArtistName + " - " + composition.CompositionName
+            );
+        }
+
+        public static string RenameFileKeepExtension(string filePath, string newFileName)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+                throw new ArgumentException("File path cannot be null or empty", nameof(filePath));
+
+            if (string.IsNullOrWhiteSpace(newFileName))
+                throw new ArgumentException("New file name cannot be null or empty", nameof(newFileName));
+
+            string directory = Path.GetDirectoryName(filePath);
+            string extension = Path.GetExtension(filePath);
+
+            string newFilePath = Path.Combine(directory, newFileName + extension);
+
+            File.Move(filePath, newFilePath);
+
+            return newFilePath;
         }
     }
 }

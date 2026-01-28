@@ -67,6 +67,7 @@
                     </MenuItem>
                     <MenuItem x:Name="btnAddRawData" Header="Add data from list of file paths." Click="btnAddRawData_Click">
                     </MenuItem>
+                    <MenuItem x:Name="btnFixAlbums" Header="Fix albums (absent albums or albums errors)" Click="btnFixAlbums_Click"></MenuItem>
                 </MenuItem>
                 <MenuItem x:Name="btnView" Click="btnView_Click" Header="View" FontSize="12"></MenuItem>
                 <MenuItem x:Name="btnBrowser" Click="btnBrowser_Click" Header="Browser" IsCheckable="true" FontSize="12"></MenuItem>

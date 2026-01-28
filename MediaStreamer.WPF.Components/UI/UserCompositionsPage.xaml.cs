@@ -6,6 +6,7 @@ using System.Windows.Input;
 using MediaStreamer.Domain;
 using MediaStreamer.Logging;
 using MediaStreamer.RAMControl;
+using MediaStreamer.WPF.Components.Services;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -47,7 +48,9 @@ namespace MediaStreamer.WPF.Components
 
         private void buttonListen_Click(object sender, RoutedEventArgs e)
         {
-            Program.FileManipulator.DecomposeAudioFile(Program.FileManipulator.OpenAudioFileCrossPlatform().Result, Program._logger?.GetLogErorrOrReturnNull());
+            Program.FileManipulator.DecomposeAudioFile(
+                    Program.FileManipulator.OpenAudioFileCrossPlatform(new FilePicker()).Result, Program._logger?.GetLogErorrOrReturnNull()
+                );
             List();
         }
 

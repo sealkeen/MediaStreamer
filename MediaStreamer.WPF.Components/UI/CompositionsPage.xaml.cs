@@ -1,9 +1,4 @@
-﻿using MediaStreamer.Domain;
-using MediaStreamer.Logging;
-using MediaStreamer.RAMControl;
-using Sealkeen.Linq.Extensions;
-using StringExtensions;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using MediaStreamer.Domain;
+using MediaStreamer.RAMControl;
+using Sealkeen.Linq.Extensions;
+using StringExtensions;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -38,9 +36,9 @@ namespace MediaStreamer.WPF.Components
                         $"File valid = {File.Exists(Program.currentComposition.FilePath)}");
                 }
             }
-            catch (Exception ex) 
-            { 
-                Program.SetCurrentStatus("CompositionsPage(): " + ex.Message); 
+            catch (Exception ex)
+            {
+                Program.SetCurrentStatus("CompositionsPage(): " + ex.Message);
             }
 
             if (Session.CompositionsVM == null)
@@ -90,8 +88,11 @@ namespace MediaStreamer.WPF.Components
                 var result =
                     await Program.DBAccess.DB.GetICompositionsAsync(Session.MainPageVM.GetSkip(), 10);
                 ListInitialized = true;
+
                 return result;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Program.SetCurrentStatus("GetICompositions: " + ex.Message);
                 return new List<IComposition>();
             }
@@ -126,18 +127,23 @@ namespace MediaStreamer.WPF.Components
 
         public override async Task ListAsync()
         {
-            try {
+            try
+            {
                 Session.CompositionsVM.CompositionsStore.Compositions = await GetICompositions();
                 lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
                 lastDataLoadWasPartial = false;
-            } catch {
+            }
+            catch
+            {
                 Session.CompositionsVM.CompositionsStore.Compositions = new List<IComposition>();
-                try {
+                try
+                {
                     await GetICompositions();
                     lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
                     lastDataLoadWasPartial = false;
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Program.SetCurrentStatus("ListAsync: " + ex.Message);
                 }
             }
@@ -170,7 +176,7 @@ namespace MediaStreamer.WPF.Components
         {
             int? selectedIndex = lstItems?.SelectedIndex;
             bool moreThenOne = selectedIndex >= 1;
-                //&& 
+            //&& 
             bool lessThanLast = (lstItems?.SelectedIndex < lstItems?.Items.Count);
             return moreThenOne && lessThanLast;
         }
@@ -218,7 +224,8 @@ namespace MediaStreamer.WPF.Components
                 {
                     return Session.CompositionsVM.CompositionsStore.Queue.Dequeue();
                 }
-                if (HasNextInList()) {
+                if (HasNextInList())
+                {
                     return Session.CompositionsVM.CompositionsStore.Compositions[(Session.CompositionsVM.LastCompositionIndex + 1)];
                 }
                 throw new ArgumentOutOfRangeException("End of compositions list.");
@@ -247,7 +254,9 @@ namespace MediaStreamer.WPF.Components
                 {
                     Session.CompositionsVM.LastCompositionIndex = lstItems.SelectedIndex;
                     lstItems.SelectedIndex += 1;
-                } else if (HasFirstElement() && Session.CompositionsVM.CompositionsStore.Queue.Empty()) {
+                }
+                else if (HasFirstElement() && Session.CompositionsVM.CompositionsStore.Queue.Empty())
+                {
                     Session.CompositionsVM.LastCompositionIndex = -1;
                     lstItems.SelectedIndex = 0;
                 }
@@ -281,8 +290,8 @@ namespace MediaStreamer.WPF.Components
                     return;
                 foreach (ICompositionInstance composition in selectedItems)
                 {
-                    EnqueueOrPush(Session.CompositionsVM.CompositionsStore.Queue.Enqueue, 
-                        Session.CompositionsVM.CompositionsStore.Queue.Push, 
+                    EnqueueOrPush(Session.CompositionsVM.CompositionsStore.Queue.Enqueue,
+                        Session.CompositionsVM.CompositionsStore.Queue.Push,
                         composition.GetInstance(), queueOrPush);
                 }
                 if (!Program.mediaPlayerIsPlaying && HasNextInQueue())
@@ -334,7 +343,7 @@ namespace MediaStreamer.WPF.Components
                 Program.DBAccess?.AddNewListenedComposition(target.GetInstance(), SessionInformation.CurrentUser);
                 if (Selector.ListenedCompositionsPage != null)
                 {
-                    Task.Factory.StartNew( () => Selector.ListenedCompositionsPage.List() );
+                    Task.Factory.StartNew(() => Selector.ListenedCompositionsPage.List());
                 }
                 if (lstItems.SelectedIndex < 0 || lstItems.SelectedItem.GetHashCode() != target.GetHashCode())
                 {
@@ -355,7 +364,7 @@ namespace MediaStreamer.WPF.Components
                 Session.CompositionsVM.CompositionsStore.Compositions.Count > lstItems.SelectedIndex)
                 PlayTarget(Session.CompositionsVM.CompositionsStore.Compositions[lstItems.SelectedIndex]);
             else
-            {       
+            {
                 Program.SetCurrentStatus("ViewModel for Compositions was not initialized correctly.");
                 return;
             }
@@ -372,7 +381,7 @@ namespace MediaStreamer.WPF.Components
                     ICompositionInstance currentComp;
                     var files = new List<TagLib.File>() { };
                     var compositions = new List<IComposition>();
-                    
+
                     // For every selected element
                     foreach (var song in selectedItems)
                     {
@@ -386,7 +395,7 @@ namespace MediaStreamer.WPF.Components
                         }
                     }
                     Selector.TagEditorPage = new TagEditorPage(files, compositions);
-                    Selector.MainPage.SetFrameContent( Selector.TagEditorPage );
+                    Selector.MainPage.SetFrameContent(Selector.TagEditorPage);
                 }
             }
             catch (Exception ex)
@@ -439,49 +448,6 @@ namespace MediaStreamer.WPF.Components
                 lstItems.SelectedIndex = -1;
         }
 
-        /// <summary>
-        /// TODO:Fix "Rename to Standard" check menu item button -> enable renaming the file to match pattern "Artist – Title (Year if exists)".
-        /// </summary>
-        /// <param name="compositions"></param>
-        protected static void RenameCompositionFiles(List<IComposition> compositions)
-        {
-            try
-            {
-                FileInfo fileInfo;
-                foreach (var comp in compositions)
-                {
-                    fileInfo = new FileInfo(comp.FilePath);
-                    Artist artist = comp.Artist;
-                    if (comp.Artist == null)
-                    {
-                        artist = Program.DBAccess.DB.GetICompositions().Where(x => x.ArtistID == comp.ArtistID).First().Artist;
-                    }
-                    string newName = fileInfo.DirectoryName + "\\" +
-                        artist.ArtistName + " – " + comp.CompositionName;
-                    if (comp.Album.Year != null)
-                    {
-                        if (comp.Album.Year < 2100 && comp.Album.Year > 1900)
-                            newName += $" ({comp.Album.Year})";
-                    }
-                    newName += fileInfo.Extension;
-                    System.IO.File.Move(fileInfo.FullName, newName);
-                    comp.FilePath = newName;
-                    Program.DBAccess.DB.SaveChanges();
-
-                    //TimeSpan tS;
-                    //if (comp.Duration != null)
-                    //    tS = TimeSpan.FromSeconds(comp.Duration.Value);
-                    //else
-                    //    tS = TimeSpan.FromSeconds(int.MinValue);
-
-                    Program.DBAccess.AddComposition(artist.ArtistName,
-                        comp.CompositionName, comp.Album.AlbumName, comp.Duration.Value, comp.FilePath);
-                }
-            } catch (Exception ex) {
-                Program._logger?.LogError("RenameCompositionFiles" + ex.Message);
-            }
-        }
-
         // GridSplitter -->
         double _oldLstItemsWidth = 0.0;
         double _oldGridWidth = 0.0;
@@ -502,6 +468,7 @@ namespace MediaStreamer.WPF.Components
             _oldGridWidth = mainGrid.ActualWidth;
             //_oldRoamingGroupWidth = firstColumn.ActualWidth + secondColumn.ActualWidth + thirdColumn.ActualWidth;
         }
+
         private void GridSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             double newGridWidth = mainGrid.ActualWidth;
@@ -530,6 +497,7 @@ namespace MediaStreamer.WPF.Components
             //    }
             //}
         }
+
         // <-- GridSplitter 
         public override void Rerender()
         {

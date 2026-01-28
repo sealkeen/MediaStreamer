@@ -399,5 +399,11 @@ namespace MediaStreamer.DataAccess.NetStandard
                 .Select(c => c as IComposition)
                 .ToList());
         }
+
+        // TODO: implement
+        public int SaveChangesTo(string tableName)
+        {
+            return 0;
+        }
     }
 }

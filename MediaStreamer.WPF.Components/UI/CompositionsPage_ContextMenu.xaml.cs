@@ -94,7 +94,8 @@ namespace MediaStreamer.WPF.Components
         {
             ChangeComposition(CurrentListView ==lstItems ? lstItems.SelectedItems : lstQuery.SelectedItems);
         }
-        protected void cmiRename_Click(object sender, RoutedEventArgs e)
+
+        protected async void cmiRename_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -111,9 +112,12 @@ namespace MediaStreamer.WPF.Components
             }
             finally
             {
-                ReList();
+                Session.CompositionsVM.CompositionsStore.Compositions = await GetICompositions();
+                lstItems.GetBindingExpression(System.Windows.Controls.ListView.ItemsSourceProperty).UpdateTarget();
+                lastDataLoadWasPartial = false;
             }
         }
+
         protected void cmiDelete_Click(object sender, RoutedEventArgs e)
         {
             try

@@ -367,5 +367,10 @@ namespace MediaStreamer.DataAccess.RawSQL
             throw new NotImplementedException();
             return new List<ListenedComposition>().AsQueryable();
         }
+
+        public int SaveChangesTo(string tableName)
+        {
+            return 0;
+        }
     }
 }

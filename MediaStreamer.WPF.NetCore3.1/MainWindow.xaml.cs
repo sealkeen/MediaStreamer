@@ -1,17 +1,18 @@
-﻿using MediaStreamer.DataAccess.CrossPlatform;
-using MediaStreamer.DataAccess.NetStandard;
-using MediaStreamer.Domain;
-using MediaStreamer.Logging;
-using MediaStreamer.RAMControl;
-using MediaStreamer.WPF.Components;
-using StringExtensions;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using MediaStreamer.DataAccess.CrossPlatform;
+using MediaStreamer.DataAccess.NetStandard;
+using MediaStreamer.Domain;
+using MediaStreamer.Logging;
+using MediaStreamer.RAMControl;
+using MediaStreamer.WPF.Components;
+using MediaStreamer.WPF.Components.Services;
+using StringExtensions;
 
 namespace MediaStreamer.WPF.NetCore3_1
 {
@@ -248,7 +249,7 @@ namespace MediaStreamer.WPF.NetCore3_1
                 Program.DBAccess?.DB.Clear();
             }
         }
-            
+        
         private void btnAddRawData_Click(object sender, RoutedEventArgs e)
         {
             Session.MainPage.SetFrameContent(AddNewItems.GetPage());
@@ -257,9 +258,8 @@ namespace MediaStreamer.WPF.NetCore3_1
         private async void btnSQLiteLoadFile_Click(object sender, RoutedEventArgs e)
         {
             Selector.MainPage.SetFrameContent(Selector.LoadingPage ?? (Selector.LoadingPage = new LoadingPage()));
-            //var tsk = Task.Factory.StartNew(new Action(async delegate
-            //{
-            var path = await Program.FileManipulator.GetOpenedDatabasePathAsync();
+
+            var path = await Program.FileManipulator.GetOpenedDatabasePathAsync(new FilePicker());
             if (!File.Exists(path))
                 return;
             Program.DBAccess = new DBRepository() { DB = new DataAccess.RawSQL.ReadonlyDBContext(path, Program._logger) };
@@ -321,6 +321,78 @@ namespace MediaStreamer.WPF.NetCore3_1
                 {
                     TargetType = typeof(Window)
                 };
+        }
+
+        private void btnFixAlbums_Click(object sender, RoutedEventArgs e)
+        {
+            // Arrange
+            var testPath =
+                DataAccess.CrossPlatform.PathResolver.GetStandardDatabasePath()
+                + "_Debug_Tests_SaveChanges_"
+                + $"{DateTime.Today.ToString("yyyy-MM-dd__HH.mm.ss")}";
+
+            JSONDataContext productionContext = new JSONDataContext();
+            JSONDataContext debugContext = new JSONDataContext(null, testPath);
+
+            debugContext.SaveDelayed = true;
+            productionContext.EnsureCreated();
+            debugContext.EnsureCreated();
+
+            var debugComps = debugContext.GetCompositions();
+            var debugArts = debugContext.GetArtists();
+            var debugAlbums = debugContext.GetAlbums().ToDictionary(e => e.AlbumID);
+            var debugArtistGenres = debugContext.GetArtistGenres().ToDictionary(ag => $"{ag.GenreID}{ag.ArtistID}");
+            var debugGenres = debugContext.GetGenres().ToDictionary(g => g.GenreID);
+
+            var productionComps = productionContext.GetCompositions();
+            var productionArtists = productionContext.GetArtists().ToDictionary(a => a.ArtistID);
+            var productionAlbums = productionContext.GetAlbums();
+            var productionArtistGenres = productionContext.GetArtistGenres().ToDictionary(ag => $"{ag.GenreID}{ag.ArtistID}");
+            var productionGenres = productionContext.GetGenres().ToDictionary(g => g.GenreID);
+
+            int amountCorrected = 0;
+            int amountAdded = 0;
+            int amountAbsent = 0;
+            bool saveComps = false;
+            foreach (var singleComp in productionComps)
+            {
+                var singleArt = productionContext.GetArtists().First(a => a.ArtistID == singleComp.ArtistID);
+                if (singleArt == null)
+                    continue;
+
+                if (!productionAlbums.Any(a => a.AlbumID == singleComp.AlbumID))
+                {
+                    var album = productionAlbums.FirstOrDefault(a => a.AlbumID == singleComp.ArtistID);
+                    if (singleComp.AlbumID == null)
+                    {
+                        amountAbsent++;
+                    }
+                    else if (album != null && singleComp.AlbumID != null)
+                    {
+                        album.AlbumID = singleComp.AlbumID.Value;
+                        amountCorrected++;
+                    }
+                    else if (singleComp.AlbumID == null && album == null)
+                    {
+                        Album newAlbum = new Album() { AlbumID = singleComp.AlbumID.Value, ArtistID = singleArt.ArtistID };
+                        amountAdded++;
+                        productionContext.AddEntity(newAlbum);
+                        singleComp.AlbumID = newAlbum.AlbumID;
+                        saveComps = true;
+                    }
+                }
+            }
+
+            productionContext.SaveChangesTo("Albums");
+            if (saveComps) productionContext.SaveChangesTo("Compositions");
+
+            Console.WriteLine("Amount corrected: " + amountCorrected);
+            Console.WriteLine("Amount added: " + amountAdded);
+            Console.WriteLine("Amount absent: " + amountAbsent);
+
+            MessageBox.Show("Amount corrected: " + amountCorrected + "\nAmount added: " + amountAdded + "\nAmount absent: " + amountAbsent);
+
+            // Assert.NotNull(singleComp);
         }
     }
 }

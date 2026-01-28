@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Windows;
-using MediaStreamer.RAMControl;
-using System.Linq;
-using MediaStreamer.Logging;
-using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using MediaStreamer.Logging;
+using MediaStreamer.RAMControl;
+using MediaStreamer.WPF.Components.Services;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -96,7 +97,7 @@ namespace MediaStreamer.WPF.Components
 
         protected async void buttonNewComp_Click(object sender, RoutedEventArgs e)
         {
-            var tsk = await Program.FileManipulator.OpenAudioFileCrossPlatform();
+            var tsk = await Program.FileManipulator.OpenAudioFileCrossPlatform(new FilePicker());
 
             Program.FileManipulator.DecomposeAudioFile(tsk, Program._logger?.GetLogErorrOrReturnNull());
             ReList();
@@ -104,7 +105,7 @@ namespace MediaStreamer.WPF.Components
 
         protected void buttonNewRange_Click(object sender, RoutedEventArgs e)
         {
-            Program.FileManipulator.DecomposeAudioFiles(Program.FileManipulator.OpenAudioFilesCrossPlatform(), Program.SetCurrentStatus);
+            Program.FileManipulator.DecomposeAudioFiles(Program.FileManipulator.OpenAudioFilesCrossPlatform(new FilePicker()), Program.SetCurrentStatus);
             ReList();
         }
     }
