@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -326,29 +327,28 @@ namespace MediaStreamer.WPF.NetCore3_1
         private void btnFixAlbums_Click(object sender, RoutedEventArgs e)
         {
             // Arrange
-            var testPath =
-                DataAccess.CrossPlatform.PathResolver.GetStandardDatabasePath()
-                + "_Debug_Tests_SaveChanges_"
-                + $"{DateTime.Today.ToString("yyyy-MM-dd__HH.mm.ss")}";
 
             JSONDataContext productionContext = new JSONDataContext();
-            JSONDataContext debugContext = new JSONDataContext(null, testPath);
-
-            debugContext.SaveDelayed = true;
             productionContext.EnsureCreated();
-            debugContext.EnsureCreated();
-
-            var debugComps = debugContext.GetCompositions();
-            var debugArts = debugContext.GetArtists();
-            var debugAlbums = debugContext.GetAlbums().ToDictionary(e => e.AlbumID);
-            var debugArtistGenres = debugContext.GetArtistGenres().ToDictionary(ag => $"{ag.GenreID}{ag.ArtistID}");
-            var debugGenres = debugContext.GetGenres().ToDictionary(g => g.GenreID);
-
             var productionComps = productionContext.GetCompositions();
             var productionArtists = productionContext.GetArtists().ToDictionary(a => a.ArtistID);
             var productionAlbums = productionContext.GetAlbums();
             var productionArtistGenres = productionContext.GetArtistGenres().ToDictionary(ag => $"{ag.GenreID}{ag.ArtistID}");
-            var productionGenres = productionContext.GetGenres().ToDictionary(g => g.GenreID);
+            var productionGenres = productionContext.GetGenres();
+            var dictionaryOfGenres = new Dictionary<Guid, Genre>();
+            bool rewriteGenres = false;
+            foreach (var genre in productionGenres) {
+                if (!dictionaryOfGenres.Any(g => g.Key == genre.GenreID)) { 
+                    dictionaryOfGenres[genre.GenreID] = genre;
+                } else {
+                    rewriteGenres = true;
+                }
+            }
+            if (rewriteGenres) {
+                productionContext.Genres = dictionaryOfGenres.Select(g=>g.Value).ToList();
+                productionContext.SaveChangesTo("Genres");
+                productionGenres = productionContext.GetGenres();
+            }
 
             int amountCorrected = 0;
             int amountAdded = 0;
@@ -356,9 +356,11 @@ namespace MediaStreamer.WPF.NetCore3_1
             bool saveComps = false;
             foreach (var singleComp in productionComps)
             {
-                var singleArt = productionContext.GetArtists().First(a => a.ArtistID == singleComp.ArtistID);
-                if (singleArt == null)
+                var singleArt = productionArtists?.FirstOrDefault(a => a.Key == singleComp.ArtistID).Value;
+                if (singleArt == null) {
+                    //Artist newArtist = new Artist() { };
                     continue;
+                }
 
                 if (!productionAlbums.Any(a => a.AlbumID == singleComp.AlbumID))
                 {
