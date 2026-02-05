@@ -1,18 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using MediaStreamer.Domain;
-using StringExtensions;
-using Sealkeen.Linq.Extensions;
 using MediaStreamer.RAMControl;
-using System.Threading;
-using MediaStreamer.Logging;
+using StringExtensions;
+using System;
+using System.Diagnostics;
+using System.Windows;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -25,11 +16,6 @@ namespace MediaStreamer.WPF.Components
         {
             QueueSelected();
         }
-
-        //protected void cmiOpenInWinamp_Click(object sender, RoutedEventArgs e)
-        //{
-        //    cmiPlaySeveral_Click(sender, e);
-        //}
 
         protected void cmiMoveToEnd_Click(object sender, RoutedEventArgs e)
         {
@@ -78,18 +64,6 @@ namespace MediaStreamer.WPF.Components
             ReList();
         }
 
-        //protected void cmiPlaySeveral_Click(object sender, RoutedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        Program.FileManipulator.PlaySeveralSongs(lstItems?.SelectedItems, typeof(Composition));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Program.SetCurrentStatus(ex.Message, true);
-        //    }
-        //}
-
         protected void cmiChangeComposition_Click(object sender, RoutedEventArgs e)
         {
             ChangeComposition(CurrentListView ==lstItems ? lstItems.SelectedItems : lstQuery.SelectedItems);
@@ -102,7 +76,7 @@ namespace MediaStreamer.WPF.Components
                 var selectedIndex = CurrentListView ==lstItems ? lstItems.SelectedIndex : lstQuery.SelectedIndex ;
                 var selectedItems = CurrentListView ==lstItems ? lstItems.SelectedItems : lstQuery.SelectedItems;
                 if (selectedIndex >= 0 && selectedItems.Count >= 1)
-                {// For every selected element
+                { // For every selected element
                     Session.CompositionsVM.CompositionsStore.ChangeCompositionTags(selectedItems);
                 }
             }
@@ -133,6 +107,33 @@ namespace MediaStreamer.WPF.Components
             catch (Exception ex)
             {
                 Program.SetCurrentStatus($"Delete composition violation: {ex.Message}", true);
+            }
+        }
+
+        private void cmiPlayInAimp_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedIndex = CurrentListView == lstItems ? lstItems.SelectedIndex : lstQuery.SelectedIndex;
+                var selectedItem = CurrentListView == lstItems ? lstItems.SelectedItem : lstQuery.SelectedItem;
+
+                if (selectedIndex >= -1)
+                {
+                    var instance = (selectedItem as IComposition).GetInstance();
+                    ProcessStartInfo psi = new ProcessStartInfo() // $"C:\Program Files\AIMP\AIMP.exe" /ADD_PLAY "D:\Music\MySong.mp3"
+                    {
+                        FileName = @"C:/Program Files/AIMP/AIMP.exe",
+                        Arguments = $"/ADD_PLAY \"{instance.FilePath}\"",
+                    };
+
+                    psi.UseShellExecute = true;
+
+                    Process.Start(psi);
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.SetCurrentStatus(ex.Message, true);
             }
         }
     }

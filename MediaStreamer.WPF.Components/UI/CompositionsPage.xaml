@@ -50,6 +50,7 @@
                     <Button x:Name="cmiOpenLocation" Click="cmiOpenLocation_Click">Open File Location</Button>
                     <Button x:Name="cmiUpdate" Click="cmiUpdate_Click">Update list</Button>
                     <Button x:Name="cmiMoveToEnd" Click="cmiMoveToEnd_Click">Move to End</Button>
+                    <Button x:Name="cmiPlayInAimp" Click="cmiPlayInAimp_Click">Play in AIMP</Button>
                 </ContextMenu>
             </ListView.ContextMenu>
             <ListView.View>
