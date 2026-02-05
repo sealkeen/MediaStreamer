@@ -1,5 +1,7 @@
 using MediaStreamer.Domain;
 using MediaStreamer.RAMControl;
+using Sealkeen.Linq.Extensions;
+using StringExtensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,8 +11,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Sealkeen.Linq.Extensions;
-using StringExtensions;
 
 namespace MediaStreamer.WPF.Components
 {
@@ -19,7 +19,7 @@ namespace MediaStreamer.WPF.Components
     /// </summary>
     public partial class CompositionsPage : FirstFMPage
     {
-	    private LinkedList<object> _selectedItems = new LinkedList<object>();
+        private LinkedList<object> _selectedItems = new LinkedList<object>();
         protected void lstItems_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (lstItems.SelectedItems.Count <= 0)
@@ -33,10 +33,11 @@ namespace MediaStreamer.WPF.Components
                     lstItems_MouseLeftButtonDown(sender, e.ButtonState, e.Source, e.OriginalSource, _selectedItems)
             );
         }
-        private void lstItems_MouseLeftButtonDown(object sender, 
-            MouseButtonState state, 
-            object source, 
-            object originalSource, 
+
+        private void lstItems_MouseLeftButtonDown(object sender,
+            MouseButtonState state,
+            object source,
+            object originalSource,
             IEnumerable SelectedItems)
         {
             try
@@ -48,12 +49,12 @@ namespace MediaStreamer.WPF.Components
                             return;
 
                         if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-                        Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
+                            Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
                         )
                             return;
 
-                    //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
-                    if (state == MouseButtonState.Pressed)
+                        //lstItems.SelectedItems.Add((((FrameworkElement)e.OriginalSource).DataContext as Composition));
+                        if (state == MouseButtonState.Pressed)
                         {
                             if (source != null)
                             {
@@ -63,7 +64,7 @@ namespace MediaStreamer.WPF.Components
                         }
                     })
                 );
-            } catch(Exception ex){
+            } catch (Exception ex){
                 Program._logger?.LogTrace("lstItems_MouseLeftButtonDown :" + ex.Message);
             }
         }
@@ -81,7 +82,7 @@ namespace MediaStreamer.WPF.Components
                 List<string> lstFiles = new List<string>(files);
                 //var tsk = await 
                 //Task.Factory.StartNew( () =>
-                Program.FileManipulator.DecomposeAudioFiles(lstFiles, Program.SetCurrentStatus) 
+                Program.FileManipulator.DecomposeAudioFiles(lstFiles, Program.SetCurrentStatus)
                 //    )
                 ;
                 ReList();
@@ -184,8 +185,7 @@ namespace MediaStreamer.WPF.Components
                         Clipboard.SetDataObject(sb.ToString().TrimEnd());
                     }
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Program._logger?.LogError(ex.Message);
             }
         }
