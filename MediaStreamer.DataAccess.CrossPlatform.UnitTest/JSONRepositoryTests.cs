@@ -6,10 +6,44 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
     public class JSONRepositoryTests
     {
         [Fact]
+        public async Task ChangeCompositionData_SaveChangesTestsWithFirstproductionComp_ShouldSaveCorrectAmountOfData()
+        {
+            // Arrange
+            var testPath = Path.Combine(
+                PathResolver.GetStandardDatabasePath()
+                , "_Debug_Tests_SaveChanges"
+                , $"{DateTime.Today.ToString("yyyy-MM-dd__HH.mm.ss")}");
+
+            JSONDataContext productionContext = new JSONDataContext();
+            JSONDataContext debugContext = new JSONDataContext(null, testPath);
+
+            debugContext.SaveDelayed = true;
+            productionContext.EnsureCreated();
+            debugContext.EnsureCreated();
+            Assert.True(productionContext.TableInfo.Count > 0); Assert.True(debugContext.TableInfo.Count > 0);
+
+            var comps = await productionContext.GetCompositionsAsync();
+            Assert.False(comps.Count == 0);
+            var debugComps = debugContext.GetCompositions();
+            var debugArts = debugContext.GetArtists();
+            var debugAlbums = debugContext.GetAlbums();
+            var debugArtistGenres = debugContext.GetArtistGenres();
+            var debugGenres = debugContext.GetGenres();
+
+            var singleComp = comps.First();
+            var singleArt = productionContext.GetArtists().First(a => a.ArtistID == singleComp.ArtistID);
+            var singleAlbum = productionContext.GetAlbums().First(a => a.AlbumID == singleComp.AlbumID);
+            var singleArtistGenre = productionContext.GetArtistGenres().FirstOrDefault(ag => ag.ArtistID == singleArt.ArtistID);
+            var singleGenre = productionContext.GetGenres().FirstOrDefault(g => g.GenreID == singleArtistGenre.GenreID);
+
+            Assert.NotNull(singleComp);
+        }
+
+        [Fact]
         public void CreateAndOpenJObjectFile()
         {
             // No parent element so first parameter is null
-            JObject jObject = new JObject(null, 
+            JObject jObject = new JObject(null,
                 new JKeyValuePair(
                     new JString("Key"), new JString("Value")
                 )
@@ -25,7 +59,7 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
         public async Task MoveProductionDataToDebugContext()
         {
             JSONDataContext productionContext = new JSONDataContext();
-            JSONDataContext debugContext = new JSONDataContext(null, PathResolver.GetStandardDatabasePath() 
+            JSONDataContext debugContext = new JSONDataContext(null, PathResolver.GetStandardDatabasePath()
                 //+ "_Tests"
                 + "_Debug"
                 );
@@ -55,15 +89,18 @@ namespace MediaStreamer.DataAccess.CrossPlatform.UnitTest
                 var firstArtistGenre = productionContext.GetArtistGenres().Where(
                     g => g.GenreID == firstAlb.GenreID && g.ArtistID == firstArt.ArtistID)
                     .FirstOrDefault();
-                if (!debugArts.Any(a => a.ArtistID == firstCmp.ArtistID)) {
+                if (!debugArts.Any(a => a.ArtistID == firstCmp.ArtistID))
+                {
                     debugContext.Add(firstArt);
                     //debugContext.SaveChanges();
                 }
-                if (!debugGenres.Any(g => g.GenreID == firstGenre.GenreID)) {
+                if (!debugGenres.Any(g => g.GenreID == firstGenre.GenreID))
+                {
                     debugContext.Add(firstGenre);
                     //debugContext.SaveChanges();
                 }
-                if (!debugArtistGenres.Any(ag => ag.GenreID == firstArtistGenre.GenreID && ag.ArtistID == firstArtistGenre.ArtistID)) {
+                if (!debugArtistGenres.Any(ag => ag.GenreID == firstArtistGenre.GenreID && ag.ArtistID == firstArtistGenre.ArtistID))
+                {
                     debugContext.Add(firstArtistGenre);
                     //debugContext.SaveChanges();
                 }
